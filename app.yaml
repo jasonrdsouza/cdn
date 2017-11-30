@@ -5,8 +5,11 @@ handlers:
 - url: /passwords
   static_files: dart/build/web/passwords.html
   upload: dart/build/web/passwords.html
+  secure: always
 - url: /
   static_dir: dart/build/web/
+  secure: always
 - url: /.*
   script: _go_app
+  secure: always
 
