@@ -1,0 +1,8 @@
+name: password_generator
+
+dependencies:
+  dart_to_js_script_rewriter: any
+
+transformers:
+- dart_to_js_script_rewriter
+
