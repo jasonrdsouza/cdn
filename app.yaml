@@ -1,0 +1,12 @@
+runtime: go
+api_version: go1
+
+handlers:
+- url: /passwords
+  static_files: dart/build/web/passwords.html
+  upload: dart/build/web/passwords.html
+- url: /
+  static_dir: dart/build/web/
+- url: /.*
+  script: _go_app
+
