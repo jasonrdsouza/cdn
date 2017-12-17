@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Contacts Chooser</title>
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+
+    <a href="https://github.com/jasonrdsouza/hooggaa"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+
+  </head>
+
+  <body>
+    <div class="container" id="login-prompt">
+    <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center orange-text">Hooggaa Contacts Chooser</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Please login with your Google account to get started.</h5>
+      </div>
+      <div class="row center">
+        <form id="google-login">
+          <button class="btn-large waves-effect waves-light orange" type="submit" id="google-login-button">Get Started</button>
+        </form>
+      </div>
+      <br><br>
+      <div class="row center">
+        <h5 class="header col s12 light">Why do we want you to login with Google?</h5>
+      </div>
+    </div>
+    </div>
+
+    <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+            <h5 class="center">Speeds up onboarding</h5>
+
+            <p class="light">Instead of manually entering the information of people you are interested in staying in touch with, we'll let you choose which of your contacts you'd like to automatically import.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+            <h5 class="center">Better social graph integration</h5>
+
+            <p class="light">As we release more features to help you grow your most important relationships, the more information we have about your contacts, the better able we are to personalize your suggestions.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Automated engagement tracking</h5>
+
+            <p class="light">Knowing the contact information of the people that are important to you allows us to automatically keep track of who you are in touch with, and who we should remind you to connect with.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br><br>
+    </div>
+
+    </div> <!-- id="login-prompt" -->
+
+    <div class="container" id="contacts-section">
+      <div class="section no-pad-bot" id="contacts-banner">
+      <div class="container">
+      <br><br>
+      <h1 class="header center orange-text">Hooggaa Contacts Chooser</h1>
+
+      <div class="row center">
+        <h5 class="header col s12 light">Please select the contacts you'd like to import</h5>
+      </div>
+
+      <ul class="collection" id="contacts-list">
+        <li class="collection-item avatar">
+          <img src="assets/hooggaa_logo.png" alt="" class="circle">
+          <span class="title">Hooggaa Support</span>
+          <p>support@hooggaa.com<br>
+             www.hooggaa.com
+          </p>
+          <div class="switch secondary-content">
+            <label>
+              <input type="checkbox">
+              <span class="lever"></span>
+            </label>
+          </div>
+        </li>
+      </ul>
+
+      </div>
+      </div>
+    </div> <!-- id="contacts-section" -->
+
+    <!-- Business logic -->
+    <script async type="application/dart" src="scripts/hooggaa.dart"></script>
+  </body>
+</html>
+

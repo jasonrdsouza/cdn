@@ -1,7 +1,11 @@
-name: password_generator
+name: cdn
 
 dependencies:
   dart_to_js_script_rewriter: any
+  # hooggaa dependancies
+  googleapis: any
+  googleapis_auth: any
+
 
 transformers:
 - dart_to_js_script_rewriter
