@@ -10,8 +10,18 @@ handlers:
   static_files: dart/build/hooggaa.html
   upload: dart/build/hooggaa.html
   secure: always
+- url: /css
+  static_dir: dart/build/css/
+  secure: always
+- url: /scripts
+  static_dir: dart/build/scripts/
+  secure: always
+- url: /assets
+  static_dir: dart/build/assets/
+  secure: always
 - url: /
-  static_dir: dart/build/
+  static_files: dart/build/index.html
+  upload: dart/build/index.html
   secure: always
 - url: /.*
   script: _go_app
