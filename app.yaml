@@ -3,15 +3,15 @@ api_version: go1
 
 handlers:
 - url: /passwords
-  static_files: dart/build/web/passwords.html
-  upload: dart/build/web/passwords.html
+  static_files: dart/build/passwords.html
+  upload: dart/build/passwords.html
   secure: always
 - url: /hooggaa
-  static_files: dart/build/web/hooggaa.html
-  upload: dart/build/web/hooggaa.html
+  static_files: dart/build/hooggaa.html
+  upload: dart/build/hooggaa.html
   secure: always
 - url: /
-  static_dir: dart/build/web/
+  static_dir: dart/build/
   secure: always
 - url: /.*
   script: _go_app

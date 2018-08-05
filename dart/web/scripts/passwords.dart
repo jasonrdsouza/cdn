@@ -44,26 +44,32 @@ String constructPassword(int length) {
 }
 
 bool uppercaseAllowed() {
-  return querySelector('#uppercase-letters').checked;
+  CheckboxInputElement element = querySelector('#uppercase-letters');
+  return element.checked;
 }
 
 bool lowercaseAllowed() {
-  return querySelector('#lowercase-letters').checked;
+  CheckboxInputElement element = querySelector('#lowercase-letters');
+  return element.checked;
 }
 
 bool numbersAllowed() {
-  return querySelector('#numbers').checked;
+  CheckboxInputElement element = querySelector('#numbers');
+  return element.checked;
 }
 
 bool symbolsAllowed() {
-  return querySelector('#symbols').checked;
+  CheckboxInputElement element = querySelector('#symbols');
+  return element.checked;
 }
 
 bool avoidAmbiguousCharacters() {
-  return querySelector('#avoid-ambiguous-characters').checked;
+  CheckboxInputElement element = querySelector('#avoid-ambiguous-characters');
+  return element.checked;
 }
 
 int requestedLength() {
-  return querySelector('#length').valueAsNumber;
+  InputElement element = querySelector('#length');
+  return element.valueAsNumber;
 }
 

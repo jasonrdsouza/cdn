@@ -1,12 +1,12 @@
 name: cdn
 
+dev_dependencies:
+  build_runner: ^0.10.0
+  build_test: ^0.10.2
+  build_web_compilers: ^0.4.0
+
 dependencies:
-  dart_to_js_script_rewriter: any
   # hooggaa dependancies
   googleapis: any
   googleapis_auth: any
-
-
-transformers:
-- dart_to_js_script_rewriter
 
