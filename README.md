@@ -11,18 +11,12 @@ dev_appserver.py app.yaml
 Dartlang app
 ```
 webdev serve
-
-# Dart2 is currently broken, so webdev doesn't work unless you do the following
-# pub global run webdev serve
 ```
 
 ## Deploying
 From the dart directory, run
 ```
 webdev build --release
-
-# Similar to above, webdev is currently broken in the preview release of Dart2, so the following is needed
-# pub global run webdev build --release
 ```
 Which will create a version of the code that is ready to be served as a static app, and put it in the `build/web` directory
 
