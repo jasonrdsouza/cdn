@@ -1,11 +1,16 @@
 import 'dart:html';
 import 'dart:async';
+import 'dart:io';
 
 Element fetchBloc(String category) {
   return querySelector('.bloc-time.$category');
 }
 
 int getInitialTimeValue(String category) {
+  String userSupplied = Uri.base.queryParameters[category];
+  if (userSupplied != null && int.tryParse(userSupplied) != null) {
+    return int.parse(userSupplied);
+  }
   return int.parse(fetchBloc(category).attributes['data-init-value']);
 }
 
@@ -17,7 +22,26 @@ int timeToSeconds(int hours, int minutes, int seconds) {
   return hours * 60 * 60 + minutes * 60 + seconds;
 }
 
+List<int> normalizeTime(int totalSeconds) {
+  // in case the user inputs values larger than 60 for seconds or minutes
+  int hours = (totalSeconds / 3600).floor();
+  int minutes = ((totalSeconds % 3600) / 60).floor();
+  int seconds = (totalSeconds % 3600) % 60;
+
+  return [hours, minutes, seconds];
+}
+
 void animateBlocDigit(Element digit, String newValue) {
+  // This is broken and I'm not sure how to fix it. I think
+  // I need to figure out a way to order the animation, instead
+  // of everything happening at once (which is the default?).
+  // Ideally I would update the back cards to the new value,
+  // then animate the front card flip, then after the animation is
+  // done, update the front cards (which would be transparent to the
+  // user). Unfortunately, everything happens at once, so it doesn't
+  // look right. Also, the front bottom animation is messed up
+  // because it happens simultaneously (again, due to me not being able
+  // to order the animation frames) with the front top animation.
   Element digitTop = digit.querySelector('.top');
   Element digitBottom = digit.querySelector('.bottom');
   Element digitBackTop = digit.querySelector('.top-back');
@@ -28,9 +52,10 @@ void animateBlocDigit(Element digit, String newValue) {
   digitBackBottom.text = newValue;
 
   // Animate the old value in front to the new value in back
-  //digitTop.animate([{"rotateX": 0}, {"rotateX": 180}], 1200);
+  Animation animation = digitTop.animate([{"transform": "rotateX(0deg)"}, {"transform": "rotateX(-180deg)"}], {"duration": 800, "fill": "both"});
   digitTop.text = newValue;
-  //digitBottom.animate([{"opacity": 75}, {"opacity": 0}], 200);
+  digitBottom.animate([{"transform": "rotateX(180deg)"}, {"transform": "rotatex(0deg)"}], 800);
+  //sleep(new Duration(milliseconds:800));
   digitBottom.text = newValue;
 }
 
@@ -57,6 +82,10 @@ void updateBloc(category, int newValue) {
   }
 }
 
+String padTime(int timeValue) {
+  return timeValue.toString().padLeft(2, '0');
+}
+
 void main() {
   int hours = getInitialTimeValue('hours');
   int minutes = getInitialTimeValue('min');
@@ -66,8 +95,14 @@ void main() {
   int totalSeconds = timeToSeconds(hours, minutes, seconds);
   print('That is $totalSeconds seconds');
 
+  List<int> normalizedTime = normalizeTime(totalSeconds);
+  hours = normalizedTime[0];
+  minutes = normalizedTime[1];
+  seconds = normalizedTime[2];
+  print('The normalized time is $hours hours, $minutes minutes, and $seconds seconds');
+
   Timer.periodic(Duration(seconds: 1), (timer) {
-    if (totalSeconds <= 0) {
+    if (totalSeconds <= 1) {
       timer.cancel();
     }
     totalSeconds--;
@@ -83,22 +118,9 @@ void main() {
     }
 
     // Update DOM values
-    print('Updating DOM to be $hours:$minutes:$seconds');
+    print('Updating DOM to be ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}');
     updateBloc('hours', hours);
     updateBloc('min', minutes);
     updateBloc('sec', seconds);
   });
-//  var christmas2018 = DateTime(2018, 12, 25);
-//  Timer.periodic(Duration(seconds: 1), (_) {
-//    var now = DateTime.now();
-//    var diff = christmas2018.difference(now);
-//    var inMilli = diff.inMilliseconds;
-//    var inSeconds = diff.inSeconds;
-//
-//    var seconds = (inSeconds % 60).floor();
-//    var minutes = ((inSeconds / 60) % 60).floor();
-//    var hours = ((inMilli / (1000 * 60 * 60)) % 24).floor();
-//    var days = (inMilli / (1000 * 60 * 60 * 24)).floor();
-//
-//  });
 }
