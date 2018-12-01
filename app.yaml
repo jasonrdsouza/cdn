@@ -10,6 +10,10 @@ handlers:
   static_files: dart/build/hooggaa.html
   upload: dart/build/hooggaa.html
   secure: always
+- url: /pomodoro
+  static_files: dart/build/pomodoro.html
+  upload: dart/build/pomodoro.html
+  secure: always
 - url: /css
   static_dir: dart/build/css/
   secure: always

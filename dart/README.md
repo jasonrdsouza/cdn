@@ -5,7 +5,15 @@ Notes about the various dartlang projects contained herein.
 Client side password generator using cryptographic random functionality.
 
 ## Pomodoro
-Simple pomodoro timer
+Simple pomodoro timer. Specify custom start time via the `hours`, `min`, and `sec` URL parameters.
+
+Examples:
+```
+https://cdn.dsouza.io/pomodoro?min=3
+https://cdn.dsouza.io/pomodoro?hours=1&min=30
+https://cdn.dsouza.io/pomodoro?min=90
+https://cdn.dsouza.io/pomodoro?min=90
+```
 
 ## Hooggaa
 Simple proof of concept showing an example flow for a simple contacts chooser webapp. Currently leverages the [Google People API](https://developers.google.com/people/) to pull contact information. Everything happens on the client, and no data is persisted.

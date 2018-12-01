@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'dart:async';
-import 'dart:io';
 
 Element fetchBloc(String category) {
   return querySelector('.bloc-time.$category');
@@ -55,7 +54,6 @@ void animateBlocDigit(Element digit, String newValue) {
   Animation animation = digitTop.animate([{"transform": "rotateX(0deg)"}, {"transform": "rotateX(-180deg)"}], {"duration": 800, "fill": "both"});
   digitTop.text = newValue;
   digitBottom.animate([{"transform": "rotateX(180deg)"}, {"transform": "rotatex(0deg)"}], 800);
-  //sleep(new Duration(milliseconds:800));
   digitBottom.text = newValue;
 }
 
@@ -101,26 +99,28 @@ void main() {
   seconds = normalizedTime[2];
   print('The normalized time is $hours hours, $minutes minutes, and $seconds seconds');
 
-  Timer.periodic(Duration(seconds: 1), (timer) {
-    if (totalSeconds <= 1) {
-      timer.cancel();
-    }
-    totalSeconds--;
+  if (totalSeconds > 0) {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (totalSeconds <= 1) {
+        timer.cancel();
+      }
+      totalSeconds--;
 
-    seconds--;
-    if (seconds < 0 && minutes >= 0) {
-      seconds = 59;
-      minutes--;
-    }
-    if (minutes < 0 && hours >=0) {
-      minutes = 59;
-      hours--;
-    }
+      seconds--;
+      if (seconds < 0 && minutes >= 0) {
+        seconds = 59;
+        minutes--;
+      }
+      if (minutes < 0 && hours >=0) {
+        minutes = 59;
+        hours--;
+      }
 
-    // Update DOM values
-    print('Updating DOM to be ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}');
-    updateBloc('hours', hours);
-    updateBloc('min', minutes);
-    updateBloc('sec', seconds);
-  });
+      // Update DOM values
+      print('Updating DOM to be ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}');
+      updateBloc('hours', hours);
+      updateBloc('min', minutes);
+      updateBloc('sec', seconds);
+    });
+  }
 }

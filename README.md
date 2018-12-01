@@ -6,6 +6,7 @@ Entire AppEngine app
 ```
 dev_appserver.py app.yaml
 ```
+*make sure you have built the Dart code and updated the app.yaml routes*
 
 Dartlang app
 ```
