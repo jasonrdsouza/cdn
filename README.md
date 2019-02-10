@@ -24,3 +24,11 @@ Once that is done, ensure that the `app.yaml` static directory handler is proper
 ```
 gcloud --project dsouza-cdn app deploy
 ```
+
+## Subresource Integrity
+To generate cryptographic hash of CDN hosted resources (stylesheets, Javascript libraries, etc):
+```
+http <LINK_TO_RESOURCE> | openssl dgst -sha384 -binary | openssl base64 -A
+```
+
+Add `integrity` tag to all externally hosted resources.
