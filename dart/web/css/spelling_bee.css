@@ -1,0 +1,33 @@
+h1 {
+  color: #333;
+}
+body {
+  margin: 0 auto;
+  max-width: 50em;
+  font-family: 'Cute Font', cursive;
+  line-height: 1.5;
+  padding: 2em 1em;
+  font-size: 28px;
+  color: #566b78;
+}
+
+code,
+pre {
+  background: #f5f7f9;
+  border-bottom: 1px solid #d8dee9;
+  color: #a7adba;
+}
+
+code {
+  padding: 2px 4px;
+  vertical-align: text-bottom;
+}
+
+pre {
+  padding: 1em;
+  border-left: 2px solid #69c;
+}
+
+a {
+  color: #e81c4f;
+}

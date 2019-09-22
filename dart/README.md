@@ -1,6 +1,9 @@
 # Overview
 Notes about the various dartlang projects contained herein.
 
+## Spelling Bee Solver
+Simple solver for the [NYT Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee) puzzle game.
+
 ## Passwords
 Client side password generator using cryptographic random functionality.
 

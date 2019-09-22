@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NYT Spelling Bee Solver</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NYT Spelling Bee Solver">
+    <meta property="og:description" content="Automated solver for the NYT Spelling Bee at (https://www.nytimes.com/puzzles/spelling-bee)">
+
+    <link rel="stylesheet" type="text/css" href="css/spelling_bee.css">
+    <link rel="icon" type="image/ico" href="assets/honeypot.ico">
+    <link href="https://fonts.googleapis.com/css?family=Cute+Font|Montserrat&display=swap" rel="stylesheet">
+    <script defer src="scripts/spelling_bee.dart.js"></script>
+  </head>
+
+  <body>
+    <header id="header">
+      <h1>Spelling Bee Solver</h1>
+    </header>
+
+    <main>
+      <div id="user-input">
+        Letters: <input type="text" id="letters" name="letters"><br>
+        Required: <input type="text" id="required-letter" name="required-letter"><br>
+        <input type="button" id="solve" value="solve" name="submit">
+      </div>
+      <div id="result-summary">
+      </div>
+      <pre id="results">
+        Results
+        displayed
+        here
+      </pre>
+      <p>
+        <a href="http://jasondsouza.org">by Jason Dsouza</a>
+      </p>
+    </main>
+  </body>
+</html>

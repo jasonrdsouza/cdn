@@ -2,6 +2,10 @@ runtime: go
 api_version: go1
 
 handlers:
+- url: /spelling-bee
+  static_files: dart/build/spelling_bee.html
+  upload: dart/build/spelling_bee.html
+  secure: always
 - url: /passwords
   static_files: dart/build/passwords.html
   upload: dart/build/passwords.html
