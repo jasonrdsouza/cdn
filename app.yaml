@@ -1,4 +1,4 @@
-runtime: go111
+runtime: go112
 
 handlers:
 - url: /spelling-bee
@@ -31,6 +31,6 @@ handlers:
   upload: dart/build/index.html
   secure: always
 - url: /.*
-  script: _go_app
+  script: auto
   secure: always
 
