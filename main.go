@@ -1,17 +1,24 @@
 package main
 
 import (
-    "fmt"
-    "net/http"
-
-    "google.golang.org/appengine"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
 )
 
 func main() {
-    http.HandleFunc("/", handler)
-    appengine.Main()
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+	log.Printf("Listening on port %s", port)
+
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprint(w, "Dsouza CDN")
+	fmt.Fprint(w, "Dsouza CDN")
 }
