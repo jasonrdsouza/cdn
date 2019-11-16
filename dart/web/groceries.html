@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-framework="dart">
+	<head>
+    <title>Grocery List</title>
+		<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Grocery List">
+    <meta property="og:description" content="Grocery List Tracker Web Application">
+
+    <link rel="stylesheet" href="css/groceries.css">
+    <link rel="icon" type="image/ico" href="assets/shopping_cart.png">
+    <script defer src="scripts/groceries/app.dart.js"></script>
+	</head>
+	<body>
+		<section class="todoapp">
+			<header class="header">
+				<h1>Grocery List</h1>
+				<input class="new-todo" placeholder="Add a grocery item" autofocus>
+			</header>
+			<section class="main">
+				<input id="toggle-all" class="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul class="todo-list"></ul>
+			</section>
+			<footer class="footer">
+				<span class="todo-count"><strong>0</strong> item left</span>
+				<ul class="filters">
+					<li>
+						<a class="selected" href="#/">All</a>
+					</li>
+					<li>
+						<a href="#/active">Active</a>
+					</li>
+					<li>
+						<a href="#/completed">Completed</a>
+					</li>
+				</ul>
+				<button class="clear-completed">Clear completed</button>
+			</footer>
+		</section>
+		<footer class="info">
+			<p>Double-click to edit a grocery item</p>
+			<p>Created by <a href="http://jasondsouza.org">Jason Dsouza</a></p>
+		</footer>
+	</body>
+</html>
