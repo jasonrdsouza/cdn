@@ -21,7 +21,7 @@ handlers:
   static_files: sicp/index.xhtml
   upload: sicp/index.xhtml
   secure: always
-- url: /html
+- url: /sicp/contents
   static_dir: sicp/html/
   secure: always
 - url: /css
