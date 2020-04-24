@@ -1,4 +1,4 @@
-runtime: go112
+runtime: go111
 
 handlers:
 - url: /spelling-bee
@@ -16,6 +16,13 @@ handlers:
 - url: /pomodoro
   static_files: dart/build/pomodoro.html
   upload: dart/build/pomodoro.html
+  secure: always
+- url: /sicp
+  static_files: sicp/index.xhtml
+  upload: sicp/index.xhtml
+  secure: always
+- url: /html
+  static_dir: sicp/html/
   secure: always
 - url: /css
   static_dir: dart/build/css/
