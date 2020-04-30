@@ -1,11 +1,14 @@
 body {
   margin: 40px auto;
-  max-width: 650px;
   line-height: 1.6;
   font-size: 18px;
   color: #444;
   background-color: #EEEEEE;
   padding: 0 10px;
+}
+
+.container {
+  padding-top: 3em;
 }
 
 h1,h2,h3 {
