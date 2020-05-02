@@ -2,8 +2,6 @@ body {
   margin: 40px auto;
   line-height: 1.6;
   font-size: 18px;
-  color: #444;
-  background-color: #EEEEEE;
   padding: 0 10px;
 }
 
@@ -23,4 +21,37 @@ h1,h2,h3 {
   a {
     color: #BB86FC;
   }
+}
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid darkgrey;
+  border-right: none;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: darkgrey;
+}
+
+.searchTerm:focus{
+  color: darkgrey;
+}
+
+.searchButton {
+  width: 70px;
+  height: 36px;
+  border: 1px solid darkgrey;
+  background: darkgrey;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
 }

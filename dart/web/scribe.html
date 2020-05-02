@@ -4,31 +4,23 @@
   <title>Article Reader</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/tufte.css"/>
   <link rel="stylesheet" href="css/scribe.css">
   <link rel="icon" type="image/png" href="assets/quill.png">
-
-  <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   <script defer src="scripts/scribe.dart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col s10">
-        <input type="text" id="sourceUrl" placeholder="Article URL"></input>
-      </div>
-      <div class="col s2">
-        <button class="btn waves-effect waves-light" id="submit" type="submit" name="action">Submit</button>
-      </div>
+  <div class="wrap">
+    <div class="search">
+      <input class="searchTerm" type="text" id="sourceUrl" placeholder="Article URL"></input>
+      <button class="searchButton" id="submit" type="submit" name="action">Fetch</button>
     </div>
+  </div>
 
-    <div id="article">
-      <h1 id="articleTitle"></h1>
-      <div id="articleContents"></div>
-    </div>
+  <div id="article">
+    <h1 id="articleTitle"></h1>
+    <div id="articleContents"></div>
   </div>
 </body>
 </html>

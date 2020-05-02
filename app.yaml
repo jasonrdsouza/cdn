@@ -37,6 +37,9 @@ handlers:
 - url: /assets
   static_dir: dart/build/assets/
   secure: always
+- url: /fonts
+  static_dir: dart/build/fonts/
+  secure: always
 - url: /
   static_files: dart/build/index.html
   upload: dart/build/index.html
