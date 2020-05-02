@@ -55,3 +55,8 @@ h1,h2,h3 {
   cursor: pointer;
   font-size: 20px;
 }
+
+.metrics {
+  text-align: right;
+  font-style: normal;
+}
