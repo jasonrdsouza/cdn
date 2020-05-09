@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 
 void main() async {
-  print('Article Scribe Awoken');
+  print('Article Scribe Awoken!');
   String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe/simplify";
   // String scribeUrl = "http://localhost:8081/simplify";
 
