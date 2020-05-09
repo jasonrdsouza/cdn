@@ -12,15 +12,17 @@
 </head>
 <body>
   <div class="wrap">
-    <div class="search">
-      <input class="searchTerm" type="text" id="sourceUrl" placeholder="Article URL"></input>
-      <button class="searchButton" id="submit" type="submit" name="action">Fetch</button>
-    </div>
+    <form id="urlForm">
+      <div class="search">
+        <input class="searchTerm" type="text" id="sourceUrl" placeholder="Article URL"></input>
+        <button class="searchButton" id="submit" type="submit" name="action">Fetch</button>
+      </div>
+    </form>
   </div>
 
   <div id="article">
     <h1 id="articleTitle"></h1>
-    <div class="metrics">
+    <div class="info">
       <h2 class="metrics" id="articleMetrics"></h2>
     </div>
     <div id="articleContents"></div>

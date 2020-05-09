@@ -53,7 +53,7 @@ h1,h2,h3 {
   font-size: 20px;
 }
 
-.metrics {
+.info, .metrics {
   text-align: right;
   font-style: normal;
 }
