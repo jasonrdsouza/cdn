@@ -4,24 +4,30 @@ import 'dart:html';
 void main() async {
   print('Article Scribe Awoken!');
   String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe/simplify";
-  // String scribeUrl = "http://localhost:8081/simplify";
+  //String scribeUrl = "http://localhost:8081/simplify";
 
   FormElement urlForm = querySelector('#urlForm');
   ButtonElement submitButton = querySelector('#submit');
   InputElement urlInput = querySelector('#sourceUrl');
-  HeadingElement articleTitle = querySelector('#articleTitle');
   HeadingElement articleMetrics = querySelector('#articleMetrics');
+  AnchorElement articleLink = querySelector('#articleLink');
   DivElement articleContents = querySelector('#articleContents');
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
 
-    var body = {'page': urlInput.value.trim()};
+    var url = standardizeUrl(urlInput.value);
+
+    // set shareable URL
+    window.history.replaceState('', 'Article Reader', '?url=${url}');
+
+    var body = {'page': url};
     var headers = {'Content-Type': 'application/json'};
     HttpRequest.request(scribeUrl, method: 'POST', requestHeaders: headers, sendData: json.encode(body))
       .then((HttpRequest resp) {
         var readableResult = json.decode(resp.responseText);
-        articleTitle.text = readableResult['title'];
+        articleLink.text = readableResult['title'];
+        articleLink.href = url;
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
       });
@@ -51,13 +57,17 @@ transcribeArticleContents(DivElement articleDiv, String articleContents) {
 fetchInitialUrl(InputElement urlInput, ButtonElement submitButton) {
   String key = 'url';
   if (Uri.base.queryParameters.containsKey(key)) {
-    Uri initialUrl = Uri.parse(Uri.base.queryParameters['url'].trim());
-    if (initialUrl.hasScheme) {
-      urlInput.value = initialUrl.toString();
-    } else {
-      urlInput.value = 'http://${initialUrl}';
-    }
+    urlInput.value = standardizeUrl(Uri.base.queryParameters[key]);
     submitButton.click();
+  }
+}
+
+String standardizeUrl(String url) {
+  Uri initialUrl = Uri.parse(url.trim());
+  if (initialUrl.hasScheme) {
+    return initialUrl.toString();
+  } else {
+    return 'https://${initialUrl}';
   }
 }
 

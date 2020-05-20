@@ -4,6 +4,11 @@ Notes about the various dartlang projects contained herein.
 ## Spelling Bee Solver
 Simple solver for the [NYT Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee) puzzle game.
 
+## Scribe
+Wrapper around the [Mozilla Readability](https://github.com/mozilla/readability) to allow for
+a reader-friendly view of web articles. Uses a custom Tufte inspired stylesheet, and adds various
+niceties like dark-mode support, time-to-read, and word count.
+
 ## Passwords
 Client side password generator using cryptographic random functionality.
 
