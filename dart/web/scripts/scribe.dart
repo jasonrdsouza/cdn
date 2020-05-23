@@ -12,12 +12,15 @@ void main() async {
   HeadingElement articleMetrics = querySelector('#articleMetrics');
   AnchorElement articleLink = querySelector('#articleLink');
   DivElement articleContents = querySelector('#articleContents');
+  DivElement loadingIcon = querySelector('.loadingIcon');
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
 
-    var url = standardizeUrl(urlInput.value);
+    // display loading bar
+    loadingIcon.style.display = 'block';
 
+    var url = standardizeUrl(urlInput.value);
     // set shareable URL
     window.history.replaceState('', 'Article Reader', '?url=${url}');
 
@@ -30,6 +33,8 @@ void main() async {
         articleLink.href = url;
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
+
+        loadingIcon.style.display = 'none';
       });
   });
 
