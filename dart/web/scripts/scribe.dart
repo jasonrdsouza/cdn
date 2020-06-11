@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
 void main() async {
   print('Article Scribe Awoken!');
-  String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe/simplify";
-  //String scribeUrl = "http://localhost:8081/simplify";
+  String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
+  //String scribeUrl = "http://localhost:8081";
 
   FormElement urlForm = querySelector('#urlForm');
   ButtonElement submitButton = querySelector('#submit');
@@ -26,7 +27,7 @@ void main() async {
 
     var body = {'page': url};
     var headers = {'Content-Type': 'application/json'};
-    HttpRequest.request(scribeUrl, method: 'POST', requestHeaders: headers, sendData: json.encode(body))
+    HttpRequest.request('${scribeUrl}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
       .then((HttpRequest resp) {
         var readableResult = json.decode(resp.responseText);
         articleLink.text = readableResult['title'];
@@ -38,6 +39,13 @@ void main() async {
       });
   });
 
+  // trigger cached article check
+  var timer = Timer(Duration(seconds: 1), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+  urlInput.onInput.listen((Event e) {
+    timer.cancel();
+    timer = Timer(Duration(seconds: 1), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+  });
+
   fetchInitialUrl(urlInput, submitButton);
 }
 
@@ -46,6 +54,27 @@ class AllowAllUriPolicy implements UriPolicy {
   bool allowsUri(String uri) {
     return true;
   }
+}
+
+setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
+  if (['https://', 'http://'].contains(requestUrl)) {
+    // don't check cache for empty request URL
+    element.classes.remove('cached');
+    element.classes.remove('uncached');
+    return;
+  }
+
+  HttpRequest.getString('${baseScribeUrl}/cached?url=${requestUrl}').then((result) {
+    var isCached = result == 'true';
+
+    if (isCached) {
+      element.classes.remove('uncached');
+      element.classes.add('cached');
+    } else {
+      element.classes.remove('cached');
+      element.classes.add('uncached');
+    }
+  });
 }
 
 transcribeArticleContents(DivElement articleDiv, String articleContents) {
@@ -76,7 +105,7 @@ String standardizeUrl(String url) {
   }
 }
 
-int countWords(articleContents) {
+int countWords(String articleContents) {
   return articleContents.split(new RegExp(r'\s+')).length;
 }
 

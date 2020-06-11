@@ -53,6 +53,14 @@ h1,h2,h3 {
   font-size: 20px;
 }
 
+.cached {
+  background: #5FA052;
+}
+
+.uncached {
+  background: #E96245;
+}
+
 .metrics {
   text-align: right;
   font-style: normal;
