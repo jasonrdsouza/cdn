@@ -17,9 +17,8 @@ void main() async {
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
-
-    // display loading bar
-    loadingIcon.style.display = 'block';
+    clearArticleContents(articleContents);
+    showLoadingIcon(loadingIcon);
 
     var url = standardizeUrl(urlInput.value);
     // set shareable URL
@@ -35,7 +34,7 @@ void main() async {
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
 
-        loadingIcon.style.display = 'none';
+        clearLoadingIcon(loadingIcon);
       });
   });
 
@@ -75,6 +74,18 @@ setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
       element.classes.add('uncached');
     }
   });
+}
+
+clearLoadingIcon(DivElement loadingDiv) {
+  loadingDiv.style.display = 'none';
+}
+
+showLoadingIcon(DivElement loadingDiv) {
+  loadingDiv.style.display = 'block';
+}
+
+clearArticleContents(DivElement articleDiv) {
+  articleDiv.setInnerHtml("");
 }
 
 transcribeArticleContents(DivElement articleDiv, String articleContents) {
