@@ -71,6 +71,11 @@ h1,h2,h3 {
   display: none;
 }
 
+.errorScreen {
+  text-align: center;
+  display: none;
+}
+
 /*
  * Begin Loading Icon CSS
  */

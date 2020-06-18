@@ -14,11 +14,13 @@ void main() async {
   AnchorElement articleLink = querySelector('#articleLink');
   DivElement articleContents = querySelector('#articleContents');
   DivElement loadingIcon = querySelector('.loadingIcon');
+  DivElement errorScreen = querySelector('.errorScreen');
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
     clearArticleContents(articleContents);
-    showLoadingIcon(loadingIcon);
+    hideElement(errorScreen);
+    showElement(loadingIcon);
 
     var url = standardizeUrl(urlInput.value);
     // set shareable URL
@@ -34,7 +36,12 @@ void main() async {
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
 
-        clearLoadingIcon(loadingIcon);
+        hideElement(loadingIcon);
+      }).catchError((error) {
+        articleLink.text = "Error transcribing article...";
+        articleLink.href = url;
+        hideElement(loadingIcon);
+        showElement(errorScreen);
       });
   });
 
@@ -76,12 +83,12 @@ setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
   });
 }
 
-clearLoadingIcon(DivElement loadingDiv) {
-  loadingDiv.style.display = 'none';
+hideElement(DivElement div) {
+  div.style.display = 'none';
 }
 
-showLoadingIcon(DivElement loadingDiv) {
-  loadingDiv.style.display = 'block';
+showElement(DivElement div) {
+  div.style.display = 'block';
 }
 
 clearArticleContents(DivElement articleDiv) {
