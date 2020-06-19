@@ -40,6 +40,7 @@ void main() async {
       }).catchError((error) {
         articleLink.text = "Error transcribing article...";
         articleLink.href = url;
+        articleMetrics.text = "";
         hideElement(loadingIcon);
         showElement(errorScreen);
       });
