@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+const CACHE_WAIT_MILLISECONDS = 500;
+const READER_WORDS_PER_MINUTE = 200;
+
 void main() async {
   print('Article Scribe Awoken!');
   String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
@@ -48,10 +51,10 @@ void main() async {
   });
 
   // trigger cached article check
-  var timer = Timer(Duration(seconds: 1), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+  var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
   urlInput.onInput.listen((Event e) {
     timer.cancel();
-    timer = Timer(Duration(seconds: 1), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+    timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
   });
 
   fetchInitialUrl(urlInput, submitButton);
@@ -138,7 +141,7 @@ int countWords(String articleContents) {
 }
 
 double calculateReadTime(int numWords) {
-  return numWords / 200;
+  return numWords / READER_WORDS_PER_MINUTE;
 }
 
 String produceMetricText(String articleContents) {
