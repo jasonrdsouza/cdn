@@ -19,6 +19,8 @@ void main() async {
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
     clearArticleContents(articleContents);
+    clearArticleMetrics(articleMetrics);
+    clearArticleTitle(articleLink);
     hideElement(errorScreen);
     showElement(loadingIcon);
 
@@ -40,7 +42,6 @@ void main() async {
       }).catchError((error) {
         articleLink.text = "Error transcribing article...";
         articleLink.href = url;
-        articleMetrics.text = "";
         hideElement(loadingIcon);
         showElement(errorScreen);
       });
@@ -94,6 +95,14 @@ showElement(DivElement div) {
 
 clearArticleContents(DivElement articleDiv) {
   articleDiv.setInnerHtml("");
+}
+
+clearArticleMetrics(HeadingElement articleMetrics) {
+  articleMetrics.text = "";
+}
+
+clearArticleTitle(AnchorElement articleTitle) {
+  articleTitle.text = "";
 }
 
 transcribeArticleContents(DivElement articleDiv, String articleContents) {
