@@ -75,7 +75,8 @@ setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
     return;
   }
 
-  HttpRequest.getString('${baseScribeUrl}/cached?url=${requestUrl}').then((result) {
+  String encodedUrl = Uri.encodeQueryComponent(requestUrl);
+  HttpRequest.getString('${baseScribeUrl}/cached?url=${encodedUrl}').then((result) {
     var isCached = result == 'true';
 
     if (isCached) {
