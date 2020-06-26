@@ -4,16 +4,17 @@ import 'dart:html';
 
 const CACHE_WAIT_MILLISECONDS = 500;
 const READER_WORDS_PER_MINUTE = 200;
+const SCRIBE_URL = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
+//const SCRIBE_URL = "http://localhost:8081";
 
 void main() async {
   print('Article Scribe Awoken!');
-  String scribeUrl = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
-  //String scribeUrl = "http://localhost:8081";
 
   FormElement urlForm = querySelector('#urlForm');
   ButtonElement submitButton = querySelector('#submit');
   InputElement urlInput = querySelector('#sourceUrl');
   HeadingElement articleMetrics = querySelector('#articleMetrics');
+  AnchorElement rawContentLink = querySelector('#rawContentLink');
   AnchorElement articleLink = querySelector('#articleLink');
   DivElement articleContents = querySelector('#articleContents');
   DivElement loadingIcon = querySelector('.loadingIcon');
@@ -22,8 +23,9 @@ void main() async {
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
     clearArticleContents(articleContents);
-    clearArticleMetrics(articleMetrics);
-    clearArticleTitle(articleLink);
+    clearText(articleMetrics);
+    clearText(articleLink);
+    clearText(rawContentLink);
     hideElement(errorScreen);
     showElement(loadingIcon);
 
@@ -33,11 +35,12 @@ void main() async {
 
     var body = {'page': url};
     var headers = {'Content-Type': 'application/json'};
-    HttpRequest.request('${scribeUrl}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
+    HttpRequest.request('${SCRIBE_URL}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
       .then((HttpRequest resp) {
         var readableResult = json.decode(resp.responseText);
         articleLink.text = readableResult['title'];
         articleLink.href = url;
+        populateRawContentLink(rawContentLink, SCRIBE_URL, url);
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
 
@@ -51,10 +54,10 @@ void main() async {
   });
 
   // trigger cached article check
-  var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+  var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
   urlInput.onInput.listen((Event e) {
     timer.cancel();
-    timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(scribeUrl, standardizeUrl(urlInput.value), submitButton));
+    timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
   });
 
   fetchInitialUrl(urlInput, submitButton);
@@ -97,16 +100,18 @@ showElement(DivElement div) {
   div.style.display = 'block';
 }
 
+clearText(HtmlElement element) {
+  element.text = "";
+}
+
+populateRawContentLink(AnchorElement link, String baseScribeUrl, String requestUrl) {
+  link.text = "SEE RAW CONTENT";
+  String encodedUrl = Uri.encodeQueryComponent(requestUrl);
+  link.href = '${baseScribeUrl}/fetch?url=${encodedUrl}';
+}
+
 clearArticleContents(DivElement articleDiv) {
   articleDiv.setInnerHtml("");
-}
-
-clearArticleMetrics(HeadingElement articleMetrics) {
-  articleMetrics.text = "";
-}
-
-clearArticleTitle(AnchorElement articleTitle) {
-  articleTitle.text = "";
 }
 
 transcribeArticleContents(DivElement articleDiv, String articleContents) {

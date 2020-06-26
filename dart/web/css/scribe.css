@@ -66,6 +66,11 @@ h1,h2,h3 {
   font-style: normal;
 }
 
+.siteFooter {
+  font-family: monospace;
+  font-size: 15px;
+}
+
 .loadingIcon {
   text-align: center;
   display: none;
