@@ -41,6 +41,9 @@ handlers:
 - url: /assets
   static_dir: dart/build/assets/
   secure: always
+- url: /javascript
+  static_dir: dart/build/javascript/
+  secure: always
 - url: /fonts
   static_dir: dart/build/fonts/
   secure: always
