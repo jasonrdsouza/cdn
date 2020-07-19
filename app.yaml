@@ -21,6 +21,10 @@ handlers:
   static_files: dart/build/scribe.html
   upload: dart/build/scribe.html
   secure: always
+- url: /smartcam
+  static_files: dart/build/smartcam.html
+  upload: dart/build/smartcam.html
+  secure: always
 - url: /sicp
   static_files: sicp/index.xhtml
   upload: sicp/index.xhtml
