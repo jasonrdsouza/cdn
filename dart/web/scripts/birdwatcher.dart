@@ -1,7 +1,6 @@
 import 'dart:html';
 
 import 'mobilenet.dart';
-//import 'dart:html'
 
 void main() async {
   print('Bird Watcher Active!');
@@ -26,7 +25,10 @@ void main() async {
 
       var predictions = await classifyImage('img');
       print(predictions);
-      consoleElement.innerText = predictions[0]['className'];
+      String topPrediction = (predictions[0]['className']).split(",").first;
+      var predictionProbability = (predictions[0]['probability'] * 100).round();
+
+      consoleElement.innerText = "Neural Net Prediction: ${topPrediction}\nConfidence: ${predictionProbability}%";
     }
   });
 

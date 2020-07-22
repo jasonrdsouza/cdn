@@ -2,10 +2,10 @@ let net;
 
 async function mobileNetPredictImage(imageElementId) {
   // Load the model if necessary
-  if (!net) {
+  //if (!net) {
     console.log('Loading model');
     net = await mobilenet.load();
-  }
+  //}
 
   // Make a prediction through the model on our image.
   console.log(`Fetching image with id ${imageElementId}`)

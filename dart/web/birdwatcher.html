@@ -6,6 +6,13 @@
     <meta name="author" content="Jason Dsouza">
     <meta property="og:type" content="website" />
     <meta property="og:title" content="AI Bird Watcher" />
+
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/birdwatcher.css">
+
+    <link rel="icon" type="image/png" href="assets/binoculars.png">
     
     <!-- Load the latest version of TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
@@ -15,8 +22,17 @@
     <script defer src="scripts/birdwatcher.dart.js"></script>
   </head>
   <body>
-    <img id="img" crossorigin src=""/>
-    <div id="console"></div>
-    <input id="fileInput" type='file' />
+
+    <div class="container">
+      <div class="row">
+        <div class="one-half column" style="margin-top: 25%">
+          <h4>Bird Detector (beta)</h4>
+          <img id="img" class="rounded-corners" crossorigin src=""/>
+          <div id="console"></div>
+          <input id="fileInput" class="button-primary" type='file' />
+        </div>
+      </div>
+    </div>
+
   </body>
 </html>
