@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSON Formatter</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/paper.css"/>
+  <link rel="icon" type="image/png" href="assets/closing_tag.png">
+
+  <script defer src="scripts/jsonfmt.dart.js"></script>
+</head>
+
+<body>
+  <div class="container paper">
+
+    <h2>JSON Formatter</h2>
+
+    <div class="form-group">
+      <label for="input">Input JSON:</label>
+      <textarea id="input" placeholder="Input JSON"></textarea>
+    </div>
+
+    <div class="row flex-center">
+      <div class="col-6 col">
+        <button id="submitFormat" class="btn-block btn-success-outline">Format!</button>
+      </div>
+    </div>
+
+    <div>
+      <label for="output">Formatted JSON:</label>
+      <pre id="output" class="border"><code id="jsonOutput"></code></pre>
+    </div>
+
+  </div>
+</body>
+</html>
