@@ -1,6 +1,4 @@
 html, body {
-  width: 80%;
-  height: 80%;
   margin: 40px auto;
   padding: 0 10px;
   max-width:650px;
@@ -8,13 +6,10 @@ html, body {
 }
 
 h1, h2, h3 {
-  line-height:1.2;
   text-align: center;
 }
 
-#wrapper {
-  width: 450px;
-  margin: auto;
-  border: dotted black;
-  padding: 1px;
+#canvas {
+  border: 1px dashed lightslategrey;
+  padding: 1px
 }
