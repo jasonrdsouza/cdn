@@ -1,11 +1,23 @@
 # Overview
 Notes about the various dartlang projects contained herein.
 
+## JsonFMT
+Simple utility to pretty-print JSON blobs.
+
+## Darting Snake
+Recreation of the well known game [Snake](https://en.wikipedia.org/wiki/Snake_(video_game_genre)), with some hidden easter eggs.
+
+## SmartCam
+Proof of concept to enable easily turning old phones and computers with webcams into a mesh security camera network, with machine learning assisted functionality like identifying interesting objects (people, pets, etc), and auto-recording when they enter the frame.
+
+## Birdwatcher
+Experiment with machine learning (mostly so I can learn how to hook the various pieces together) to identify the birds I take pictures of while quarantining during Covid.
+
 ## Spelling Bee Solver
 Simple solver for the [NYT Spelling Bee](https://www.nytimes.com/puzzles/spelling-bee) puzzle game.
 
 ## Scribe
-Wrapper around the [Mozilla Readability](https://github.com/mozilla/readability) to allow for
+Wrapper around the [Mozilla Readability](https://github.com/mozilla/readability) library to allow for
 a reader-friendly view of web articles. Uses a custom Tufte inspired stylesheet, and adds various
 niceties like dark-mode support, time-to-read, and word count.
 

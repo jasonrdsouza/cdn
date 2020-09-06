@@ -6,7 +6,7 @@ void main() {
 
   ButtonElement submitButton = querySelector('#submitFormat');
   TextAreaElement inputElement = querySelector('#input');
-  PreElement formattedBlock = querySelector('#output');
+  HtmlElement formattedBlock = querySelector('#jsonOutput');
 
   submitButton.onClick.listen((_) {
     formattedBlock.text = formatJson(inputElement.value);
