@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+import 'highlight.dart';
+
 const CACHE_WAIT_MILLISECONDS = 500;
 const READER_WORDS_PER_MINUTE = 200;
 const SCRIBE_URL = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
@@ -36,28 +38,31 @@ void main() async {
     var body = {'page': url};
     var headers = {'Content-Type': 'application/json'};
     HttpRequest.request('${SCRIBE_URL}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
-      .then((HttpRequest resp) {
-        var readableResult = json.decode(resp.responseText);
-        articleLink.text = readableResult['title'];
-        articleLink.href = url;
-        populateRawContentLink(rawContentLink, SCRIBE_URL, url);
-        articleMetrics.text = produceMetricText(readableResult['textContent']);
-        transcribeArticleContents(articleContents, readableResult['content']);
+        .then((HttpRequest resp) {
+      var readableResult = json.decode(resp.responseText);
+      articleLink.text = readableResult['title'];
+      articleLink.href = url;
+      populateRawContentLink(rawContentLink, SCRIBE_URL, url);
+      articleMetrics.text = produceMetricText(readableResult['textContent']);
+      transcribeArticleContents(articleContents, readableResult['content']);
 
-        hideElement(loadingIcon);
-      }).catchError((error) {
-        articleLink.text = "Error transcribing article...";
-        articleLink.href = url;
-        hideElement(loadingIcon);
-        showElement(errorScreen);
-      });
+      hideElement(loadingIcon);
+      findAndHighlightCodeBlocks();
+    }).catchError((error) {
+      articleLink.text = "Error transcribing article...";
+      articleLink.href = url;
+      hideElement(loadingIcon);
+      showElement(errorScreen);
+    });
   });
 
   // trigger cached article check
-  var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
+  var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS),
+      () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
   urlInput.onInput.listen((Event e) {
     timer.cancel();
-    timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS), () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
+    timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS),
+        () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
   });
 
   fetchInitialUrl(urlInput, submitButton);
