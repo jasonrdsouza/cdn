@@ -1,4 +1,4 @@
-runtime: go112
+runtime: go113
 
 handlers:
 - url: /spelling-bee
@@ -17,6 +17,33 @@ handlers:
   static_files: dart/build/pomodoro.html
   upload: dart/build/pomodoro.html
   secure: always
+- url: /scribe
+  static_files: dart/build/scribe.html
+  upload: dart/build/scribe.html
+  secure: always
+- url: /smartcam
+  static_files: dart/build/smartcam.html
+  upload: dart/build/smartcam.html
+  secure: always
+- url: /birdwatcher
+  static_files: dart/build/birdwatcher.html
+  upload: dart/build/birdwatcher.html
+  secure: always
+- url: /snake
+  static_files: dart/build/snake.html
+  upload: dart/build/snake.html
+  secure: always
+- url: /jsonfmt
+  static_files: dart/build/jsonfmt.html
+  upload: dart/build/jsonfmt.html
+  secure: always
+- url: /sicp
+  static_files: sicp/index.xhtml
+  upload: sicp/index.xhtml
+  secure: always
+- url: /sicp/contents
+  static_dir: sicp/html/
+  secure: always
 - url: /css
   static_dir: dart/build/css/
   secure: always
@@ -25,6 +52,12 @@ handlers:
   secure: always
 - url: /assets
   static_dir: dart/build/assets/
+  secure: always
+- url: /javascript
+  static_dir: dart/build/javascript/
+  secure: always
+- url: /fonts
+  static_dir: dart/build/fonts/
   secure: always
 - url: /
   static_files: dart/build/index.html

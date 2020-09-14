@@ -1,0 +1,318 @@
+body {
+  margin: 40px auto;
+  line-height: 1.6;
+  font-size: 18px;
+  padding: 0 10px;
+}
+
+.container {
+  padding-top: 3em;
+}
+
+h1,h2,h3 {
+  line-height:1.2;
+}
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid darkgrey;
+  border-right: none;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: darkgrey;
+}
+
+.searchTerm:focus{
+  color: darkgrey;
+}
+
+.searchButton {
+  width: 70px;
+  height: 36px;
+  border: 1px solid darkgrey;
+  background: darkgrey;
+  text-align: center;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.cached {
+  background: #5FA052;
+}
+
+.uncached {
+  background: #E96245;
+}
+
+.metrics {
+  text-align: right;
+  font-style: normal;
+}
+
+.siteFooter {
+  font-family: monospace;
+  font-size: 15px;
+}
+
+.loadingIcon {
+  text-align: center;
+  display: none;
+}
+
+.errorScreen {
+  text-align: center;
+  display: none;
+}
+
+/*
+ * Begin Loading Icon CSS
+ */
+.lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: darkgrey;
+  margin: -4px 0 0 -4px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/*
+ * End Loading Icon CSS
+ */
+
+/* Tomorrow Highlight.js color scheme
+ * http://jmblog.github.com/color-themes-for-google-code-highlightjs
+ */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+  color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+  color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #8959a8;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background: white;
+  color: #4d4d4c;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+/*
+ * End Tomorrow Highlight.js color scheme
+ */
+
+@media (prefers-color-scheme: dark) {
+  body {
+      color: #CCCCCC;
+      background-color: #1d1f21;
+  }
+
+  /*
+   * Tomorrow (Highlight.js) Dark color scheme
+   */
+  /* Tomorrow Comment */
+  .hljs-comment,
+  .hljs-quote {
+    color: #969896;
+  }
+
+  /* Tomorrow Red */
+  .hljs-variable,
+  .hljs-template-variable,
+  .hljs-tag,
+  .hljs-name,
+  .hljs-selector-id,
+  .hljs-selector-class,
+  .hljs-regexp,
+  .hljs-deletion {
+    color: #cc6666;
+  }
+
+  /* Tomorrow Orange */
+  .hljs-number,
+  .hljs-built_in,
+  .hljs-builtin-name,
+  .hljs-literal,
+  .hljs-type,
+  .hljs-params,
+  .hljs-meta,
+  .hljs-link {
+    color: #de935f;
+  }
+
+  /* Tomorrow Yellow */
+  .hljs-attribute {
+    color: #f0c674;
+  }
+
+  /* Tomorrow Green */
+  .hljs-string,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-addition {
+    color: #b5bd68;
+  }
+
+  /* Tomorrow Blue */
+  .hljs-title,
+  .hljs-section {
+    color: #81a2be;
+  }
+
+  /* Tomorrow Purple */
+  .hljs-keyword,
+  .hljs-selector-tag {
+    color: #b294bb;
+  }
+
+  .hljs {
+    display: block;
+    overflow-x: auto;
+    background: #1d1f21;
+    color: #c5c8c6;
+    padding: 0.5em;
+  }
+}

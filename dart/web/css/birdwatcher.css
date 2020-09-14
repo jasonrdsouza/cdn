@@ -1,0 +1,9 @@
+img.rounded-corners {
+  border-radius: 20px;
+  max-width: 100%;
+  box-shadow: 10px 10px 5px #ccc;
+}
+
+div#console {
+  margin: 3em;
+}

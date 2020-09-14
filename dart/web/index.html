@@ -5,28 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
     <title>Experimental Projects Directory</title>
 
-    <!-- Material Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" integrity="sha384-KxpqEtX6IphxuXpPgGLnnBoBcMTZGFv++/7NFeQQIAjYJ4mSS4JyQBUJ0azwYsMi" crossorigin="anonymous">
-
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js" integrity="sha384-RlHK+pMtKV9NIVQZo4JTdXmyPFJY2g0rn9U/byWOqTGja41TURHRmcbj1b8IkU8D" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/paper.css">
   </head>
 
   <body>
 
-    <div class="container">
-      <div class="collection with-header">
-        <div class="collection-header"><h4>Experimental Projects Directory</h4></div>
-        <a href="/passwords" class="collection-item">Password Generator</a>
-        <a href="/pomodoro" class="collection-item">Pomodoro Timer</a>
-        <a href="/spelling-bee" class="collection-item">Spelling Bee Solver</a>
-        <a href="https://wiki.dsouza.io" class="collection-item">Wiki (now disabled)</a>
-        <a href="https://paste.dsouza.io" class="collection-item">Pastebin (now disabled)</a>
-        <a href="/hooggaa" class="collection-item">Hooggaa POC (now disabled)</a>
-      </div>
+    <div>
+    <div class="container paper border">
+      <h2>Experimental Projects Directory</h2>
+      <ul>
+        <li><a href="https://pub.dev/packages/cork_site">Cork - Minimalist static site generator</a>
+          <ul>
+            <li>Attempt to write the simplest possible static site generator that satisfies my own personal use cases</li>
+            <li>Native support for <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>, <a href="https://mustache.github.io/">Mustache</a>, and <a href="https://dart.dev/">Dartlang</a></li>
+            <li>Not meant as a general purpose solution like <a href="https://jekyllrb.com/">Jekyll</a> or <a href="https://gohugo.io/">Hugo</a></li>
+          </ul>
+        </li>
+        <li><a href="/jsonfmt">Json Formatter</a>
+          <ul><li>Simple utility to pretty-print JSON blobs</li></ul>
+        </li>
+        <li><a href="/snake">Snake Game</a>
+          <ul><li>First foray into writing games with web technologies, by way of recreating the well known game <a href="https://en.wikipedia.org/wiki/Snake_(video_game_genre)">Snake</a></li></ul>
+        </li>
+        <li><a href="/birdwatcher">AI Bird Watcher</a>
+          <ul><li>Experiment with machine learning to <a href="https://xkcd.com/1425/">identify the birds I take pictures of</a> while quarantining during <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic">Covid-19</a></li></ul>
+        </li>
+        <li><a href="/smartcam">Smart Security Camera</a>
+          <ul>
+            <li>Proof of concept to enable easily turning old phones and computers with webcams into a mesh security camera network</li>
+            <li>Uses machine learning to identify interesting objects (people, pets, etc), and auto-record when they enter the frame</li>
+          </ul>
+        </li>
+        <li><a href="/scribe">Article Scribe</a>
+          <ul>
+            <li>Article readability as a service, optimized for mobile reading</li>
+            <li>My attempt at a more personalized <a href="https://getpocket.com">Pocket</a></li>
+            <li>Integrated with various other personal tooling and workflows</li>
+          </ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/sqsrd">SQS Message Redriving Utility</a>
+          <ul>
+            <li>Command line utility to "redrive" SQS messages.</li>
+            <li>Useful for high throughput services with <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">dead-letter queues</a></li>
+          </ul>
+        </li>
+        <li><a href="/sicp">SICP Mirror</a>
+          <ul><li>Browser (and mobile) friendly version of the legendary computer science text <a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">Structure and Interpretation of Computer Programs</a></li></ul>
+        </li>
+        <li><a href="/spelling-bee">Spelling Bee Solver</a>
+          <ul><li>Solver for the addictive New York Times <a href="https://www.nytimes.com/puzzles/spelling-bee">Spelling Bee</a> game</li></ul>
+        </li>
+        <li><a href="/pomodoro">Pomodoro Timer</a>
+          <ul><li>Minimalist <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro Timer</a> with a RESTful UI</li></ul>
+        </li>
+        <li><a href="/passwords">Password Generator</a>
+          <ul>
+            <li>Simple, client-side password generator using cryptographically secure randomly generated characters</li>
+          </ul>
+        </li>
+        <li><a href="https://wiki.dsouza.io">Personal Wiki</a>
+          <ul><li>Based on <a href="https://tiddlywiki.com/">TiddlyWiki</a>, customized as a computer-aided <a href="https://en.wikipedia.org/wiki/Zettelkasten">Zettelkasten</a>. No longer served publicly.</li></ul>
+        </li>
+        <li><a href="/hooggaa">Hooggaa POC</a>
+          <ul><li>Proof of concept onboarding flow for Hooggaa startup (now disabled)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/paste">Paste</a>
+          <ul><li>A serverless, secure, personal pastebin.</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/kron">Kron</a>
+          <ul><li>Implementation of cron, with modern features like retries and job dependancies (unfinished)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/banktorrent">BankTorrent</a>
+          <ul><li>A third app to track shared expenses, this time CLI focused (2013)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/transactor">Transactor</a>
+          <ul><li>Another webapp to track shared expenses, focused on couples (2013)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/commoncents">CommonCents</a>
+          <ul><li>Webapp to track shared expenses between friends (2012, predating the rise of SplitWise ;-)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/foosball_monkey">Foosball Monkey</a>
+          <ul><li>Webapp to track office Foosball rankings (2012)</li></ul>
+        </li>
+        <li><a href="https://nodule-volume-estimation.jasondsouza.org/">Computer vision lung nodule volume estimation project (2011)</a></li>
+        <li><a href="https://www.jasondsouza.org/unscramble/">Unscramble</a>
+          <ul><li>Small utility (with UI) to unscramble letters into valid words (ala Scrabble, Words with Friends, etc.)</li></ul>
+        </li>
+        <li><a href="https://github.com/jasonrdsouza/MongoBenchmarks">Simple MongoDB Benchmarking Suite</a>
+          <ul><li>(unsupported as of 2011)</li></ul>
+        </li>
+      </ul>
+    </div>
     </div>
 
   </body>

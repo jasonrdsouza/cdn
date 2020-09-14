@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scribe Article Reader & Archiver</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/tufte.css"/>
+  <link rel="stylesheet" href="css/scribe.css">
+  <link rel="icon" type="image/png" href="assets/quill.png">
+
+  <!-- Code block syntax highlighting -->
+  <script src="javascript/highlight.pack.js"></script>
+  <script src="javascript/highlight-now.js"></script>
+
+  <script defer src="scripts/scribe.dart.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <form id="urlForm">
+      <div class="search">
+        <input class="searchTerm" type="text" id="sourceUrl" placeholder="Article URL"></input>
+        <button class="searchButton" id="submit" type="submit" name="action">Fetch</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="article">
+    <h1 id="articleTitle">
+      <a id="articleLink"></a>
+    </h1>
+    <div class="info">
+      <h2 class="metrics" id="articleMetrics"></h2>
+    </div>
+
+    <!-- Loading Icon -->
+    <div class="loadingIcon">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+
+    <div class="errorScreen">
+      <img src="assets/spilled_ink.png" alt="Error loading article...">
+    </div>
+
+    <!-- Article Contents -->
+    <div id="articleContents"></div>
+
+    <footer class="siteFooter">
+      <a id="rawContentLink"></a>
+    </footer>
+  </div>
+</body>
+</html>
