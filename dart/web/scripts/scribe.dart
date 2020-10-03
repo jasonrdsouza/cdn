@@ -6,6 +6,7 @@ import 'highlight.dart';
 
 const CACHE_WAIT_MILLISECONDS = 500;
 const READER_WORDS_PER_MINUTE = 200;
+const VIEWER_QUERY_PARAM = 'v';
 const SCRIBE_URL = "https://us-central1-dsouza-proving-ground.cloudfunctions.net/scribe";
 //const SCRIBE_URL = "http://localhost:8081";
 
@@ -32,8 +33,7 @@ void main() async {
     showElement(loadingIcon);
 
     var url = standardizeUrl(urlInput.value);
-    // set shareable URL
-    window.history.replaceState('', 'Article Reader', '?url=${url}');
+    setShareableUrl(url);
 
     var body = {'page': url};
     var headers = {'Content-Type': 'application/json'};
@@ -66,6 +66,7 @@ void main() async {
   });
 
   fetchInitialUrl(urlInput, submitButton);
+  hideSearchBarIfRequested();
 }
 
 class AllowAllUriPolicy implements UriPolicy {
@@ -136,6 +137,20 @@ fetchInitialUrl(InputElement urlInput, ButtonElement submitButton) {
     urlInput.value = standardizeUrl(Uri.base.queryParameters[key]);
     submitButton.click();
   }
+}
+
+hideSearchBarIfRequested() {
+  if (Uri.base.queryParameters.containsKey(VIEWER_QUERY_PARAM) && Uri.base.queryParameters[VIEWER_QUERY_PARAM] == '1') {
+    hideElement(querySelector('#formWrapper'));
+  }
+}
+
+setShareableUrl(String url) {
+  String queryString = 'url=${url}';
+  if (Uri.base.queryParameters.containsKey(VIEWER_QUERY_PARAM)) {
+    queryString = 'v=1&${queryString}';
+  }
+  window.history.replaceState('', 'Article Reader', '?${queryString}');
 }
 
 String standardizeUrl(String url) {
