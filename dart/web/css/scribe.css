@@ -57,6 +57,7 @@ h1,h2,h3 {
 .metrics {
   text-align: right;
   font-style: normal;
+  font-size: 1.25em;
 }
 
 .siteFooter {
