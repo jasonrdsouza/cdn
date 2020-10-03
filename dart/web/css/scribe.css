@@ -227,7 +227,7 @@ h1,h2,h3 {
 .hljs {
   display: block;
   overflow-x: auto;
-  background: white;
+  background: #fffff8;
   color: #4d4d4c;
   padding: 0.5em;
 }
