@@ -60,6 +60,7 @@ void main() async {
   var timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS),
       () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
   urlInput.onInput.listen((Event e) {
+    clearCachedStatus(submitButton);
     timer.cancel();
     timer = Timer(Duration(milliseconds: CACHE_WAIT_MILLISECONDS),
         () => setCachedStatus(SCRIBE_URL, standardizeUrl(urlInput.value), submitButton));
@@ -76,11 +77,15 @@ class AllowAllUriPolicy implements UriPolicy {
   }
 }
 
+clearCachedStatus(Element submitButton) {
+  submitButton.classes.remove('cached');
+  submitButton.classes.remove('uncached');
+}
+
 setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
   if (['https://', 'http://'].contains(requestUrl)) {
     // don't check cache for empty request URL
-    element.classes.remove('cached');
-    element.classes.remove('uncached');
+    clearCachedStatus(element);
     return;
   }
 
