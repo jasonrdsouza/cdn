@@ -29,6 +29,10 @@ handlers:
   static_files: dart/build/birdwatcher.html
   upload: dart/build/birdwatcher.html
   secure: always
+- url: /mushrooms
+  static_files: dart/build/mushrooms.html
+  upload: dart/build/mushrooms.html
+  secure: always
 - url: /snake
   static_files: dart/build/snake.html
   upload: dart/build/snake.html
