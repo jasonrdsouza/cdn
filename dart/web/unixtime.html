@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Unix Timestamp Conversion</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/paper.css"/>
+  <link rel="icon" type="image/png" href="assets/timezones.png">
+
+  <script defer src="scripts/unixtime.dart.js"></script>
+</head>
+
+<body>
+  <div class="container paper">
+
+    <h2>Unix Timestamp Converter</h2>
+
+    <div class="form-group">
+      <label for="input">Unix Timestamp</label>
+      <textarea id="input" placeholder="timestamp (seconds)"></textarea>
+    </div>
+
+    <div class="row flex-center">
+      <div class="col-6 col">
+        <button id="submitConvert" class="btn-block btn-success-outline">Convert!</button>
+      </div>
+    </div>
+
+    <div>
+      <label for="output">Humanized Timestamp:</label>
+      <pre id="output" class="border"><code id="output"></code></pre>
+    </div>
+
+  </div>
+</body>
+</html>

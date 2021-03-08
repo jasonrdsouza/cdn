@@ -41,6 +41,10 @@ handlers:
   static_files: dart/build/jsonfmt.html
   upload: dart/build/jsonfmt.html
   secure: always
+- url: /unixtime
+  static_files: dart/build/unixtime.html
+  upload: dart/build/unixtime.html
+  secure: always
 - url: /clock
   static_files: dart/build/clock.html
   upload: dart/build/clock.html
