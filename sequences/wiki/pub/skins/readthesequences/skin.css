@@ -1,0 +1,1750 @@
+/*++++++++++++++++++++++++++++++++++*
+  ‘READTHESEQUENCES’ skin for PmWiki
+  
+  Copyright 2019 SAID ACHMIZ
+  
+  www [dot] saidachmiz [dot] net
+  said [at] saidachmiz [dot] net
+  
+  Skin version 2019-01-12
+ *++++++++++++++++++++++++++++++++++*/
+
+/************************/
+/* GARAMOND PREMIER PRO */
+/************************/
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-RegularItalic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-Medium.otf') format('opentype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-MediumItalic.otf') format('opentype');
+	font-weight: 500;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-Semibold.otf') format('opentype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-SemiboldItalic.otf') format('opentype');
+	font-weight: 600;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-Bold.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro';
+	src: url('../../../fonts/font_files/GaramondPremierPro/GaramondPremierPro-BoldItalic.otf') format('opentype');
+	font-weight: bold;
+	font-style: italic;
+	font-display: fallback;
+}
+
+/********************************/
+/* GARAMOND PREMIER PRO CAPTION */
+/********************************/
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-RegularItalic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-Medium.otf') format('opentype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-MediumItalic.otf') format('opentype');
+	font-weight: 500;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-Semibold.otf') format('opentype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-SemiboldItalic.otf') format('opentype');
+	font-weight: 600;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-Bold.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Caption';
+	src: url('../../../fonts/font_files/GaramondPremierProCaption/GaramondPremierProCaption-BoldItalic.otf') format('opentype');
+	font-weight: bold;
+	font-style: italic;
+	font-display: fallback;
+}
+
+/********************************/
+/* GARAMOND PREMIER PRO SUBHEAD */
+/********************************/
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-RegularItalic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Medium.otf') format('opentype');
+	font-weight: 500;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-MediumItalic.otf') format('opentype');
+	font-weight: 500;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Semibold.otf') format('opentype');
+	font-weight: 600;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-SemiboldItalic.otf') format('opentype');
+	font-weight: 600;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Garamond Premier Pro Subhead';
+	src: url('../../../fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Bold.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+	font-display: fallback;
+}
+
+/******************/
+/* PRESTIGE ELITE */
+/******************/
+
+@font-face {
+	font-family: 'Prestige Elite';
+	src: url('../../../fonts/font_files/PrestigeElite/PrestigeElite-Regular.otf') format('opentype');
+	font-weight: normal;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Prestige Elite';
+	src: url('../../../fonts/font_files/PrestigeElite/PrestigeElite-RegularItalic.otf') format('opentype');
+	font-weight: normal;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Prestige Elite';
+	src: url('../../../fonts/font_files/PrestigeElite/PrestigeElite-Bold.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Prestige Elite';
+	src: url('../../../fonts/font_files/PrestigeElite/PrestigeElite-BoldItalic.otf') format('opentype');
+	font-weight: bold;
+	font-style: italic;
+	font-display: fallback;
+}
+
+/****************/
+/* PROXIMA NOVA */
+/****************/
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-Thin.otf') format('opentype');
+	font-weight: 200;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-ThinItalic.otf') format('opentype');
+	font-weight: 200;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-Light.otf') format('opentype');
+	font-weight: 300;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-LightItalic.otf') format('opentype');
+	font-weight: 300;
+	font-style: italic;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-Regular.otf') format('opentype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Proxima Nova';
+	src: url('../../../fonts/font_files/ProximaNova/ProximaNova-RegularItalic.otf') format('opentype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: fallback;
+}
+
+/*******************/
+/* SOURCE SANS PRO */
+/*******************/
+
+@font-face {
+	font-family: 'Source Sans Pro';
+	src: url('../../../fonts/font_files/SourceSansPro/SourceSansPro-Regular.otf') format('opentype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: fallback;
+}
+
+@font-face {
+	font-family: 'Source Sans Pro';
+	src: url('../../../fonts/font_files/SourceSansPro/SourceSansPro-RegularItalic.otf') format('opentype');
+	font-weight: 400;
+	font-style: italic;
+	font-display: fallback;
+}
+
+/***********/
+/* GENERAL */
+/***********/
+
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+html, body {
+	padding: 0;
+	margin: 0;
+	font-size: 16px;
+	background-color: #fffffa;
+	text-rendering: optimizeLegibility; 
+}
+
+#wikitext {
+	font-family: Garamond Premier Pro, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-size: 1.3125rem;
+	font-weight: 400;
+	line-height: 1.4;
+	color: #000;
+	text-shadow: 0 0 1px #fffffa;
+	text-align: justify;
+	text-justify: inter-word;
+	font-variant-ligatures: common-ligatures;
+	tab-size: 4;
+	-moz-font-feature-settings: "liga", "clig";
+	-webkit-font-feature-settings: "liga", "clig";
+	font-feature-settings: "liga", "clig";
+
+	min-height: 100vh;
+	overflow: auto;
+	padding: 0 0 80px 0;
+	position: relative;
+}
+
+/****************/
+/* PAGE ACTIONS */
+/****************/
+
+#wikicmds {
+	position: fixed;
+	right: 0;
+	top: 0;
+	margin: 2em 0.5em 0 0;
+	z-index: 1;
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', Verdana, sans-serif;
+	font-size: 0.875rem;
+}
+#wikicmds li {
+	margin: 0;
+	padding: 0.25em 0.5em;
+	display: inline-block;
+}
+#wikicmds a {
+	display: block;
+}
+#wikicmds a:hover {
+	border: none;
+}
+#wikicmds a::after {
+	display: none;
+}
+
+#wikimove input[type="text"] {
+	width: 600px;
+	font-size: 18px;
+}
+#wikimove input[name="move"] {
+	width: 150px;
+	font-size: 17px;
+	border: 1px solid black;
+	background-color: white;
+	border-radius: 4px;
+	position: relative;
+	top: -1px;
+}
+#wikimove input[name="move"]:hover {
+	background-color: #aaa;
+}
+
+
+/************/
+/* HEADINGS */
+/************/
+
+h1 {
+	font-family: Garamond Premier Pro Subhead, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-weight: 500;
+	font-size: 2em;
+	text-align: center;
+	line-height: 1.15;
+	color: #000;
+	max-width: 620px;
+	margin: 80px auto 40px auto;
+}
+h1 + p {
+	margin: 40px auto;
+}
+h1.h1_with_byline {
+	margin-bottom: 0px;
+}
+h1.h1_with_byline + p {
+	margin-top: 6px;
+	margin-bottom: 40px;
+	text-align: center;
+}
+h2 {
+	font-family: Garamond Premier Pro Subhead, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-weight: 500;
+	font-size: 1.5em;
+	color: #aaa;
+	max-width: 620px;
+	text-align: center;
+	margin: 80px auto 0px auto;
+}
+h2 + h1 {
+	margin-top: 0px;
+	font-variant: small-caps;
+	line-height: 1.1;
+	max-width: 100%;
+	font-size: 2.25em;
+}
+h3 {
+	font-family: Garamond Premier Pro Subhead, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-weight: 500;
+	font-size: 1.6em;
+	font-style: italic;
+	text-align: left;
+	max-width: 620px;
+	margin: 1em auto 0.6em auto
+}
+h3 + p {
+	margin-top: 6px;
+}
+h4 {
+	font-family: Garamond Premier Pro Subhead, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-size: 1.15em;
+	max-width: 620px;
+	margin: 16px auto 0px auto;
+}
+h4 + p {
+	margin-top: 9px;
+}
+
+/***************/
+/* CODE BLOCKS */
+/***************/
+
+/* These control the fixed-width text elements of the page */
+pre, code { font-size:14px; }
+pre, code, .diffmarkup { font-family:'Lucida Console','Andale Mono','Courier New',Courier,monospace; }
+pre { line-height: 18px; }
+pre code, code code, pre pre { font-size:100%; }
+
+/*************/
+/* EDIT FORM */
+/*************/
+
+h2.wikiaction {
+	margin: 1em auto 0.5em auto;
+}
+#wikiedit {
+	margin: 0 auto;
+	width: 1000px;
+}
+#wikiedit textarea {
+	font-family: Georgia, Palatino, Palatino Linotype, serif;
+	font-family: Prestige Elite, Courier, Courier New, monospace;
+	font-size: 1.125rem;
+	width: 100%;
+	height: 720px;
+	margin: 0 0 4px 0;
+}
+.quickref {
+	max-width: 940px;
+	margin: 20px;
+}
+.quickref p {
+	margin: 0;
+}
+
+/*********/
+/* LINKS */
+/*********/
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+a:hover {
+	color: #999;
+	border-bottom: 1px dotted #999;
+}
+a:active {
+	color: #777;
+}
+a:link::after,
+a:visited::after {
+	position: relative;
+	content: "﻿°";
+	margin-left: 2px;
+	margin-right: 1px;
+	color: #933;
+}
+
+/********/
+/* MISC */
+/********/
+
+.wikimessage { margin-top:4px; margin-bottom:4px; font-style:italic; }
+
+input, img, iframe {
+	max-width: 100%;
+}
+dd {
+	margin-left: 15px;
+}
+ul, ol {
+	margin: 0; 
+	padding: 0 0 0 20px;
+}
+
+select, textarea, input {
+	font-size: inherit;
+}
+
+/* Prevent white space below vertically stacked images */
+div.imgonly img, div.imgcaption img:first-child { vertical-align: bottom; }
+
+/* In HTML5 only styles are valid for alignment */
+td.left,	 th.left	 { text-align: left;}
+td.center, th.center { text-align: center;}
+td.right,	th.right	{ text-align: right;}
+td.top,		th.top		{ vertical-align: top;}
+td.bottom, th.bottom { vertical-align: bottom;}
+td.middle, th.middle { vertical-align: middle;}
+
+p {
+	max-width: 620px;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	margin: auto;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+p em {
+	font-variant-ligatures: discretionary-ligatures;
+	-moz-font-feature-settings: "dlig";
+	-webkit-font-feature-settings: "dlig";
+	font-feature-settings: "dlig";
+}
+ol {
+	max-width: 620px;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	padding-left: 2.9em;
+	margin: 0px auto 0px auto;
+}
+ol li {
+	margin-bottom: 1em;
+}
+p .noalternates em {
+	font-variant-ligatures: no-contextual;
+	-moz-font-feature-settings: "calt" 0;
+	-webkit-font-feature-settings: "calt" 0;
+	font-feature-settings: "calt" 0;
+}
+.osf {
+	font-variant-numeric: oldstyle-nums;
+	-moz-font-feature-settings: "onum";
+	-webkit-font-feature-settings: "onum";
+	font-feature-settings: "onum";
+}
+.year {
+	font-variant-numeric: oldstyle-nums, proportional-nums;
+	-moz-font-feature-settings: "onum", "pnum";
+	-webkit-font-feature-settings: "onum", "pnum";
+	font-feature-settings: "onum", "pnum";
+}
+.noalternates {
+	font-variant-ligatures: no-contextual;
+	-moz-font-feature-settings: "calt" 0;
+	-webkit-font-feature-settings: "calt" 0;
+	font-feature-settings: "calt" 0;
+}
+
+/***********/
+/* FIGURES */
+/***********/
+
+div.img {
+	max-width: 620px;
+	margin: 1.75em auto 2em auto;
+}
+.img img {
+	display: block;
+	margin: auto;
+}
+.img img + br {
+	display: none;
+}
+.caption {
+	display: block;
+	text-align: center;
+	font-size: 0.9em;
+	margin: 1em 0 0 0;
+}
+
+/***************************************/
+/* TABLES OF CONTENTS (BOOK, SEQUENCE) */
+/***************************************/
+
+.toc ol {
+	list-style-type: none;
+	display: table;
+	padding-left: 0;
+	text-align: center;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+.toc li {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	line-height: 1.4;
+}
+.toc h3 {
+	text-align: center;
+	font-style: normal;
+	line-height: 1.1;
+	margin-top: 0.5em;
+	margin-bottom: 0;
+}
+.toc h3 .chapter_letter {
+	color: #BBB;
+	font-size: 1.7em;
+}
+.toc a {
+	color: #690010;
+}
+.toc a:hover {
+	border: none;
+	text-shadow: 0px 0px 0.5px #ff987b, 0px 0px 1px #c05651;
+}
+.toc h3 a:hover {
+	border: none;
+	text-shadow: 0px 0px 0.5px #ff987b, 0px 0px 1.5px #c05651;
+}
+.toc a:link::after, a:visited::after {
+	content: none;
+}
+
+/*********/
+/* LISTS */
+/*********/
+
+ul {
+	max-width: 620px;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	padding-left: 2.9em;
+	margin: 0px auto 0px auto;
+}
+blockquote ul,
+blockquote ol {
+	padding-left: 40px;
+}
+ul li {
+	margin-bottom: 1em;
+}
+ul ul {
+	margin-top: 1em;
+}
+ol {
+	counter-reset: numeric_list;
+	list-style-type: none;
+}
+ol li {
+	position: relative;
+}
+ol li::before {
+	counter-increment: numeric_list;
+	content: counter(numeric_list) ".";
+	position: absolute;
+	width: 2em;
+	left: -2.5em;
+	text-align: right;
+	font-variant-numeric: oldstyle-nums;
+	-moz-font-feature-settings: "onum";
+	-webkit-font-feature-settings: "onum";
+	font-feature-settings: "onum";
+}
+
+/*************************/
+/* CITATIONS & FOOTNOTES */
+/*************************/
+
+.citation {
+	font-family: Garamond Premier Pro Caption, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	vertical-align: baseline;
+	position: relative;
+	top: -0.6em;
+	font-size: 0.65em;
+	font-weight: 600;
+	color: #933;
+}
+.citation a:link::before, 
+.citation a:visited::before {
+	content: "\200A";
+	margin: 0;
+}
+.citation a:link::after, 
+.citation a:visited::after {
+	content: "\200A";
+	margin: 0;
+}
+a.footnote {
+	font-family: Garamond Premier Pro Caption, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	vertical-align: baseline;
+	position: relative;
+	font-weight: 600;
+	color: #933;
+}
+a.footnote::before, 
+a.footnote::before {
+	content: "\200A";
+	margin: 0;
+}
+a.footnote::after, 
+a.footnote::after {
+	content: "\200A";
+	margin: 0;
+}
+.footnotes {
+	counter-reset: footnotes;
+	font-size: 0.75em;
+	margin: 1em auto 2em auto;
+	padding-left: 2em;
+	max-width: 620px;
+	font-variant-ligatures: no-contextual;
+	-moz-font-feature-settings: "calt" 0;
+	-webkit-font-feature-settings: "calt" 0;
+	font-feature-settings: "calt" 0;
+	font-variant-ligatures: no-discretionary-ligatures;
+	-moz-font-feature-settings: "dlig" 0;
+	-webkit-font-feature-settings: "dlig" 0;
+	font-feature-settings: "dlig" 0;
+}
+.footnotes p em {
+	font-variant-ligatures: no-contextual no-discretionary-ligatures;
+	-moz-font-feature-settings: "calt" 0, "dlig" 0;
+	-webkit-font-feature-settings: "calt" 0, "dlig" 0;
+	font-feature-settings: "calt" 0, "dlig" 0;
+}
+.footnotes p {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+span.footnote {
+	position: relative;
+}
+span.footnote::before {
+	counter-increment: footnotes;
+	content: counter(footnotes) ".";
+	position: absolute;
+	width: 2em;
+	left: -2.5em;
+	text-align: right;
+}
+.back_to_citation_link {
+	vertical-align: baseline;
+	position: relative;
+	top: 0.1em;
+}
+.back_to_citation_link a:link::before {
+	content: "\2005";
+}
+.back_to_citation_link a:link::after {
+	content: "\2005";
+}
+
+/****************/
+/* BIBLIOGRAPHY */
+/****************/
+
+.bibliography {
+	font-size: 0.9em;
+	text-indent: -2em;
+	margin-top: 1em;
+	text-align: left;
+	font-variant-ligatures: no-contextual;
+	-moz-font-feature-settings: "calt" 0;
+	-webkit-font-feature-settings: "calt" 0;
+	font-feature-settings: "calt" 0;
+}
+.bibliography p em {
+	font-variant-ligatures: no-contextual no-discretionary-ligatures;
+	-moz-font-feature-settings: "calt" 0, "dlig" 0;
+	-webkit-font-feature-settings: "calt" 0, "dlig" 0;
+	font-feature-settings: "calt" 0, "dlig" 0;
+}
+.big_toc ul > li > ol > li,
+.toc ol li {
+	position: initial;
+}
+.big_toc ol li::before,
+.toc ol li::before {
+	content: none;
+}
+p.indent {
+	padding-left: 2.9em;
+}
+sup, sub {
+	font-family: Garamond Premier Pro Caption, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	vertical-align: baseline;
+	position: relative;
+	top: -0.6em;
+	font-size: 0.65em;
+	font-weight: 500;
+}
+sub {
+	top: 0.3em;
+}
+.equation em + sub, .equation em sub {
+	left: -0.15em;
+	letter-spacing: -0.5px;
+}
+.sup {
+	font-family: Garamond Premier Pro Caption, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-variant-position: super;
+	-moz-font-feature-settings: "sups";
+	-webkit-font-feature-settings: "sups";
+	font-feature-settings: "sups";
+	font-weight: 500;
+}
+.sub {
+	font-family: Garamond Premier Pro Caption, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+	font-variant-position: sub;
+	-moz-font-feature-settings: "subs";
+	-webkit-font-feature-settings: "subs";
+	font-feature-settings: "subs";
+	font-weight: 500;
+}
+blockquote {
+	max-width: 620px;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+blockquote p,
+blockquote ul,
+blockquote ol {
+	font-size: 0.9em;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+}
+.toc blockquote ul {
+	margin-top: 1em;
+}
+.toc blockquote ul li {
+	margin-bottom: 0.6em;
+	line-height: 1.3;
+}
+p.blockquote_byline {
+	margin-top: 8px;
+	text-align: right;
+}
+.semibold {
+	font-weight: 600;
+}
+pre, code, .monospaced {
+	font-family: Prestige Elite, Courier, Courier New, monospace;
+	font-size: 0.83em;
+	white-space: pre-line;
+}
+p.monospaced,
+.monospaced p {
+	line-height: 1.5;
+}
+.smallcaps {
+	font-variant: small-caps;
+}
+.boxed {
+	font-family: Source Sans Pro, Lucida Grande, Lucida Sans Unicode, Verdana, sans-serif;
+	font-weight: normal;
+	font-size: 0.8em;
+	color: #0a0a0a;
+	border: 1px solid black;
+	padding: 2px 0px 2px 0px;
+}
+.diagram .boxed {
+	font-size: 0.9em;
+	padding: 3px 1px 4px 1px;
+}
+.boxed::before {
+	content: "\2005";
+}
+.boxed::after {
+	content: "\2005";
+}
+.question {
+	padding-left: 3em;
+	padding-right: 2em;
+	position: relative;
+	font-weight: bold;
+}
+.question + p {
+	padding-left: 3em;
+	padding-right: 2em;
+	position: relative;
+}
+.question::before {
+	content: "Q: ";
+	position: absolute;
+	left: 1.5em;
+	font-weight: bold;
+}
+.question + p::before {
+	content: "A: ";
+	position: absolute;
+	left: 1.5em;
+}
+.original_lesswrong_link {
+	text-align: center;
+	max-width: 620px;
+	margin: 2em auto;
+}
+.original_lesswrong_link {
+	position: relative;
+	height: 35px;
+}
+.original_lesswrong_link img {
+	display: none;
+}
+
+.nohyphens,
+.nohyphens p {
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+.original_lesswrong_link a:link::after {
+	content: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0KVW5pY29kZSByZXF1ZXN0ZWQ6IDQyIChkZWNpbWFsOiA0MiBoZXg6IDB4MmEpCkdseXBoIGluZGV4IGZvciB1bmljb2RlOiAxMwpMb2FkIEdseXBoIGludG8gRmFjZSdzIGdseXBoIHNsb3QuIGVycm9yIGNvZGU6IDAKR2x5cGggTmFtZTogYXN0ZXJpc2sKR2x5cGggV2lkdGg6IDAgSGVpZ2h0OiAwIEhvci4gQWR2YW5jZTogMCBWZXJ0LiBBZHZhbmNlOiAwCk51bSBwb2ludHM6IDY0Ck51bSBjb250b3VyczogMQpDb250b3VyIGVuZHBvaW50IGluZGV4IHZhbHVlczogNjMKLS0+Cgo8c3ZnCiAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIgogICB4bWxuczpzdmc9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHdpZHRoPSIzMCIKICAgaGVpZ2h0PSIzNS4wNDUwNCIKICAgdmVyc2lvbj0iMS4xIgogICBpZD0ic3ZnMiIKICAgaW5rc2NhcGU6dmVyc2lvbj0iMC45MSByMTM3MjUiCiAgIHNvZGlwb2RpOmRvY25hbWU9InN0YXIuc3ZnIj4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGE1NjEiPgogICAgPHJkZjpSREY+CiAgICAgIDxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj4KICAgICAgICA8ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD4KICAgICAgICA8ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+CiAgICAgICAgPGRjOnRpdGxlPjwvZGM6dGl0bGU+CiAgICAgIDwvY2M6V29yaz4KICAgIDwvcmRmOlJERj4KICA8L21ldGFkYXRhPgogIDxkZWZzCiAgICAgaWQ9ImRlZnM1NTkiIC8+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxIgogICAgIG9iamVjdHRvbGVyYW5jZT0iMTAiCiAgICAgZ3JpZHRvbGVyYW5jZT0iMTAiCiAgICAgZ3VpZGV0b2xlcmFuY2U9IjEwIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwIgogICAgIGlua3NjYXBlOnBhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6d2luZG93LXdpZHRoPSIxODgxIgogICAgIGlua3NjYXBlOndpbmRvdy1oZWlnaHQ9IjEwMzYiCiAgICAgaWQ9Im5hbWVkdmlldzU1NyIKICAgICBzaG93Z3JpZD0iZmFsc2UiCiAgICAgaW5rc2NhcGU6em9vbT0iNy42ODc0Mjk5IgogICAgIGlua3NjYXBlOmN4PSI2NC43ODUyMSIKICAgICBpbmtzY2FwZTpjeT0iNDQuNTQ4ODIyIgogICAgIGlua3NjYXBlOndpbmRvdy14PSIwIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIwIgogICAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjAiCiAgICAgaW5rc2NhcGU6Y3VycmVudC1sYXllcj0ic3ZnMiIKICAgICBmaXQtbWFyZ2luLXRvcD0iMCIKICAgICBmaXQtbWFyZ2luLWxlZnQ9IjAiCiAgICAgZml0LW1hcmdpbi1yaWdodD0iMCIKICAgICBmaXQtbWFyZ2luLWJvdHRvbT0iMCIgLz4KICA8IS0tIGRyYXcgYm9yZGVyIC0tPgogIDwhLS0gbWFrZSBzdXJlIGdseXBoIGlzIHZpc2libGUgd2l0aGluIHN2ZyB3aW5kb3cgLS0+CiAgPHBhdGgKICAgICBzdHlsZT0iZmlsbDojMGQ0MDAwO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDoyIgogICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgaWQ9InBhdGgzMDAiCiAgICAgZD0ibSAxNC45NTQ5NTUsMCA1LjYzMDYzLDMuMjg4MjkgcSAtMS44MDE4MDIsMi45Mjc5MiAtMi43OTI3OTMsNS4wOTAwOSAtMC45OTA5OTEsMi4xNjIxNiAtMC45OTA5OTEsMy4yNDMyNCAwLDAuNjMwNjMgMC4yMjUyMjYsMS4wMzYwMyAwLjI3MDI3LDAuNDA1NDEgMC42NzU2NzUsMC40MDU0MSAxLjI2MTI2MSwwIDIuNjU3NjU4LC0xLjU3NjU4IDEuMzk2Mzk2LC0xLjU3NjU3IDMuODI4ODI5LC02LjA4MTA4IEwgMzAsOC43Mzg3NCBsIDAsNi40NDE0NCAtMi4wMjcwMjcsMCBxIC00LjQxNDQxNCwwIC02LjEyNjEyNywwLjU0MDU0IC0xLjcxMTcxMSwwLjU0MDU0IC0xLjcxMTcxMSwxLjgwMTggMCwxLjI2MTI2IDEuNjY2NjY2LDEuODAxOCAxLjcxMTcxMywwLjQ5NTUgNi41MzE1MzIsMC40OTU1IGwgMS42NjY2NjcsMCAwLDYuNDQxNDQgLTUuODEwODExLDMuMzMzMzMgcSAtMi4xNjIxNjMsLTQuMDU0MDUgLTMuNjQ4NjQ5LC01Ljg1NTg2IC0xLjQ0MTQ0MSwtMS44MDE4IC0yLjYxMjYxMywtMS44MDE4IC0wLjQ5NTQ5NSwwIC0wLjgxMDgxLDAuNDUwNDUgLTAuMzE1MzE2LDAuNDA1NDEgLTAuMzE1MzE2LDEuMTI2MTMgMCwxLjAzNjAzIDAuOTkwOTkxLDMuMTk4MiAwLjk5MDk5MSwyLjE2MjE2IDIuNzkyNzkzLDUgbCAtNS42MzA2MywzLjMzMzMzIC01LjU0MDU0MDksLTMuMzMzMzMgcSAxLjgwMTgwMTksLTIuODM3ODQgMi43OTI3OTI5LC01IDAuOTkwOTkxLC0yLjE2MjE3IDAuOTkwOTkxLC0zLjE5ODIgMCwtMC43MjA3MiAtMC4zMTUzMTYsLTEuMTI2MTMgLTAuMzE1MzE1LC0wLjQ1MDQ1IC0wLjgxMDgxLC0wLjQ1MDQ1IC0xLjA4MTA4MSwwIC0yLjU2NzU2NzgsMS44NDY4NSAtMS40ODY0ODY0LDEuODAxOCAtMy42MDM2MDM1LDUuODEwODEgTCAwLDI2LjI2MTI2IGwgMCwtNi40NDE0NCAyLjAyNzAyNywwIHEgNC40MTQ0MTQyLDAgNi4xMjYxMjU5LC0wLjQ5NTUgMS43MTE3MTE3LC0wLjU0MDU0IDEuNzExNzExNywtMS44MDE4IDAsLTEuMjYxMjYgLTEuNzExNzExNywtMS44MDE4IFEgNi40ODY0ODYzLDE1LjE4MDE4IDIuMDI3MDI3LDE1LjE4MDE4IEwgMCwxNS4xODAxOCAwLDguNzM4NzQgNS44MTA4MTA2LDUuNDA1NCBxIDIuMzg3Mzg3NCw0LjM2OTM3IDMuNzM4NzM4Nyw1Ljk5MDk5IDEuMzk2Mzk2NywxLjU3NjU4IDIuNjU3NjU3NywxLjU3NjU4IDAuNDUwNDUsMCAwLjcyMDcyMSwtMC4zNjAzNiAwLjI3MDI3LC0wLjM2MDM2IDAuMjcwMjcsLTAuOTkwOTkgMCwtMS4xMjYxMyAtMC45OTA5OTEsLTMuMjg4MjkgUSAxMS4yMTYyMTYsNi4xMjYxMiA5LjQxNDQxNDEsMy4yODgyOSBMIDE0Ljk1NDk1NSwwIFoiIC8+Cjwvc3ZnPgo=');
+	position: absolute;
+	top: 0px;
+	margin: 0px;
+	left: calc((100% - 30px) / 2);
+}
+.original_lesswrong_link a:hover {
+	border: none;
+}
+.original_lesswrong_link a:hover::after {
+	filter: saturate(0%) brightness(300%);
+}
+.diagram {
+	font-family: Source Sans Pro, Lucida Grande, Lucida Sans Unicode, Verdana, sans-serif;
+	font-weight: normal;
+	color: #0a0a0a;
+	text-align: center;
+	padding: 8px;
+}
+.wrapper {
+	max-width: 620px;
+	margin: auto;
+}
+hr {
+	height: 0px;
+	text-align: center;
+	width: 40%;
+	border: none;
+	border-bottom: 1px solid black;
+	max-width: 300px;
+	margin-top: 36px;
+	margin-bottom: 36px;
+	box-shadow: 0px 0px 0.5px black;
+}
+.toc hr {
+	border: 0;
+	height: 1px;
+	width: 50%;
+	background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	box-shadow: none;
+	margin: 0.4em auto 0.6em auto;
+}
+.spoiler_space {
+	margin-top: 6em;
+	margin-bottom: 6em;
+}
+.noli {
+	font-variant-ligatures: no-common-ligatures;
+	-moz-font-feature-settings: "liga" 0, "clig" 0;
+	-webkit-font-feature-settings: "liga" 0, "clig" 0;
+	font-feature-settings: "liga" 0, "clig" 0;
+}
+.dlig {
+	font-variant-ligatures: discretionary-ligatures;
+	-moz-font-feature-settings: "dlig";
+	-webkit-font-feature-settings: "dlig";
+	font-feature-settings: "dlig";
+}
+.fraction {
+	font-variant-numeric: diagonal-fractions;
+	-moz-font-feature-settings: "frac";
+	-webkit-font-feature-settings: "frac";
+	font-feature-settings: "frac";
+	font-size: 1.2em;
+	line-height: 1;
+	vertical-align: baseline;
+	position: relative;
+	top: 0.05em;
+}
+.equation {
+	letter-spacing: 1px;
+}
+.equation em {
+	letter-spacing: 2px;
+}
+.equation .fraction {
+	letter-spacing: normal;
+}
+.ordinal {
+	font-variant-numeric: ordinal;
+	-moz-font-feature-settings: "ordn";
+	-webkit-font-feature-settings: "ordn";
+	font-feature-settings: "ordn";
+}
+.overline {
+	border-top: 1px solid black;
+	padding-top: 2px;
+	margin-left: -1px;
+}
+.sqrt {
+	display: inline-block;
+	border-top: 1px solid black;
+	padding: 0px 3px 0px 1px;
+	margin: -1px 0px 0px 13.5px;
+}
+.sqrt::before {
+	content: "√";
+	font-style: italic;
+	font-size: 1.05em;
+	border: none;
+	margin: -2px 0 0 -15px;
+	padding: 0;
+	position: absolute;
+}
+.sigma {
+	font-size: 1.5em;
+	line-height: 0.75;
+	vertical-align: middle;
+	position: relative;
+	top: 1px;
+}
+.sigma sub {
+	font-size: 0.43em;
+}
+.bigsigma {
+	font-size: 2em;
+	vertical-align: middle;
+	position: relative;
+	top: 2px;
+	margin-right: -64px;
+}
+.bigsigma sub {
+	font-size: 0.3em;
+	right: 29px;
+	top: 12px;
+	display: inline-block;
+	width: 2.5em;
+}
+table.equation .bigsigma sub {
+	left: initial;
+	letter-spacing: normal;
+	right: 27px;
+}
+.bigsigma sup {
+	font-size: 0.3em;
+	right: 60px;
+	top: -33px;
+	display: inline-block;
+	width: 2.5em;
+}
+#wikitext table {
+	margin-left: auto;
+	margin-right: auto;
+}
+table.equation {
+	line-height: 1;
+	margin-bottom: -0.8em;
+	border-collapse: collapse;
+}
+table.equation td {
+	padding-bottom: 0.8em;
+	vertical-align: middle;
+	padding-top: 0px;
+}
+table.equation td.equal_sign {
+	text-align: center; 
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	position: relative;
+	top: -1px;
+}
+table.equation td.numerator {
+	text-align: center; 
+	border-bottom: 1px solid black;
+	padding-bottom: 0em;
+	vertical-align: bottom;
+}
+table.equation td.denominator {
+	text-align: center; 
+	vertical-align: top;
+	padding-top: 0.2em;
+}
+table.spaced_table td {
+	padding-left: 1em;
+	padding-right: 1em;
+}
+.title, .subtitle, .author_line {
+	text-align: center;
+	max-width: 620px;
+}	
+.title {
+	line-height: 1;
+	margin: 80px auto 10px auto;
+}
+.subtitle {
+	line-height: 1;
+	margin: 0 auto 40px auto;
+}
+.author_line {
+	font-size: 1.1em;
+	line-height: 1;
+	font-style: normal;
+	letter-spacing: 0.05em;
+	margin: 40px auto 48px auto;
+}
+strong, b {
+	font-weight: bold;
+}
+.dropcaps::first-letter {
+	float: left;
+	font-size: 6.8em;
+	line-height: 0.9em;
+	padding: 8px 10px 0 0;
+	margin-bottom: -20px;
+}
+.spoiler a:link,
+.spoiler a:visited {
+	color: rgba(0,0,0,0);
+}
+.spoiler a:link::after,
+.spoiler a:visited::after {
+	content: none;
+}
+.spoiler a:hover {
+	color: inherit;
+	border: none;
+}
+
+/********************/
+/* SEQUENCES NAV UI */
+/********************/
+
+.bottom_nav {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+
+	display: flex;
+	flex-flow: row;
+	width: 100%;
+	max-width: 840px;
+	height: 80px;
+	font-family: Proxima Nova, Lucida Grande, Lucida Sans Unicode, Verdana, sans-serif;
+	font-weight: 200;
+	color: #888;
+	font-variant: small-caps;
+	border-top: 1px solid #bbb;
+}
+.bottom_nav p {
+	margin: 0;
+	line-height: 1.3;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	font-variant-numeric: tabular-nums;
+	-moz-font-feature-settings: "tnum";
+	-webkit-font-feature-settings: "tnum";
+	font-feature-settings: "tnum";
+}
+.bottom_nav a {
+	height: 100%;
+	padding-top: 11px;
+	display: block;
+}
+.bottom_nav a:hover {
+	border: none;
+	color: #333;
+	text-shadow: 0px 0px 0.5px #333;
+	background-color: #f0f0eb;
+}
+.bottom_nav a:link::after {
+	content: none;
+}
+.bottom_nav p:first-of-type a {
+	padding-left: 16px;
+	padding-right: 10px;
+	position: relative;
+}
+.bottom_nav p:last-of-type a {
+	padding-right: 6px;
+	padding-left: 10px;
+	position: relative;
+}
+.bottom_nav p:first-of-type a:link::before, 
+.bottom_nav p:first-of-type a:visited::before {
+	content: "◀ ︎";
+	color: #ccc;
+	font-size: 0.65em;
+	vertical-align: middle;
+	position: absolute;
+	top: 16px;
+	left: -1px;
+}
+.bottom_nav p:last-of-type a:link::after, 
+.bottom_nav p:last-of-type a:visited::after {
+	content: "▶︎";
+	color: #ccc;
+	font-size: 0.65em;
+	vertical-align: middle;
+	top: 1px;
+	right: -5px;
+}
+.bottom_nav p {
+	text-align: center;
+	vertical-align: top;
+	padding: 0;
+	border-left: 1px solid #d2d2d2;
+	font-size: 0.9em;
+	flex-basis: 10%;
+}
+.bottom_nav p:first-of-type {
+	text-align: left;
+	border-left: none;
+	padding-left: 0;
+}
+.bottom_nav p:last-of-type {
+	text-align: right;
+	padding-right: 0;
+}
+.bottom_nav_home p {
+	flex: 1 1 auto;
+}
+.bottom_nav_book p:first-of-type, 
+.bottom_nav_book p:last-of-type {
+	flex: 1 1 45%;
+}
+.bottom_nav_sequence p:nth-of-type(1) {
+	flex-basis: 41%;
+}
+.bottom_nav_sequence p:nth-of-type(2) {
+	flex-basis: 9%;
+}
+.bottom_nav_sequence p:nth-of-type(3) {
+	flex-basis: 11%;
+}
+.bottom_nav_sequence p:nth-of-type(4) {
+	flex-basis: 39%;
+}
+.bottom_nav_post p:nth-of-type(1) {
+	flex-basis: 32%;
+}
+.bottom_nav_post p:nth-of-type(2) {
+	flex-basis: 8%;
+}
+.bottom_nav_post p:nth-of-type(3) {
+	flex-basis: 10%;
+}
+.bottom_nav_post p:nth-of-type(4) {
+	flex-basis: 14%;
+}
+.bottom_nav_post p:nth-of-type(5) {
+	flex-basis: 36%;
+}
+.bottom_nav .ordinal {
+	position: relative;
+	bottom: 5px;
+	right: 1px;
+	font-size: 0.65em;
+}
+
+/***************/
+/* TOP NAV UIS */
+/***************/
+
+.nav_menu,
+.article-talk-selector {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	font-family: Proxima Nova, Lucida Grande, Lucida Sans Unicode, Verdana, sans-serif;
+	font-variant: small-caps;
+	font-weight: 200;
+	color: #aaa;
+	font-size: 0.65em;
+}
+.nav_menu p,
+.article-talk-selector p {
+	margin: 0 0 0 0;
+	line-height: 1.4;
+}
+.nav_menu a,
+.article-talk-selector a {
+	display: inline-block;
+	padding: 3px 8px 4px 8px;
+}
+.article-talk-selector a {
+	padding: 5px 10px 4px 10px;
+}
+.nav_menu a:first-of-type {
+	padding-left: 10px;
+	padding-right: 11px;
+}
+.article-talk-selector a:first-of-type {
+	padding-left: 14px;
+	padding-right: 11px;
+}
+.nav_menu a:hover,
+.article-talk-selector a:hover {
+	border: none;
+	background-color: #e6e6e1;
+	color: #333;
+}
+.nav_menu a:link::after,
+.nav_menu a:visited::after,
+.article-talk-selector a:link::after,
+.article-talk-selector a:visited::after {
+	content: none;
+}
+
+.article-talk-selector {
+	left: 0;
+}
+
+/**************************/
+/* MAIN TABLE OF CONTENTS */
+/**************************/
+
+.big_toc {
+	text-align: left;
+	max-width: 620px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1.8em;
+	color: #bbb;
+	font-variant-numeric: oldstyle-nums;
+	-moz-font-feature-settings: "onum";
+	-webkit-font-feature-settings: "onum";
+	font-feature-settings: "onum";
+}
+.big_toc h2 {
+	font-size: 1.3em;
+	margin-bottom: 0.3em;
+}
+.big_toc h2 + h1 {
+	font-variant: normal;
+}
+.big_toc a {
+	color: #690010;
+	font-variant-numeric: lining-nums;
+	-moz-font-feature-settings: "lnum";
+	-webkit-font-feature-settings: "lnum";
+	font-feature-settings: "lnum";
+}
+.big_toc a:hover {
+	border: none;
+	text-shadow: 0px 0px 0.5px #ff987b, 0px 0px 1px #c05651;
+}
+.big_toc a:link::after, a:visited::after {
+	content: none;
+}
+.big_toc ol {
+	list-style-type: decimal;
+	padding-left: 70px;
+	margin-bottom: 0.3em;
+}
+.big_toc ul > li > ol:first-of-type {
+	margin-top: 0.3em;
+}
+.big_toc ol ol {
+	padding-left: 55px;
+	font-size: 0.9em;
+}
+.big_toc li {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-left: 0;
+	line-height: 1.4;
+}
+.big_toc ul {
+	list-style-type: none;
+}
+.big_toc ul {
+	padding-left: 0;
+}
+.big_toc > ul > li {
+	margin-top: 1em;
+}
+.big_toc > ul > li > a {
+	font-size: 1.2em;
+}
+.big_toc > ul > li > a[href*='Book'] {
+	font-variant: small-caps;
+}
+.big_toc ul ul {
+	padding-left: 50px;
+	margin-top: 0;
+}
+.big_toc ul ul li {
+	margin-top: 0.3em;
+}
+
+/***********************/
+/* FRONT PAGE MINI-TOC */
+/***********************/
+
+.main_toc p {
+	font-size: 1.3em;
+	line-height: 1;
+	text-align: center;
+	font-family: Garamond Premier Pro Subhead, Garamond, Hoefler Text, Baskerville, Libre Baskerville, Georgia, Palatino, Palatino Linotype, serif;
+}
+.main_toc a {
+	color: #690010;
+}
+.main_toc a:hover {
+	border: none;
+	text-shadow: 0px 0px 0.5px #ff987b, 0px 0px 1.5px #c05651;
+}
+.main_toc a:link::after,
+a:visited::after {
+	content: none;
+}
+
+/**************/
+/* RESPONSIVE */
+/**************/
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) { 
+	#wikitext {
+		font-weight: 500;
+	}
+	#wikitext .diagram {
+		font-weight: 400;
+	}
+	#wikitext .boxed {
+		font-weight: 400;
+	}
+}
+
+@media all and (max-width:1560px) {
+	#wikicmds {
+		text-align: right;
+	}
+	#wikicmds li {
+		display: block;
+		padding: 0.25em 0;
+	}
+}
+
+@media all and (max-width:1020px) {
+	#wikicmds {
+		margin-top: 7em;
+	}
+	.nav_menu a {
+		display: block;
+	}
+	.nav_menu a:first-of-type {
+		padding: 3px 8px 4px 8px;
+	}
+	.nav_menu p {
+		text-align: right;
+	}
+	.talk-page-banner {
+		padding: 1.5em 0 0 0;
+	}
+}
+
+@media all and (max-width:790px) {
+	.nav_menu {
+		position: absolute;
+	}
+	.nav_menu a {
+		display: inline-block;
+	}
+	#wikicmds {
+		position: absolute;
+		margin-top: 2em;
+	}
+	#wikicmds li {
+		display: inline-block;
+	}
+	.bottom_nav p {
+		font-size: 0.8em;
+	}
+}
+
+@media all and (max-width:654px) {
+	#wikitext {
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+	}
+	.talk-page-banner {
+		margin: 0 -0.5em;
+	}
+	.bottom_nav p {
+		font-size: 0.75em;
+	}
+}
+
+@media all and (max-width:520px) {
+	.nav_menu,
+	.article-talk-selector {
+		position: absolute;
+		font-size: 1em;
+	}
+	.article-talk-selector {
+		font-size: 1em;
+		left: -10px;
+	}
+	.article-talk-selector a:not(:last-of-type) {
+		display: none;
+	}
+	table.spaced_table td {
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+		font-size: 0.9em;
+	}
+	#wikitext {
+		padding-left: 0.5em;
+		padding-right: 0.5em;
+		font-size: 1.125rem;
+	}
+	ul {
+		padding-left: 1.75em;
+	}
+	ol {
+		padding-left: 1.75em;
+	}
+	p.indent {
+		padding-left: 1.75em;
+	}
+	.toc {
+		margin-top: 3em;
+	}
+	.bottom_nav {
+		border: none;
+		flex-flow: row wrap;
+	}
+	.bottom_nav p {		
+		border-top: 1px solid #bbb;
+		font-size: 1em;
+		padding: 0.25em 0;
+	}
+	.bottom_nav p a {
+		padding: 0.625em 0.5em 0.5em 0.5em;
+	}
+	.bottom_nav_book p {
+		border-left: none;
+		border-right: none;
+	}
+	.bottom_nav_sequence p:nth-of-type(2),
+	.bottom_nav_post p:nth-of-type(2) {
+		border-left: none;
+	}
+	.bottom_nav_sequence p:last-of-type,
+	.bottom_nav_post p:last-of-type {
+		border-left: none;
+	}
+	.bottom_nav_home p:first-of-type {
+		border: none;
+	}
+	.bottom_nav_sequence p {
+		flex-basis: 50%;
+	}
+	.bottom_nav_post p {
+		flex-basis: 30%;
+	}
+	.bottom_nav_post p:nth-of-type(4) {
+		flex-basis: 40%;
+	}
+	.bottom_nav_sequence p:nth-of-type(2),
+	.bottom_nav_sequence p:nth-of-type(3) {
+		flex-basis: 50%;
+	}
+	.bottom_nav_post p:nth-of-type(2),
+	.bottom_nav_post p:nth-of-type(3) {
+		flex-basis: 30%;
+	}
+	.bottom_nav_post p:nth-of-type(4) {
+		flex-basis: 40%;
+	}
+	.bottom_nav p:first-of-type {
+		flex-basis: 100%;
+	}
+	.bottom_nav p:last-of-type {
+		flex-basis: 100%;
+	}
+	.bottom_nav_book p {
+		flex-basis: 100%;
+	}
+	.big_toc {
+		padding-left: 0.5em;
+	}
+	.big_toc li {
+		line-height: 1.2;
+		padding-top: 0.3em;
+	}
+	.big_toc ol,
+	.big_toc ul {
+		padding-left: 40px;
+		-webkit-hyphens: none;
+		-moz-hyphens: none;
+		-ms-hyphens: none;
+		hyphens: none;
+	}
+	.big_toc ol ol {
+		padding-left: 30px;
+	}
+	.big_toc > ul {
+		padding-left: 0px;
+	}
+	.big_toc ul ul {
+		padding-left: 23px;
+	}
+}
+
+/*	These affect the printed appearance of the web view (not the separate
+	print view) of pages. The sidebar and action links aren't printed.
+ */
+
+@media print {
+	@page { 
+		size: letter;
+		margin: 25mm 25mm 25mm 25mm;  
+	}
+	.nav_menu,
+	.bottom_nav,
+	#wikicmds {
+		display: none;
+	}
+	#wikitext {
+		font-size: 16pt;
+	}
+	body { 
+		margin: 0px;  
+	}
+}
+
+/*	Dark mode.
+	*/
+@media (prefers-color-scheme: dark) {
+	body::before {
+		content: "";
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background-color: #fffffa;
+		top: 0;
+		left: 0;
+	}
+	body::before,
+	body > *:not(#wikitext),
+	#wikitext > *,
+	#wikitext img {
+		background-color: inherit;
+		filter: invert(100%);
+		text-shadow: 0 0 0 #000;
+	}
+	.bottom_nav {
+		font-weight: 300;
+	}
+	.nav_menu,
+	.article-talk-selector {
+		font-weight: 400;
+	}
+	#wikitext {
+		font-weight: 500;
+	}
+	.toc a,
+	.big_toc a {
+		color: #003b6e;
+	}
+	h2 {
+		color: #777;
+	}
+	.toc h3 .chapter_letter {
+		color: #999;
+	}
+	a:link::after,
+	a:visited::after,
+	a.footnote {
+		color: #003b6e;
+	}
+	.original_lesswrong_link a::after {
+		filter: invert(100%) brightness(50%) saturate(300%);
+	}
+	#wikitext .article-talk-selector a:nth-of-type(3) {
+		color: #0029b9;
+		opacity: 0.75;
+	}
+}

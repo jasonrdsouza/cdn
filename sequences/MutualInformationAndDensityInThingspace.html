@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="canonical" href="MutualInformationAndDensityInThingspace.html" />
+	<title>Mutual Information, and Density in Thingspace  </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel='stylesheet' href='wiki/pub/skins/readthesequences/skin.css' type='text/css' />
+	<!--HTMLHeader--><style type='text/css'><!--a[href^='http://archive.is/timegate/'] { opacity: 0.5;  }
+
+.footnote_block_begin { 
+	width: 160px; 
+	border-bottom: 1px solid blue;
+	margin-bottom: 0.5em;
+}
+div.footnote {
+	margin: 0 3em 0.5em 0;
+	padding-left: 2em;
+	font-size: 0.9em;
+	position: relative;
+}
+div.footnote .footnote-number {
+	position: absolute;
+	left: 0;
+	width: 1.5em;
+	text-align: right;
+}
+div.footnote .footnote-number::after {
+	content: '.';
+}
+.num { position: relative; font-size: 0.7em; bottom: 0.5em; right: 0.1em; margin-left: 0.15em; }
+.frasl { font-size: 1.15em; line-height: 1; }
+.denom { position: relative; font-size: 0.7em; top: 0.05em; left: 0.1em; }
+
+--></style><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><link href="wiki/uploads/favicon.png" type="image/png" rel="shortcut icon" /><link rel='preload' href='wiki/fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Medium.otf' type='font/otf' as='font' crossorigin />
+<link rel='preload' href='wiki/fonts/font_files/ProximaNova/ProximaNova-Thin.otf' type='font/otf' as='font' crossorigin />
+  <meta name='robots' content='index,follow' />
+
+</head>
+<body>
+<!--PageText-->
+<div id='wikitext'>
+<div class='article-talk-selector' > 
+<p><a target='blank'  class='wikilink' href='MutualInformationAndDensityInThingspace.html' title='View PmWiki source for “Mutual Information, and Density in Thingspace”'>Source</a><a target='blank'  class='wikilink' href='MutualInformationAndDensityInThingspace.html' title='View “Mutual Information, and Density in Thingspace” in Markdown format'>Markdown</a> · <a rel='nofollow'  class='wikilink' href='Talk/Mutual-Information-And-Density-In-Thingspace.html' title='View the Talk page for “Mutual Information, and Density in Thingspace”'>Talk</a>
+</p></div>
+<div class='nav_menu' > 
+<p><a class='wikilink' href='HomePage.html'>Home</a><a class='wikilink' href='About.html'>About</a><a class='urllink' href='Search.html' rel='nofollow'>Search</a><a class='wikilink' href='Contents.html'>Contents</a>
+</p></div>
+<h1>Mutual Information, and Density in Thingspace</h1>
+<p  style='text-align: center;'> ❦
+</p>
+<p>Suppose you have a system <em>X</em> that can be in any of 8 states, which are all equally probable (relative to your current state of knowledge), and a system <em>Y</em> that can be in any of 4 states, all equally probable.
+total
+The entropy of <em>X</em>, as defined in the previous essay, is 3 bits; we’ll need to ask 3 yes-or-no questions to find out <em>X</em>’s exact state. The entropy of <em>Y</em> is 2 bits; we have to ask 2 yes-or-no questions to find out <em>Y</em>’s exact state. This may seem obvious since 2<sup>3</sup> = 8 and 2<sup>2</sup> = 4, so 3 questions can distinguish 8 possibilities and 2 questions can distinguish 4 possibilities; but remember that if the possibilities were not all equally likely, we could use a more clever code to discover <em>Y</em>’s state using e.g. 1.75 questions on average. In this case, though, <em>X</em>’s <em>probability mass is evenly distributed</em> over all its possible states, and likewise <em>Y</em>, so we can’t use any clever codes.
+</p>
+<p>What is the entropy of the combined system <span class='equation'>(<em>X</em>,<em>Y</em>)</span>?
+</p>
+<p>You might be tempted to answer, “It takes 3 questions to find out <em>X</em>, and then 2 questions to find out <em>Y</em>, so it takes 5 questions total to find out the state of <em>X</em> and <em>Y</em>.”
+</p>
+<p>But what if the two variables are entangled, so that learning the state of <em>Y</em> tells us something about the state of <em>X</em>?
+</p>
+<p>In particular, let’s suppose that <em>X</em> and <em>Y</em> are either both odd or both even.
+</p>
+<p>Now if we receive a 3-bit message (ask 3 questions) and learn that <em>X</em> is in state <em>X</em><sub>5</sub>, we know that <em>Y</em> is in state <em>Y</em><sub>1</sub> or state <em>Y</em><sub>3</sub>, but not state <em>Y</em><sub>2</sub> or state <em>Y</em><sub>4</sub>. So the single additional question “Is <em>Y</em> in state <em>Y</em><sub>3</sub>?,” answered “No,” tells us the entire state of <span class='equation'>(<em>X</em>,<em>Y</em>): <em>X</em> = <em>X</em><sub>5</sub>, <em>Y</em> = <em>Y</em><sub>1</sub></span>. And we learned this with a total of 4 questions.
+</p>
+<p>Conversely, if we learn that <em>Y</em> is in state <em>Y</em><sub>4</sub> using two questions, it will take us only an additional two questions to learn whether <em>X</em> is in state <em>X</em><sub>2</sub>, <em>X</em><sub>4</sub>, <em>X</em><sub>6</sub>, or <em>X</em><sub>8</sub>. Again, four questions to learn the state of the joint system.
+</p>
+<p>The <em>mutual information</em> of two variables is defined as the difference between the entropy of the joint system and the entropy of the independent systems: <span class='equation'><em>I</em>(<em>X</em>;<em>Y</em>) = <em>H</em>(<em>X</em>) + <em>H</em>(<em>Y</em>) − <em>H</em>(<em>X</em>,<em>Y</em>)</span>.
+</p>
+<p>Here there is one bit of mutual information between the two systems: Learning <em>X</em> tells us one bit of information about <em>Y</em> (cuts down the space of possibilities from 4 possibilities to 2, a factor-of-2 decrease in the volume) and learning <em>Y</em> tells us one bit of information about <em>X</em> (cuts down the possibility space from 8 possibilities to 4).
+</p>
+<p>What about when probability mass is not evenly distributed? Last essay, for example, we discussed the case in which <em>Y</em> had the probabilities <span class='fraction'>1/2</span>, <span class='fraction'>1/4</span>, <span class='fraction'>1/8</span>, <span class='fraction'>1/8</span> for its four states. Let us take this to be our probability distribution over <em>Y</em>, considered independently—if we saw <em>Y</em>, without seeing anything else, this is what we’d expect to see. And suppose the variable <em>Z</em> has two states, <em>Z</em><sub>1</sub> and <em>Z</em><sub>2</sub>, with probabilities <span class='fraction'>3/8</span> and <span class='fraction'>5/8</span> respectively.
+</p>
+<p>Then if and only if the joint distribution of <em>Y</em> and <em>Z</em> is as follows, there is zero mutual information between <em>Y</em> and <em>Z</em>:
+</p>
+<table border='0' class='equation spaced_table' ><tr><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>1</sub>&#x2004;:&#x2004;<span class='fraction'>3/16</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>&#x2004;:&#x2004;<span class='fraction'>3/32</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>3</sub>&#x2004;:&#x2004;<span class='fraction'>3/64</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>4</sub>&#x2004;:&#x2004;<span class='fraction'>3/64</span>
+</td></tr><tr><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>1</sub>&#x2004;:&#x2004;<span class='fraction'>5/16</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>2</sub>&#x2004;:&#x2004;<span class='fraction'>5/32</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>3</sub>&#x2004;:&#x2004;<span class='fraction'>5/64</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>4</sub>&#x2004;:&#x2004;<span class='fraction'>5/64</span> .
+</td></tr></table>
+<p>This distribution obeys the law
+</p>
+<p class='equation' style='text-align: center;'> <em>P</em>(<em>Y</em>,<em>Z</em>) = <em>P</em>(<em>Y</em>)<em>P</em>(<em>Z</em>) .
+</p>
+<p>For example, <span class='equation'><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>) = <em>P</em>(<em>Z</em><sub>1</sub>)<em>P</em>(<em>Y</em><sub>2</sub>) = </span><span class='fraction'>3/8</span> × <span class='fraction'>1/4</span> = <span class='fraction'>3/32</span>.
+</p>
+<p>And observe that we can recover the marginal (independent) probabilities of <em>Y</em> and <em>Z</em> just by looking at the joint distribution:
+</p>
+<table border='0' class='equation' ><tr><td  valign='top'> <em>P</em>(<em>Y</em><sub>1</sub>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td style='letter-spacing:normal; '  valign='top'> total probability of all the different ways <em>Y</em><sub>1</sub> can happen
+</td></tr><tr><td  valign='top'> &nbsp;
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>1</sub>) + <em>P</em>(<em>Z</em><sub>2</sub><em>Y</em><sub>1</sub>)
+</td></tr><tr><td  valign='top'> &nbsp;
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <span class='fraction'>3/16</span> + <span class='fraction'>5/16</span>
+</td></tr><tr><td  valign='top'> &nbsp;
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <span class='fraction'>1/2</span> .
+</td></tr></table>
+<p>So, just by inspecting the joint distribution, we can determine whether the marginal variables <em>Y</em> and <em>Z</em> are independent; that is, whether the joint distribution factors into the product of the marginal distributions; whether, for all <em>Y</em> and <em>Z</em>, we have <span class='equation'><em>P</em>(<em>Y</em>,<em>Z</em>) = <em>P</em>(<em>Y</em>)<em>P</em>(<em>Z</em>)</span>.
+</p>
+<p>This last is significant because, by <a class='wikilink' href='AnIntuitiveExplanationOfBayessTheorem.html'>Bayes’s Rule</a>,
+</p>
+<table border='0' class='equation' ><tr><td align='right'  valign='top'> <em>P</em>(<em>Z<sub>j</sub>Y<sub>i</sub></em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>Y<sub>i</sub></em>)<em>P</em>(<em>Z<sub>j</sub></em>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>Z<sub>j</sub>Y<sub>i</sub></em>)/<em>P</em>(<em>Z<sub>j</sub></em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>Y<sub>i</sub></em>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>Y<sub>i</sub></em>|<em>Z<sub>j</sub></em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>Y<sub>i</sub></em>) .
+</td></tr></table>
+<p>In English: “After you learn <em>Z<sub>j</sub></em> , your belief about <em>Y<sub>i</sub></em> is just what it was before.”
+</p>
+<p>So when the distribution factorizes—when <span class='equation'><em>P</em>(<em>Y</em>,<em>Z</em>) = <em>P</em>(<em>Y</em>)<em>P</em>(<em>Z</em>)</span>—this is <em>equivalent</em> to “Learning about <em>Y</em> never tells us anything about <em>Z</em> or vice versa.”
+</p>
+<p>From which you might suspect, correctly, that there is no mutual information between <em>Y</em> and <em>Z</em>. Where there is no mutual information, there is no Bayesian evidence, and vice versa.
+</p>
+<p>Suppose that in the distribution <span class='equation'>(<em>Y</em>,<em>Z</em>)</span> above, we treated each possible combination of <em>Y</em> and <em>Z</em> as a separate event—so that the distribution <span class='equation'>(<em>Y</em>,<em>Z</em>)</span> would have a total of 8 possibilities, with the probabilities shown—and then we calculated the entropy of the distribution (<em>Y</em>,<em>Z</em>) the same way we would calculate the entropy of any distribution:
+</p>
+<p class='equation' style='padding-left: 2em; padding-right: 2em; line-height: 1.8; text-align: left;'><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>1</sub>)log<sub>2</sub>(<em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>1</sub>)) + <em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)log<sub>2</sub>(<em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)) + <br /><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>3</sub>)log<sub>2</sub>(<em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>3</sub>)) + … + <em>P</em>(<em>Z</em><sub>2</sub><em>Y</em><sub>4</sub>)log<sub>2</sub>(<em>P</em>(<em>Z</em><sub>2</sub><em>Y</em><sub>4</sub>))
+</p>
+<p class='equation' style='padding-left: 2em; padding-right: 2em; line-height: 1.8;'> = (<span class='fraction'>3/16</span>)log<sub>2</sub>(<span class='fraction'>3/16</span>) + (<span class='fraction'>3/32</span>)log<sub>2</sub>(<span class='fraction'>3/32</span>) + <br />(<span class='fraction'>3/64</span>)log<sub>2</sub>(<span class='fraction'>3/64</span>) + … + (<span class='fraction'>5/64</span>)log<sub>2</sub>(<span class='fraction'>5/64</span>) .
+</p>
+<p>You would end up with the same total you would get if you separately calculated the entropy of <em>Y</em> plus the entropy of <em>Z</em>. There is no mutual information between the two variables, so our uncertainty about the joint system is not any less than our uncertainty about the two systems considered separately. (I am not showing the calculations, but you are welcome to do them; and I am not showing the proof that this is true in general, but you are welcome to Google on “Shannon entropy” and “mutual information.”)
+</p>
+<p>What if the joint distribution doesn’t factorize? For example:
+</p>
+<table border='0' class='equation spaced_table' ><tr><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>1</sub>&#x2004;:&#x2004;<span class='fraction'>12/64</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>&#x2004;:&#x2004;<span class='fraction'>8/64</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>3</sub>&#x2004;:&#x2004;<span class='fraction'>1/64</span>
+</td><td  valign='top'> <em>Z</em><sub>1</sub><em>Y</em><sub>4</sub>&#x2004;:&#x2004;<span class='fraction'>3/64</span>
+</td></tr><tr><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>1</sub>&#x2004;:&#x2004;<span class='fraction'>20/64</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>2</sub>&#x2004;:&#x2004;<span class='fraction'>8/64</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>3</sub>&#x2004;:&#x2004;<span class='fraction'>7/64</span>
+</td><td  valign='top'> <em>Z</em><sub>2</sub><em>Y</em><sub>4</sub>&#x2004;:&#x2004;<span class='fraction'>5/64</span> .
+</td></tr></table>
+<p>If you add up the joint probabilities to get marginal probabilities, you should find that <span class='equation'><em>P</em>(Y<sub>1</sub>) = </span><span class='fraction'>1/2</span>, <em>P</em>(<em>Z</em><sub>1</sub>) = <span class='fraction'>3/8</span>, and so on—the marginal probabilities are the same as before.
+</p>
+<p>But the joint probabilities do not always equal the product of the marginal probabilities. For example, the probability <span class='equation'><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)</span> equals <span class='fraction'>8/64</span>, where <span class='equation'><em>P</em>(<em>Z</em><sub>1</sub>)<em>P</em>(<em>Y</em><sub>2</sub>)</span> would equal <span class='fraction'>3/8</span> × <span class='fraction'>1/4</span> = <span class='fraction'>6/64</span>. That is, the probability of running into <em>Z</em><sub>1</sub><em>Y</em><sub>2</sub> together is greater than you’d expect based on the probabilities of running into <em>Z</em><sub>1</sub> or <em>Y</em><sub>2</sub> separately.
+</p>
+<p>Which in turn implies:
+</p>
+<table border='0' class='equation' ><tr><td align='right'  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)
+</td><td class='equal_sign'  valign='top'> &gt;
+</td><td  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub>)<em>P</em>(<em>Y</em><sub>2</sub>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)/<em>P</em>(<em>Y</em><sub>2</sub>)
+</td><td class='equal_sign'  valign='top'> &gt;
+</td><td  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub>|<em>Y</em><sub>2</sub>)
+</td><td class='equal_sign'  valign='top'> &gt;
+</td><td  valign='top'> <em>P</em>(<em>Z</em><sub>1</sub>).
+</td></tr></table>
+<p>Since there’s an “unusually high” probability for <span class='equation'><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>)</span>—defined as a probability higher than the marginal probabilities would indicate by default—it follows that observing <em>Y</em><sub>2</sub> is evidence that increases the probability of <em>Z</em><sub>1</sub>. And by a symmetrical argument, observing <em>Z</em><sub>1</sub> must favor <em>Y</em><sub>2</sub>.
+</p>
+<p>As there are at least some values of <em>Y</em> that tell us about <em>Z</em> (and vice versa) there must be mutual information between the two variables; and so you will find—I am confident, though I haven’t actually checked—that calculating the entropy of <span class='equation'>(<em>Y</em>,<em>Z</em>)</span> yields less total uncertainty than the sum of the independent entropies of <em>Y</em> and <em>Z</em>. That is, <span class='equation'><em>H</em>(<em>Y</em>,<em>Z</em>) = <em>H</em>(<em>Y</em>) + <em>H</em>(<em>Z</em>) − <em>I</em>(<em>Y</em>;<em>Z</em>)</span>, with all quantities necessarily positive.
+</p>
+<p>(I digress here to remark that the symmetry of the expression for the mutual information shows that <em>Y</em> <em>must</em> tell us as much about <em>Z</em>, on average, as <em>Z</em> tells us about <em>Y</em>. I leave it as an exercise to the reader to reconcile this with anything they were taught in logic class about how, if all ravens are black, being allowed to reason Raven<span class='equation'>(<em>x</em>)</span> ⇒ Black<span class='equation'>(<em>x</em>)</span> doesn’t mean you’re allowed to reason Black<span class='equation'>(<em>x</em>)</span> ⇒ Raven<span class='equation'>(<em>x</em>)</span>. How different seem the symmetrical probability flows of the Bayesian, from the sharp lurches of logic—even though the latter is just a degenerate case of the former.)
+</p>
+<p>“But,” you ask, “what has all this to do with the proper use of words?”
+</p>
+<p>In <a class='wikilink' href='EmptyLabels.html'>Empty Labels</a> and then <a class='wikilink' href='ReplaceTheSymbolWithTheSubstance.html'>Replace the Symbol with the Substance</a>, we saw the technique of replacing a word with its definition—the example being given:
+</p>
+<blockquote>
+<p>All [mortal, ¬feathers, bipedal] are mortal.
+</p>
+<p>Socrates is a [mortal, ¬feathers, bipedal].
+</p>
+<p>Therefore, Socrates is mortal.
+</p></blockquote>
+<p>Why, then, would you even want to have a word for “human”? Why not just say “Socrates is a mortal featherless biped”?
+</p>
+<p>Because it’s helpful to have shorter words for things that you encounter often. If your code for describing single properties is already efficient, then there will not be an advantage to having a special word for a conjunction—like “human” for “mortal featherless biped”—unless things that are mortal <em>and</em> featherless <em>and</em> bipedal, are found more often than the marginal probabilities would lead you to expect.
+</p>
+<p>In efficient codes, word length corresponds to probability—so the code for <em>Z</em><sub>1</sub><em>Y</em><sub>2</sub> will be just as long as the code for <em>Z</em><sub>1</sub> plus the code for <em>Y</em><sub>2</sub>, unless <span class='equation'><em>P</em>(<em>Z</em><sub>1</sub><em>Y</em><sub>2</sub>) &gt; <em>P</em>(<em>Z</em><sub>1</sub>)<em>P</em>(<em>Y</em><sub>2</sub>)</span>, in which case the code for the word can be shorter than the codes for its parts.
+</p>
+<p>And this in turn corresponds exactly to the case where we can infer some of the properties of the thing from seeing its other properties. It must be more likely than the default that featherless bipedal things will also be mortal.
+</p>
+<p>Of course the word “human” really describes many, many more properties— when you see a human-shaped entity that talks and wears clothes, you can infer whole hosts of biochemical and anatomical and cognitive facts about it. To replace the word “human” with a description of everything we know about humans would require us to spend an inordinate amount of time talking. But this is true <em>only</em> because a featherless talking biped is far more likely than default to be poisonable by hemlock, or have broad nails, or be overconfident.
+</p>
+<p>Having a word for a thing, rather than just listing its properties, is a more compact code precisely in those cases where we can infer some of those properties from the other properties. (With the exception perhaps of very primitive words, like “red,” that we would use to send an entirely uncompressed description of our sensory experiences. But by the time you encounter a bug, or even a rock, you’re dealing with nonsimple property collections, far above the primitive level.)
+</p>
+<p>So having a word “<a class='wikilink' href='SneakingInConnotations.html'>wiggin</a>” for green-eyed black-haired people is more useful than just saying “green-eyed black-haired person” precisely when:
+</p>
+<ol><li>Green-eyed people are more likely than average to be black-haired (and vice versa), meaning that we can probabilistically infer green eyes from black hair or vice versa; <em>or</em>
+</li><li>Wiggins share other properties that can be inferred at greater-than-default probability. In this case we have to separately observe the green eyes and black hair; but then, after observing both these properties independently, we can probabilistically infer other properties (like a taste for ketchup).
+</li></ol><p>One may even consider the act of defining a word as a promise to this effect. Telling someone, “I define the word ‘wiggin’ to mean a person with green eyes and black hair,” by Gricean implication, asserts that the word “wiggin” will somehow help you make inferences / shorten your messages.
+</p>
+<p>If green-eyes and black hair have no greater than default probability to be found together, nor does any other property occur at greater than default probability along with them, then the word “wiggin” is a lie: The word claims that certain people are worth distinguishing as a group, but they’re not.
+</p>
+<p>In this case the word “wiggin” does not help describe reality more compactly—it is not defined by someone sending the shortest message—it has no role in the simplest explanation. Equivalently, the word “wiggin” will be of no help to you in doing any Bayesian inference. Even if you do not call the word a lie, it is surely an error.
+</p>
+<p>And the way to carve reality at its joints is to draw your boundaries around concentrations of unusually high probability density in <a class='wikilink' href='TheClusterStructureOfThingspace.html'>Thingspace</a>.
+</p>
+<div class='original_lesswrong_link' class='img imgonly'> <a class='urllink' href='https://www.greaterwrong.com/lw/o2/mutual_information_and_density_in_thingspace#comments' title='View Less Wrong discussion thread for “Mutual Information, and Density in Thingspace”' rel='nofollow'><img src='wiki/uploads/star.svg' alt='' /></a></div>
+<div class='bottom_nav bottom_nav_post' >
+<p><a class='wikilink' href='EntropyAndShortCodes.html'>Entropy, and Short Codes</a>
+</p>
+<p><a class='wikilink' href='Contents.html'>Top</a>
+</p>
+<p><a class='wikilink' href='Book-III-TheMachineInTheGhost.html'>Book</a>
+</p>
+<p><a class='wikilink' href='AHumansGuideToWordsSequence.html'>Sequence</a>
+</p>
+<p><span style='font-size:83%'><a class='wikilink' href='SuperexponentialConceptspaceAndSimpleWords.html'>Superexponential Conceptspace, and Simple Words</a></span>
+</p></div>
+</div>
+
+<!--PageActionFmt--><!--/PageActionFmt-->
+<!--HTMLFooter-->
+</body>
+</html>
+

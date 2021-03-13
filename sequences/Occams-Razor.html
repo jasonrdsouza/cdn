@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="canonical" href="OccamsRazor.html" />
+	<title>Occam’s Razor </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel='stylesheet' href='wiki/pub/skins/readthesequences/skin.css' type='text/css' />
+	<!--HTMLHeader--><style type='text/css'><!--a[href^='http://archive.is/timegate/'] { opacity: 0.5;  }
+
+.footnote_block_begin { 
+	width: 160px; 
+	border-bottom: 1px solid blue;
+	margin-bottom: 0.5em;
+}
+div.footnote {
+	margin: 0 3em 0.5em 0;
+	padding-left: 2em;
+	font-size: 0.9em;
+	position: relative;
+}
+div.footnote .footnote-number {
+	position: absolute;
+	left: 0;
+	width: 1.5em;
+	text-align: right;
+}
+div.footnote .footnote-number::after {
+	content: '.';
+}
+.num { position: relative; font-size: 0.7em; bottom: 0.5em; right: 0.1em; margin-left: 0.15em; }
+.frasl { font-size: 1.15em; line-height: 1; }
+.denom { position: relative; font-size: 0.7em; top: 0.05em; left: 0.1em; }
+
+--></style><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><link href="wiki/uploads/favicon.png" type="image/png" rel="shortcut icon" /><link rel='preload' href='wiki/fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Medium.otf' type='font/otf' as='font' crossorigin />
+<link rel='preload' href='wiki/fonts/font_files/ProximaNova/ProximaNova-Thin.otf' type='font/otf' as='font' crossorigin />
+  <meta name='robots' content='index,follow' />
+
+</head>
+<body>
+<!--PageText-->
+<div id='wikitext'>
+<div class='article-talk-selector' > 
+<p><a target='blank'  class='wikilink' href='OccamsRazor.html' title='View PmWiki source for “Occam’s Razor”'>Source</a><a target='blank'  class='wikilink' href='OccamsRazor.html' title='View “Occam’s Razor” in Markdown format'>Markdown</a> · <a rel='nofollow'  class='wikilink' href='Talk/Occams-Razor.html' title='View the Talk page for “Occam’s Razor”'>Talk</a>
+</p></div>
+<div class='nav_menu' > 
+<p><a class='wikilink' href='HomePage.html'>Home</a><a class='wikilink' href='About.html'>About</a><a class='urllink' href='Search.html' rel='nofollow'>Search</a><a class='wikilink' href='Contents.html'>Contents</a>
+</p></div>
+<h1>Occam’s Razor</h1>
+<p  style='text-align: center;'> ❦
+</p>
+<p>The more complex an explanation is, the more evidence you need just to find it in belief-space. (In Traditional Rationality this is often phrased <a class='wikilink' href='EinsteinsArrogance.html'>misleadingly</a>, as “The more complex a proposition is, the more evidence is required to argue for it.”) How can we measure the complexity of an explanation? How can we determine how much evidence is required?
+</p>
+<p>Occam’s Razor is often phrased as “The simplest explanation that fits the facts.” Robert Heinlein replied that the simplest explanation is “The lady down the street is a witch; she did it.”
+</p>
+<p>One observes that the length of an English sentence is not a good way to measure “complexity.” And “fitting” the facts by merely <em>failing to prohibit</em> them is insufficient.
+</p>
+<p>Why, exactly, is the length of an English sentence a poor measure of complexity? Because when you speak a sentence aloud, you are using <em>labels</em> for concepts that the listener shares—the receiver has already stored the complexity in them. Suppose we abbreviated Heinlein’s whole sentence as “Tldtsiawsdi!” so that the entire explanation can be conveyed in one word; better yet, we’ll give it a short arbitrary label like “Fnord!” Does this reduce the complexity? No, because you have to tell the listener in advance that “Tldtsiawsdi!” stands for “The lady down the street is a witch; she did it.” “Witch,” itself, is a label for some extraordinary assertions—just because we all know what it means doesn’t mean the concept is simple.
+</p>
+<p>An enormous bolt of electricity comes out of the sky and hits something, and the Norse tribesfolk say, “Maybe a really powerful agent was angry and threw a lightning bolt.” The human brain is the most complex artifact in the known universe. If <em>anger</em> seems simple, it’s because we don’t see all the neural circuitry that’s implementing the emotion. (Imagine trying to explain why <em>Saturday Night Live</em> is funny, to an alien species with no sense of humor. But don’t feel superior; you yourself have no sense of fnord.) The complexity of anger, and indeed the complexity of intelligence, was glossed over by the humans who hypothesized Thor the thunder-agent.
+</p>
+<p><em>To a human</em>, Maxwell’s equations take much longer to explain than Thor. Humans don’t have a built-in vocabulary for calculus the way we have a built-in vocabulary for anger. You’ve got to explain your language, and the language behind the language, and the very concept of mathematics, before you can start on electricity.
+</p>
+<p>And yet it seems that there should be some sense in which Maxwell’s equations are <em>simpler</em> than a human brain, or Thor the thunder-agent.
+</p>
+<p>There is. It’s <em>enormously</em> easier (as it turns out) to write a computer program that simulates Maxwell’s equations, compared to a computer program that simulates an intelligent emotional mind like Thor.
+</p>
+<p>The formalism of Solomonoff induction measures the “complexity of a description” by the length of the shortest computer program which produces that description as an output. To talk about the “shortest computer program” that does something, you need to specify a space of computer programs, which requires a language and interpreter. Solomonoff induction uses Turing machines, or rather, bitstrings that specify Turing machines. What if you don’t like Turing machines? Then there’s only a constant complexity penalty to design your own universal Turing machine that interprets whatever code you give it in whatever programming language you like. Different inductive formalisms are penalized by a worst-case constant factor relative to each other, corresponding to the size of a universal interpreter for that formalism.
+</p>
+<p>In the better (in my humble opinion) versions of Solomonoff induction, the computer program does not produce a deterministic prediction, but assigns probabilities to strings. For example, we could write a program to explain a fair coin by writing a program that assigns equal probabilities to all 2<em><sup>N</sup></em> strings of length <em>N</em>. This is Solomonoff induction’s approach to <em>fitting</em> the observed data. The higher the probability a program assigns to the observed data, the better that program <em>fits</em> the data. And probabilities must sum to 1, so for a program to better “fit” one possibility, it must steal probability mass from some other possibility which will then “fit” much more poorly. There is no superfair coin that assigns 100% probability to heads and 100% probability to tails.
+</p>
+<p>How do we trade off the fit to the data, against the complexity of the program? If you ignore complexity penalties, and think <em>only</em> about fit, then you will always prefer programs that claim to deterministically predict the data, assign it 100% probability. If the coin shows <span class='smallcaps'>htthht</span>, then the program that claims that the coin was fixed to show <span class='smallcaps'>htthht</span> fits the observed data 64 times better than the program which claims the coin is fair. Conversely, if you ignore fit, and consider only complexity, then the “fair coin” hypothesis will always seem simpler than any other hypothesis. Even if the coin turns up <span class='smallcaps'>hthhthhhthhhhthhhhht</span>… Indeed, the fair coin <em>is</em> simpler and it fits this data exactly as well as it fits any other string of 20 coinflips—no more, no less—but we see another hypothesis, seeming not too complicated, that fits the data much better.
+</p>
+<p>If you let a program store one more binary bit of information, it will be able to cut down a space of possibilities by half, and hence assign twice as much probability to all the points in the remaining space. This suggests that one bit of program complexity should cost <em>at least</em> a “factor of two gain” in the fit. If you try to design a computer program that explicitly stores an outcome like <span class='smallcaps'>htthht</span>, the six bits that you lose in complexity must destroy all plausibility gained by a 64-fold improvement in fit. Otherwise, you will sooner or later decide that all fair coins are fixed.
+</p>
+<p>Unless your program is being smart, and <em>compressing</em> the data, it should do no good just to move one bit from the data into the program description.
+</p>
+<p>The way Solomonoff induction works to predict sequences is that you sum up over all allowed computer programs—if any program is allowed, Solomonoff induction becomes uncomputable—with each program having a prior probability of (<span class='fraction'>1/2</span>) to the power of its code length in bits, and each program is further weighted by its fit to all data observed so far. This gives you a weighted mixture of experts that can predict future bits.
+</p>
+<p>The Minimum Message Length formalism is nearly equivalent to Solomonoff induction. You send a string describing a code, and then you send a string describing the data in that code. Whichever explanation leads to the shortest <em>total</em> message is the best. If you think of the set of allowable codes as a space of computer programs, and the code description language as a universal machine, then Minimum Message Length is nearly equivalent to Solomonoff induction. (Nearly, because it chooses the <em>shortest</em> program, rather than summing up over all programs.)
+</p>
+<p>This lets us see clearly the problem with using “The lady down the street is a witch; she did it” to explain the pattern in the sequence 0101010101. If you’re sending a message to a friend, trying to describe the sequence you observed, you would have to say: “The lady down the street is a witch; she made the sequence come out 0101010101.” Your accusation of witchcraft wouldn’t let you <em>shorten</em> the rest of the message; you would still have to describe, in full detail, the data which her witchery caused.
+</p>
+<p>Witchcraft may fit our observations in the sense of qualitatively <em>permitting</em> them; but this is because witchcraft permits <em>everything</em>, like saying “<a class='wikilink' href='FakeCausality.html'>Phlogiston</a>!” So, even after you say “witch,” you still have to describe all the observed data in full detail. You have not <em>compressed the total length of the message describing your observations</em> by transmitting the message about witchcraft; you have simply added a useless prologue, increasing the total length.
+</p>
+<p>The real sneakiness was concealed in the word “it” of “A witch did it.” A witch did <em>what</em>?
+</p>
+<p>Of course, thanks to <a class='urllink' href='https://www.greaterwrong.com/lw/il/hindsight_bias/' rel='nofollow'>hindsight bias</a> and <a class='wikilink' href='Anchoring-And-Adjustment.html'>anchoring</a> and <a class='wikilink' href='FakeExplanations.html'>fake explanations</a> and <a class='wikilink' href='FakeCausality.html'>fake causality</a> and <a class='wikilink' href='PositiveBiasLookIntoTheDark.html'>positive bias</a> and <a class='wikilink' href='KnowingAboutBiasesCanHurtPeople.html'>motivated cognition</a>, it may seem all too obvious that if a woman is a witch, <em>of course</em> she would make the coin come up 0101010101. But I’ll get to that soon enough…
+</p>
+<p class='original_lesswrong_link'><a class='urllink' href='https://www.greaterwrong.com/lw/jp/occams_razor/#comments' title='View Less Wrong discussion thread for “Occam’s Razor”'>&nbsp;</a></p>
+<div class='bottom_nav bottom_nav_post' > 
+<p><a class='wikilink' href='EinsteinsArrogance.html'>Einstein’s Arrogance</a>
+</p>
+<p><a class='wikilink' href='Contents.html'>Top</a>
+</p>
+<p><a class='wikilink' href='Book-I-MapAndTerritory.html'>Book</a>
+</p>
+<p><a class='wikilink' href='NoticingConfusionSequence.html'>Sequence</a>
+</p>
+<p><a class='wikilink' href='YourStrengthAsARationalist.html'>Your Strength as a Rationalist</a>
+</p></div>
+</div>
+
+<!--PageActionFmt--><!--/PageActionFmt-->
+<!--HTMLFooter-->
+</body>
+</html>
+

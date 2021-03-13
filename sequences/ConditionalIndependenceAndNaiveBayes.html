@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="canonical" href="ConditionalIndependenceAndNaiveBayes.html" />
+	<title>Conditional Independence, and Naive Bayes  </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel='stylesheet' href='wiki/pub/skins/readthesequences/skin.css' type='text/css' />
+	<!--HTMLHeader--><style type='text/css'><!--a[href^='http://archive.is/timegate/'] { opacity: 0.5;  }
+
+.footnote_block_begin { 
+	width: 160px; 
+	border-bottom: 1px solid blue;
+	margin-bottom: 0.5em;
+}
+div.footnote {
+	margin: 0 3em 0.5em 0;
+	padding-left: 2em;
+	font-size: 0.9em;
+	position: relative;
+}
+div.footnote .footnote-number {
+	position: absolute;
+	left: 0;
+	width: 1.5em;
+	text-align: right;
+}
+div.footnote .footnote-number::after {
+	content: '.';
+}
+.num { position: relative; font-size: 0.7em; bottom: 0.5em; right: 0.1em; margin-left: 0.15em; }
+.frasl { font-size: 1.15em; line-height: 1; }
+.denom { position: relative; font-size: 0.7em; top: 0.05em; left: 0.1em; }
+
+--></style><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><link href="wiki/uploads/favicon.png" type="image/png" rel="shortcut icon" /><link rel='preload' href='wiki/fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Medium.otf' type='font/otf' as='font' crossorigin />
+<link rel='preload' href='wiki/fonts/font_files/ProximaNova/ProximaNova-Thin.otf' type='font/otf' as='font' crossorigin />
+  <meta name='robots' content='index,follow' />
+
+</head>
+<body>
+<!--PageText-->
+<div id='wikitext'>
+<div class='article-talk-selector' > 
+<p><a target='blank'  class='wikilink' href='ConditionalIndependenceAndNaiveBayes.html' title='View PmWiki source for “Conditional Independence, and Naive Bayes”'>Source</a><a target='blank'  class='wikilink' href='ConditionalIndependenceAndNaiveBayes.html' title='View “Conditional Independence, and Naive Bayes” in Markdown format'>Markdown</a> · <a rel='nofollow'  class='wikilink' href='Talk/Conditional-Independence-And-Naive-Bayes.html' title='View the Talk page for “Conditional Independence, and Naive Bayes”'>Talk</a>
+</p></div>
+<div class='nav_menu' > 
+<p><a class='wikilink' href='HomePage.html'>Home</a><a class='wikilink' href='About.html'>About</a><a class='urllink' href='Search.html' rel='nofollow'>Search</a><a class='wikilink' href='Contents.html'>Contents</a>
+</p></div>
+<h1>Conditional Independence, <br clear='all' />and Naive Bayes</h1>
+<p  style='text-align: center;'> ❦
+</p>
+<p>Previously I spoke of <a class='wikilink' href='MutualInformationAndDensityInThingspace.html'>mutual information</a> between <em>X</em> and <em>Y</em>, written <span class='equation'><em>I</em>(<em>X</em>;<em>Y</em>)</span>, which is the difference between the entropy of the joint probability distribution, <span class='equation'><em>H</em>(<em>X</em>,<em>Y</em>)</span>, and the entropies of the marginal distributions, <span class='equation'><em>H</em>(<em>X</em>)</span> + <em>H</em>(<em>Y</em>).
+</p>
+<p>I gave the example of a variable <em>X</em>, having eight states, <em>X</em><sub>1</sub> through <em>X</em><sub>8</sub>, which are all equally probable if we have not yet encountered any evidence; and a variable <em>Y</em>, with states <em>Y</em><sub>1</sub> through <em>Y</em><sub>4</sub>, which are all equally probable if we have not yet encountered any evidence. Then if we calculate the marginal entropies <span class='equation'><em>H</em>(<em>X</em>)</span> and <span class='equation'><em>H</em>(<em>Y</em>)</span>, we will find that <em>X</em> has 3 bits of entropy, and <em>Y</em> has 2 bits.
+</p>
+<p>However, we also know that <em>X</em> and <em>Y</em> are both even or both odd; and this is all we know about the relation between them. So for the joint distribution <span class='equation'>(<em>X</em>,<em>Y</em>)</span> there are only 16 possible states, all equally probable, for a joint entropy of 4 bits. This is a 1-bit entropy defect, compared to 5 bits of entropy if <em>X</em> and <em>Y</em> were independent. This entropy defect is the mutual information—the information that <em>X</em> tells us about <em>Y</em>, or vice versa, so that we are not as uncertain about one after having learned the other.
+</p>
+<p>Suppose, however, that there exists a third variable <em>Z</em>. The variable <em>Z</em> has two states, “even” and “odd,” perfectly correlated to the evenness or oddness of <span class='equation'>(<em>X</em>,<em>Y</em>)</span>. In fact, we’ll suppose that <em>Z</em> is just the question “Are <em>X</em> and <em>Y</em> even or odd?”
+</p>
+<p>If we have no evidence about <em>X</em> and <em>Y</em>, then <em>Z</em> itself necessarily has 1 bit of entropy on the information given. There is 1 bit of mutual information between <em>Z</em> and <em>X</em>, and 1 bit of mutual information between <em>Z</em> and <em>Y</em>. And, as previously noted, 1 bit of mutual information between <em>X</em> and <em>Y</em>. So how much entropy for the whole system <span class='equation'>(<em>X</em>,<em>Y</em>,<em>Z</em>)</span>? You might naively expect that
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>X</em>,<em>Y</em>,<em>Z</em>) = <em>H</em>(<em>X</em>) + <em>H</em>(<em>Y</em>) + <em>H</em>(<em>Z</em>) − <em>I</em>(<em>X</em>;<em>Z</em>) − <em>I</em>(<em>Z</em>;<em>Y</em>) − <em>I</em>(<em>X</em>;<em>Y</em>) ,
+</p>
+<p>but this turns out not to be the case.
+</p>
+<p>The joint system <span class='equation'>(<em>X</em>,<em>Y</em>,<em>Z</em>)</span> only has 16 possible states—since <em>Z</em> is just the question “Are <em>X</em> and <em>Y</em> even or odd?”—so <span class='equation'><em>H</em>(<em>X</em>,<em>Y</em>,<em>Z</em>) = 4</span> bits. But if you calculate the formula just given, you get
+</p>
+<p  style='text-align: center;'> (3 + 2 + 1 − 1 − 1 − 1) bits = 3 bits = <span class='smallcaps'><a class='urllink' href='https://www.youtube.com/watch?v=tRVUOGUmxJI' rel='nofollow'>Wrong!</a></span>
+</p>
+<p>Why? Because if you have the mutual information between <em>X</em> and <em>Z</em>, and the mutual information between <em>Z</em> and <em>Y</em>, that may include some of the same mutual information that we’ll calculate exists between <em>X</em> and <em>Y</em>. In this case, for example, knowing that <em>X</em> is even tells us that <em>Z</em> is even, and knowing that <em>Z</em> is even tells us that <em>Y</em> is even, but this is the same information that <em>X</em> would tell us about <em>Y</em>. We <a class='wikilink' href='FakeCausality.html'>double-counted</a> some of our knowledge, and so came up with too little entropy.
+</p>
+<p>The correct formula is (I believe):
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>X</em>,<em>Y</em>,<em>Z</em>) = <em>H</em>(<em>X</em>) + <em>H</em>(<em>Y</em>) + <em>H</em>(<em>Z</em>) − <em>I</em>(<em>X</em>;<em>Z</em>) − <em>I</em>(<em>Z</em>;<em>Y</em>) − <em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>).
+</p>
+<p>Here the last term, <span class='equation'><em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>)</span>, means, “the information that <em>X</em> tells us about <em>Y</em>, given that we already know <em>Z</em>.” In this case, X doesn’t tell us anything about <em>Y</em>, given that we already know <em>Z</em>, so the term comes out as zero—and the equation gives the correct answer. There, isn’t that nice?
+</p>
+<p>“No,” you <a class='wikilink' href='ATechnicalExplanationOfTechnicalExplanation.html'>correctly</a> reply, “for you have not told me how to calculate <em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>), only given me a verbal argument that it ought to be zero.”
+</p>
+<p>We calculate <span class='equation'><em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>)</span> just the way you would expect. We know <span class='equation'><em>I</em>(<em>X</em>;<em>Y</em>) = <em>H</em>(<em>X</em>) + <em>H</em>(<em>Y</em>) − <em>H</em>(<em>X</em>,<em>Y</em>)</span>, so
+</p>
+<p class='equation' style='text-align: center;'> <em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>) = <em>H</em>(<em>X</em>|<em>Z</em>) + <em>H</em>(<em>Y</em>|<em>Z</em>) − <em>H</em>(<em>X</em>,<em>Y</em>|<em>Z</em>).
+</p>
+<p>And now, I suppose, you want to know how to calculate the conditional entropy? Well, the <em>original</em> formula for the entropy is
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>S</em>) = <span class='bigsigma'>Σ<sub><em>i</em></sub><sup> </sup></span>−<em>P</em>(<em>S<sub>i</sub></em>) × log<sub>&#x2009;2</sub>(<em>P</em>(<em>S<sub>i</sub></em>)).
+</p>
+<p>If we then learned a new fact <em>Z</em><sub>0</sub>, our remaining uncertainty about <em>S</em> would be
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>S</em>|<em>Z</em><sub>0</sub>) = <span class='bigsigma'>Σ<sub><em>i</em></sub><sup> </sup></span>−<em>P</em>(<em>S<sub>i</sub></em>|<em>Z</em><sub>0</sub>)log<sub>2</sub>(<em>P</em>(<em>Si</em>|<em>Z</em><sub>0</sub>)).
+</p>
+<p>So if we’re going to learn a new fact <em>Z</em>, but we don’t know which <em>Z</em> yet, then, on average, we expect to be around this uncertain of <em>S</em> afterward:
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>S</em>|<em>Z</em>) = <span class='bigsigma'>Σ<sub><em>j</em></sub><sup> </sup></span> <img src='wiki/uploads/big_left_parens.svg' alt='left (opening) parenthesis' title='left (opening) parenthesis' />&#xFEFF;<em>P</em>(<em>Z<sub>j</sub></em>)<span class='bigsigma'>Σ<sub><em>i</em></sub><sup> </sup></span>−<em>P</em>(<em>S<sub>i</sub></em>|<em>Z<sub>j</sub></em>)log<sub>2</sub>(<em>P</em>(<em>S<sub>i</sub></em>|<em>Z<sub>j</sub></em>))&#xFEFF;<img src='wiki/uploads/big_right_parens.svg' alt='right (closing) parenthesis' title='right (closing) parenthesis' />.
+</p>
+<p>And that’s how one calculates conditional entropies; from which, in turn, we can get the conditional mutual information.
+</p>
+<p>There are <em>all sorts</em> of ancillary theorems here, like
+</p>
+<p class='equation' style='text-align: center;'> <em>H</em>(<em>X</em>|<em>Y</em>) = <em>H</em>(<em>X</em>,<em>Y</em>) − <em>H</em>(<em>Y</em>)
+</p>
+<p>and
+</p>
+<p class='equation' style='text-align: center;'> if <em>I</em>(<em>X</em>;<em>Z</em>) = 0 and <em>I</em>(<em>Y</em>;<em>X</em>|<em>Z</em>) = 0 then <em>I</em>(<em>X</em>;<em>Y</em>) = 0,
+</p>
+<p>but I’m not going to go into those.
+</p>
+<p>“But,” you ask, “what does <em>this</em> have to do with the nature of words and their hidden Bayesian structure?”
+</p>
+<p>I am just so <em>unspeakably</em> glad that you asked that question, because I was planning to tell you whether you liked it or not. But first there are a couple more preliminaries.
+</p>
+<p>You will remember—yes, you <em>will</em> remember—that there is a duality between mutual information and Bayesian evidence. Mutual information is positive if and only if the probability of at least some joint events <span class='equation'><em>P</em>(<em>x</em>,<em>y</em>)</span> does not equal the product of the probabilities of the separate events <span class='equation'><em>P</em>(<em>x</em>)<em>P</em>(<em>y</em>)</span>. This, in turn, is exactly equivalent to the condition that Bayesian evidence exists between <em>x</em> and <em>y</em>:
+</p>
+<table border='0' class='equation' ><tr><td align='right'  valign='top'> <em>I</em>(<em>X</em>;<em>Y</em>)
+</td><td class='equal_sign'  valign='top'> &gt;
+</td><td  valign='top'> 0 ⇒
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>x</em>,<em>y</em>)
+</td><td class='equal_sign'  valign='top'> ≠
+</td><td  valign='top'> <em>P</em>(<em>x</em>)<em>P</em>(<em>y</em>)
+</td></tr><tr><td class='numerator'  valign='top'> <em>P</em>(<em>x</em>,<em>y</em>)
+</td><td rowspan='2' class='equal_sign'  valign='top'> ≠
+</td><td rowspan='2'  valign='top'> <em>P</em>(<em>x</em>)
+</td></tr><tr><td align='center' class='denominator'  valign='top'> <em>P</em>(<em>y</em>)
+</td></tr><tr><td  valign='top'> <em>P</em>(<em>x</em>|<em>y</em>)
+</td><td class='equal_sign'  valign='top'> ≠
+</td><td  valign='top'> <em>P</em>(<em>x</em>)
+</td></tr></table>
+<p>If you’re conditioning on <em>Z</em>, you just adjust the whole derivation accordingly:
+</p>
+<table border='0' class='equation' ><tr><td style='width: 50px; '  valign='top'> &nbsp;
+</td><td align='right' style='width:90px; '  valign='top'> <em>I</em>(<em>X</em>;<em>Y</em>|<em>Z</em>)
+</td><td class='equal_sign'  valign='top'> &gt;
+</td><td  valign='top'> 0 ⇒
+</td></tr><tr><td  valign='top'> &nbsp;
+</td><td align='right'  valign='top'> <em>P</em>(<em>x</em>,<em>y</em>|<em>z</em>)
+</td><td class='equal_sign'  valign='top'> ≠
+</td><td  valign='top'> <em>P</em>(<em>x</em>|<em>z</em>)<em>P</em>(<em>y</em>|<em>z</em>)
+</td></tr><tr><td rowspan='2'  valign='top'> &nbsp;
+</td><td class='numerator'  valign='top'> <em>P</em>(<em>x</em>,<em>y</em>|<em>z</em>)
+</td><td rowspan='2' class='equal_sign'  valign='top'> ≠
+</td><td rowspan='2'  valign='top'> <em>P</em>(<em>x</em>|<em>z</em>)
+</td></tr><tr><td class='denominator'  valign='top'> <em>P</em>(<em>y</em>|<em>z</em>)
+</td></tr><tr><td colspan='2' class='numerator'  valign='top'> (<em>P</em>(<em>x</em>,<em>y</em>,<em>z</em>)/<em>P</em>(<em>z</em>))
+</td><td rowspan='2' class='equal_sign'  valign='top'> ≠
+</td><td rowspan='2'  valign='top'> <em>P</em>(<em>x</em>|<em>z</em>)
+</td></tr><tr><td colspan='2' class='denominator'  valign='top'> (<em>P</em>(<em>y</em>,<em>z</em>)/<em>P</em>(<em>z</em>))
+</td></tr><tr><td rowspan='2'  valign='top'> &nbsp;
+</td><td class='numerator'  valign='top'> <em>P</em>(<em>x</em>,<em>y</em>,<em>z</em>)
+</td><td rowspan='2' class='equal_sign'  valign='top'> ≠
+</td><td rowspan='2'  valign='top'> <em>P</em>(<em>x</em>|<em>z</em>)
+</td></tr><tr><td class='denominator'  valign='top'> <em>P</em>(<em>y</em>,<em>z</em>)
+</td></tr><tr><td rowspan='2'  valign='top'> &nbsp;
+</td><td align='right'  valign='top'> <em>P</em>(<em>x</em>|<em>y</em>,<em>z</em>)
+</td><td class='equal_sign'  valign='top'> ≠
+</td><td  valign='top'> <em>P</em>(<em>x</em>|<em>z</em>).
+</td></tr></table>
+<p>Which last line reads “Even knowing <em>Z</em>, learning <em>Y</em> still changes our beliefs about <em>X</em>.”
+</p>
+<p>Conversely, as in our original case of <em>Z</em> being “even” or “odd,” <em>Z</em> <a class='wikilink' href='ArgumentScreensOffAuthority.html'>screens off</a> <em>X</em> from <em>Y</em>—that is, if we know that <em>Z</em> is “even,” learning that <em>Y</em> is in state <em>Y</em><sub>4</sub> tells us <em>nothing more</em> about whether <em>X</em> is <em>X</em><sub>2</sub>, <em>X</em><sub>4</sub>, <em>X</em><sub>6</sub>, or <em>X</em><sub>8</sub>. Or if we know that <em>Z</em> is “odd,” then learning that <em>X</em> is <em>X</em><sub>5</sub> tells us nothing more about whether <em>Y</em> is <em>Y</em><sub>1</sub> or <em>Y</em><sub>3</sub>. Learning <em>Z</em> has rendered <em>X</em> and <em>Y</em> <em>conditionally independent</em>.
+</p>
+<p>Conditional independence is a hugely important concept in probability theory—to cite just one example, without conditional independence, the universe would have no structure.
+</p>
+<p>Here, though, I only intend to talk about one particular kind of conditional independence—the case of a central variable that screens off other variables surrounding it, like a central body with tentacles.
+</p>
+<p>Let there be five variables <em>U</em>, <em>V</em>, <em>W</em>, <em>X</em>, and <em>Y</em>; and moreover, suppose that for every pair of these variables, one variable is evidence about the other. If you select <em>U</em> and <em>W</em>, for example, then learning <em>U</em> = <em>U</em><sub>1</sub> will tell you something you didn’t know before about the probability that <em>W</em> = <em>W</em><sub>1</sub>.
+</p>
+<p>An unmanageable inferential mess? Evidence gone wild? Not necessarily.
+</p>
+<p>Maybe <em>U</em> is “Speaks a language,” <em>V</em> is “Two arms and ten digits,” <em>W</em> is “Wears clothes,” <em>X</em> is “Poisonable by hemlock,” and <em>Y</em> is “Red blood.” Now if you encounter a thing-in-the-world, that might be an apple and might be a rock, and you learn that this thing speaks Chinese, you are liable to assess a much higher probability that it wears clothes; and if you learn that the thing is not poisonable by hemlock, you will assess a somewhat lower probability that it has red blood.
+</p>
+<p>Now some of these rules are stronger than others. There is the case of Fred, who is missing a finger due to a volcano accident, and the case of Barney the Baby who doesn’t speak yet, and the case of Irving the IRCBot who emits sentences but has no blood. So if we learn that a certain thing is not wearing clothes, that doesn’t screen off everything that its speech capability can tell us about its blood color. If the thing doesn’t wear clothes but <em>does</em> talk, maybe it’s Nude Nellie.
+</p>
+<p>This makes the case more interesting than, say, five integer variables that are all odd or all even, but otherwise uncorrelated. In that case, knowing any one of the variables would screen off everything that knowing a second variable could tell us about a third variable.
+</p>
+<p>But here, we have dependencies that don’t go away as soon as we learn just one variable, as the case of Nude Nellie shows. So is it an unmanageable inferential inconvenience?
+</p>
+<p>Fear not! For there may be some <em>sixth</em> variable <em>Z</em>, which, if we knew it, really <em>would</em> screen off every pair of variables from each other. There may be some variable <em>Z</em>—even if we have to <em>construct</em> <em>Z</em> rather than observing it directly—such that:
+</p>
+<table border='0' class='equation' ><tr><td align='right'  valign='top'> <em>P</em>(<em>U</em>|<em>V</em>,<em>W</em>,<em>X</em>,<em>Y</em>,<em>Z</em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>U</em>|<em>Z</em>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>V</em>|<em>U</em>,<em>W</em>,<em>X</em>,<em>Y</em>,<em>Z</em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>V</em>|<em>Z</em>)
+</td></tr><tr><td align='right'  valign='top'> <em>P</em>(<em>W</em>|<em>U</em>,<em>V</em>,<em>X</em>,<em>Y</em>,<em>Z</em>)
+</td><td class='equal_sign'  valign='top'> =
+</td><td  valign='top'> <em>P</em>(<em>W</em>|<em>Z</em>)
+</td></tr><tr><td  valign='top'> &nbsp;
+</td><td align='center'  valign='top'> <span style='font-size:144%'>⋮</span>
+</td><td  valign='top'> &nbsp;
+</td></tr></table>
+<p>Perhaps, <em>given that</em> a thing is “human,” then the probabilities of it speaking, wearing clothes, and having the standard number of fingers, are all independent. Fred may be missing a finger—but he is no more likely to be a nudist than the next person; Nude Nellie never wears clothes, but knowing this doesn’t make it any less likely that she speaks; and Baby Barney doesn’t talk yet, but is not missing any limbs.
+</p>
+<p>This is called the “Naive Bayes” method, because it usually isn’t quite true, but <em>pretending</em> that it’s true can simplify the living daylights out of your calculations. We don’t keep separate track of the influence of clothed-ness on speech capability given finger number. We just use all the information we’ve observed to keep track of the probability that this thingy is a human (or alternatively, something else, like a chimpanzee or robot) and then use our beliefs about the central class to predict anything we haven’t seen yet, like vulnerability to hemlock.
+</p>
+<p>Any observations of <em>U</em>, <em>V</em>, <em>W</em>, <em>X</em>, and <em>Y</em> just act as evidence for the central class variable <em>Z</em>, and then we use the posterior distribution on <em>Z</em> to make any predictions that need making about unobserved variables in <em>U</em>, <em>V</em>, <em>W</em>, <em>X</em>, and <em>Y</em>.
+</p>
+<p>Sound familiar? It should:
+</p>
+<p  style='text-align: center;'> &nbsp; <img src='wiki/uploads/NeuralCategories_diagram_3.svg' alt='diagram: neural network, with one central node (Category), and five peripheral nodes attached to it (Color, Luminance, Interior, Texture, Shape)' title='diagram: neural network, with one central node (Category), and five peripheral nodes attached to it (Color, Luminance, Interior, Texture, Shape)' /> &nbsp;
+</p>
+<p  style='text-align: center;'> <span style='font-size:83%'>Network 2</span>
+</p>
+<p>As a matter of fact, if you use the right kind of neural network units, this “neural network” ends up <em>exactly, mathematically</em> equivalent to Naive Bayes. The central unit just needs a logistic threshold—an S-curve response—and the weights of the inputs just need to match the logarithms of the likelihood ratios, et cetera. In fact, it’s a good guess that this is one of the reasons why logistic response often works so well in neural networks—it lets the algorithm sneak in a little Bayesian reasoning while the designers aren’t looking.
+</p>
+<p>Just because someone is presenting you with an algorithm that they call a “neural network” with buzzwords like “scruffy” and “emergent” plastered all over it, disclaiming proudly that they have no idea how the learned network works—well, don’t assume that their little AI algorithm <em>really is</em> Beyond the Realms of Logic. For this paradigm of adhockery, if it works, will turn out to have <a class='wikilink' href='SearchingForBayesStructure.html'>Bayesian structure</a>; it may even be exactly equivalent to an algorithm of the sort called “Bayesian.”
+</p>
+<p>Even if it doesn’t <em>look</em> Bayesian, on the surface.
+</p>
+<p>And then you just <em>know</em> that the Bayesians are going to start explaining exactly how the algorithm works, what underlying assumptions it reflects, which <a class='wikilink' href='MutualInformationAndDensityInThingspace.html'>environmental regularities</a> it exploits, where it works and where it fails, and even attaching understandable meanings to the learned network weights.
+</p>
+<p>Disappointing, isn’t it?
+</p>
+<div class='original_lesswrong_link' class='img imgonly'> <a class='urllink' href='https://www.greaterwrong.com/lw/o8/conditional_independence_and_naive_bayes#comments' title='View Less Wrong discussion thread for “Conditional Independence, and Naive Bayes”' rel='nofollow'><img src='wiki/uploads/star.svg' alt='' /></a></div>
+<div class='bottom_nav bottom_nav_post' >
+<p><span style='font-size:83%'><a class='wikilink' href='SuperexponentialConceptspaceAndSimpleWords.html'>Superexponential Conceptspace, and Simple Words</a></span>
+</p>
+<p><a class='wikilink' href='Contents.html'>Top</a>
+</p>
+<p><a class='wikilink' href='Book-III-TheMachineInTheGhost.html'>Book</a>
+</p>
+<p><a class='wikilink' href='AHumansGuideToWordsSequence.html'>Sequence</a>
+</p>
+<p><a class='wikilink' href='WordsAsMentalPaintbrushHandles.html'>Words as Mental Paintbrush Handles</a>
+</p></div>
+</div>
+
+<!--PageActionFmt--><!--/PageActionFmt-->
+<!--HTMLFooter-->
+</body>
+</html>
+

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+Unicode requested: 42 (decimal: 42 hex: 0x2a)
+Glyph index for unicode: 13
+Load Glyph into Face's glyph slot. error code: 0
+Glyph Name: asterisk
+Glyph Width: 0 Height: 0 Hor. Advance: 0 Vert. Advance: 0
+Num points: 64
+Num contours: 1
+Contour endpoint index values: 63
+-->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="30"
+   height="35.04504"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="star.svg">
+  <metadata
+     id="metadata561">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs559" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1881"
+     inkscape:window-height="1036"
+     id="namedview557"
+     showgrid="false"
+     inkscape:zoom="7.6874299"
+     inkscape:cx="64.78521"
+     inkscape:cy="44.548822"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <!-- draw border -->
+  <!-- make sure glyph is visible within svg window -->
+  <path
+     style="fill:#0d4000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2"
+     inkscape:connector-curvature="0"
+     id="path300"
+     d="m 14.954955,0 5.63063,3.28829 q -1.801802,2.92792 -2.792793,5.09009 -0.990991,2.16216 -0.990991,3.24324 0,0.63063 0.225226,1.03603 0.27027,0.40541 0.675675,0.40541 1.261261,0 2.657658,-1.57658 1.396396,-1.57657 3.828829,-6.08108 L 30,8.73874 l 0,6.44144 -2.027027,0 q -4.414414,0 -6.126127,0.54054 -1.711711,0.54054 -1.711711,1.8018 0,1.26126 1.666666,1.8018 1.711713,0.4955 6.531532,0.4955 l 1.666667,0 0,6.44144 -5.810811,3.33333 q -2.162163,-4.05405 -3.648649,-5.85586 -1.441441,-1.8018 -2.612613,-1.8018 -0.495495,0 -0.81081,0.45045 -0.315316,0.40541 -0.315316,1.12613 0,1.03603 0.990991,3.1982 0.990991,2.16216 2.792793,5 l -5.63063,3.33333 -5.5405409,-3.33333 q 1.8018019,-2.83784 2.7927929,-5 0.990991,-2.16217 0.990991,-3.1982 0,-0.72072 -0.315316,-1.12613 -0.315315,-0.45045 -0.81081,-0.45045 -1.081081,0 -2.5675678,1.84685 -1.4864864,1.8018 -3.6036035,5.81081 L 0,26.26126 l 0,-6.44144 2.027027,0 q 4.4144142,0 6.1261259,-0.4955 1.7117117,-0.54054 1.7117117,-1.8018 0,-1.26126 -1.7117117,-1.8018 Q 6.4864863,15.18018 2.027027,15.18018 L 0,15.18018 0,8.73874 5.8108106,5.4054 q 2.3873874,4.36937 3.7387387,5.99099 1.3963967,1.57658 2.6576577,1.57658 0.45045,0 0.720721,-0.36036 0.27027,-0.36036 0.27027,-0.99099 0,-1.12613 -0.990991,-3.28829 Q 11.216216,6.12612 9.4144141,3.28829 L 14.954955,0 Z" />
+</svg>

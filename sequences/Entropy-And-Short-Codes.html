@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-US">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<link rel="canonical" href="EntropyAndShortCodes.html" />
+	<title>Entropy, and Short Codes  </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link rel='stylesheet' href='wiki/pub/skins/readthesequences/skin.css' type='text/css' />
+	<!--HTMLHeader--><style type='text/css'><!--a[href^='http://archive.is/timegate/'] { opacity: 0.5;  }
+
+.footnote_block_begin { 
+	width: 160px; 
+	border-bottom: 1px solid blue;
+	margin-bottom: 0.5em;
+}
+div.footnote {
+	margin: 0 3em 0.5em 0;
+	padding-left: 2em;
+	font-size: 0.9em;
+	position: relative;
+}
+div.footnote .footnote-number {
+	position: absolute;
+	left: 0;
+	width: 1.5em;
+	text-align: right;
+}
+div.footnote .footnote-number::after {
+	content: '.';
+}
+.num { position: relative; font-size: 0.7em; bottom: 0.5em; right: 0.1em; margin-left: 0.15em; }
+.frasl { font-size: 1.15em; line-height: 1; }
+.denom { position: relative; font-size: 0.7em; top: 0.05em; left: 0.1em; }
+
+--></style><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /><link href="wiki/uploads/favicon.png" type="image/png" rel="shortcut icon" /><link rel='preload' href='wiki/fonts/font_files/GaramondPremierProSubhead/GaramondPremierProSubhead-Medium.otf' type='font/otf' as='font' crossorigin />
+<link rel='preload' href='wiki/fonts/font_files/ProximaNova/ProximaNova-Thin.otf' type='font/otf' as='font' crossorigin />
+  <meta name='robots' content='index,follow' />
+
+</head>
+<body>
+<!--PageText-->
+<div id='wikitext'>
+<div class='article-talk-selector' > 
+<p><a target='blank'  class='wikilink' href='Entropy-And-Short-Codes%3Faction=source' title='View PmWiki source for “Entropy, and Short Codes”'>Source</a><a target='blank'  class='wikilink' href='Entropy-And-Short-Codes%3Faction=markdown' title='View “Entropy, and Short Codes” in Markdown format'>Markdown</a> · <a rel='nofollow'  class='wikilink' href='Talk/Entropy-And-Short-Codes.html' title='View the Talk page for “Entropy, and Short Codes”'>Talk</a>
+</p></div>
+<div class='nav_menu' > 
+<p><a class='wikilink' href='index.html'>Home</a><a class='wikilink' href='About.html'>About</a><a class='urllink' href='Search.html' rel='nofollow'>Search</a><a class='wikilink' href='Contents.html'>Contents</a>
+</p></div>
+<h1>Entropy, and Short Codes</h1>
+<p  style='text-align: center;'> ❦
+</p>
+<p>(If you aren’t familiar with Bayesian inference, this may be a good time to read <a class='wikilink' href='AnIntuitiveExplanationOfBayessTheorem.html'>An Intuitive Explanation of Bayes’s Theorem</a>.)
+</p>
+<p>Suppose you have a system <em>X</em> that’s equally likely to be in any of 8 possible states:
+</p>
+<p class='equation' style='text-align: center;'> {<em>X</em><sub>1</sub>, <em>X</em><sub>2</sub>, <em>X</em><sub>3</sub>, <em>X</em><sub>4</sub>, <em>X</em><sub>5</sub>, <em>X</em><sub>6</sub>, <em>X</em><sub>7</sub>, <em>X</em><sub>8</sub>}.
+</p>
+<p>There’s an extraordinarily ubiquitous quantity—in physics, mathematics, and even biology—called <em>entropy</em>; and the entropy of <em>X</em> is 3 bits. This means that, on average, we’ll have to ask 3 yes-or-no questions to find out <em>X</em>’s value. For example, someone could tell us <em>X</em>’s value using this code:
+</p>
+<table border='0' class='spaced_table' ><tr><td  valign='top'> <em>X</em><sub>1</sub>&#x2004;:&#x2004;001
+</td><td  valign='top'> <em>X</em><sub>2</sub>&#x2004;:&#x2004;010
+</td><td  valign='top'> <em>X</em><sub>3</sub>&#x2004;:&#x2004;011
+</td><td  valign='top'> <em>X</em><sub>4</sub>&#x2004;:&#x2004;100
+</td></tr><tr><td  valign='top'> <em>X</em><sub>5</sub>&#x2004;:&#x2004;101
+</td><td  valign='top'> <em>X</em><sub>6</sub>&#x2004;:&#x2004;110
+</td><td  valign='top'> <em>X</em><sub>7</sub>&#x2004;:&#x2004;111
+</td><td  valign='top'>  <em>X</em><sub>8</sub>&#x2004;:&#x2004;000.
+</td></tr></table>
+<p>So if I asked “Is the first symbol 1?” and heard “yes,” then asked “Is the second symbol 1?” and heard “no,” then asked “Is the third symbol 1?” and heard “no,” I would know that <em>X</em> was in state 4.
+</p>
+<p>Now suppose that the system <em>Y</em> has four possible states with the following probabilities:
+</p>
+<table border='0' class='spaced_table' ><tr><td  valign='top'> <em>Y</em><sub>1</sub>&#x2004;:&#x2004;<span class='fraction'>1/2</span> (50%)
+</td><td  valign='top'> <em>Y</em><sub>2</sub>&#x2004;:&#x2004;<span class='fraction'>1/4</span> (25%)
+</td></tr><tr><td  valign='top'> <em>Y</em><sub>3</sub>&#x2004;:&#x2004;<span class='fraction'>1/8</span> (12.5%)
+</td><td  valign='top'> <em>Y</em><sub>4</sub>&#x2004;:&#x2004;<span class='fraction'>1/8</span> (12.5%).
+</td></tr></table>
+<p>Then the entropy of <em>Y</em> would be 1.75 bits, meaning that we can find out its value by asking 1.75 yes-or-no questions.
+</p>
+<p>What does it mean to talk about asking one and three-fourths of a question? Imagine that we designate the states of Y using the following code:
+</p>
+<table border='0' class='spaced_table' ><tr><td  valign='top'> <em>Y</em><sub>1</sub>&#x2004;:&#x2004;1
+</td><td  valign='top'> <em>Y</em><sub>2</sub>&#x2004;:&#x2004;01
+</td><td  valign='top'> <em>Y</em><sub>3</sub>&#x2004;:&#x2004;001
+</td><td  valign='top'> <em>Y</em><sub>4</sub>&#x2004;:&#x2004;000.
+</td></tr></table>
+<p>First you ask, “Is the first symbol 1?” If the answer is “yes,” you’re done: <em>Y</em> is in state 1. This happens half the time, so 50% of the time, it takes 1 yes-or-no question to find out <em>Y</em>’s state.
+</p>
+<p>Suppose that instead the answer is “No.” Then you ask, “Is the second symbol 1?” If the answer is “yes,” you’re done: <em>Y</em> is in state 2. The system <em>Y</em> is in state 2 with probability <span class='fraction'>1/4</span>, and each time <em>Y</em> is in state 2 we discover this fact using two yes-or-no questions, so 25% of the time it takes 2 questions to discover <em>Y</em>’s state.
+</p>
+<p>If the answer is “No” twice in a row, you ask “Is the third symbol 1?” If “yes,” you’re done and <em>Y</em> is in state 3; if “no,” you’re done and <em>Y</em> is in state 4. The <span class='fraction'>1/8</span> of the time that <em>Y</em> is in state 3, it takes three questions; and the <span class='fraction'>1/8</span> of the time that <em>Y</em> is in state 4, it takes three questions.
+</p>
+<p class='equation' style='padding-left: 3em;'> (<span class='fraction'>1/2</span> × 1) + (<span class='fraction'>1/4</span> × 2) + (<span class='fraction'>1/8</span> × 3) + (<span class='fraction'>1/8</span> × 3)
+</p>
+<p  style='padding-left: 3em;'> = 0.5 + 0.5 + 0.375 + 0.375
+</p>
+<p  style='padding-left: 3em;'> = 1.75.
+</p>
+<p>The general formula for the entropy <span class='equation'><em>H</em>(<em>S</em>)</span> of a system <em>S</em> is the sum, over all <span class='equation'><em>S<sub>i</sub></em>, of −<em>P</em>(<em>S<sub>i</sub></em>)log<sub>2</sub>(<em>P</em>(<em>S<sub>i</sub></em>))</span>.
+</p>
+<p>For example, the log (base 2) of <span class='fraction'>1/8</span> is −3. So −(<span class='fraction'>1/8</span> × −3) = 0.375 is the contribution of state <em>S</em><sub>4</sub> to the total entropy: <span class='fraction'>1/8</span> of the time, we have to ask 3 questions.
+</p>
+<p>You can’t always devise a perfect code for a system, but if you have to tell someone the state of arbitrarily many copies of <em>S</em> in a single message, you can get arbitrarily close to a perfect code. (Google “arithmetic coding” for a simple method.)
+</p>
+<p>Now, you might ask: “Why not use the code 10 for <em>Y</em><sub>4</sub>, instead of 000? Wouldn’t that let us transmit messages more quickly?”
+</p>
+<p>But if you use the code 10 for <em>Y</em><sub>4</sub>, then when someone answers “Yes” to the question “Is the first symbol 1?,” you won’t know yet whether the system state is <em>Y</em><sub>1</sub> (1) or <em>Y</em><sub>4</sub> (10). In fact, if you change the code this way, the whole system falls apart—because if you hear “1001,” you don’t know if it means “<em>Y</em><sub>4</sub>, followed by <em>Y</em><sub>2</sub>” or “<em>Y</em><sub>1</sub>, followed by <em>Y</em><sub>3</sub>.”
+</p>
+<p>The moral is that <em>short words are a conserved resource</em>.
+</p>
+<p>The key to creating a good code—a code that transmits messages as compactly as possible—is to reserve short words for things that you’ll need to say frequently, and use longer words for things that you won’t need to say as often.
+</p>
+<p>When you take this art to its limit, the length of the message you need to describe something corresponds exactly or almost exactly to its probability. This is the Minimum Description Length or Minimum Message Length formalization of <a class='wikilink' href='OccamsRazor.html'>Occam’s Razor</a>.
+</p>
+<p>And so even the <em>labels</em> that we use for words are not quite arbitrary. The sounds that we attach to our concepts can be better or worse, wiser or more foolish. Even apart from considerations of <a class='wikilink' href='TheArgumentFromCommonUsage.html'>common usage</a>!
+</p>
+<p>I say all this, because the idea that “You can <em>X</em> any way you like” is a huge obstacle to learning how to <em>X</em> wisely. “It’s a free country; I have <a class='urllink' href='http://www.overcomingbias.com/2006/12/you_are_never_e.html' rel='nofollow'>a right to my own opinion</a>” obstructs the art of finding truth. “I can define a word any way I like” obstructs the art of <a class='wikilink' href='WhereToDrawTheBoundary.html'>carving reality at its joints</a>. And even the sensible-sounding “The labels we attach to words are arbitrary” obstructs awareness of compactness. Prosody too, for that matter—Tolkien once observed what a beautiful sound the phrase “cellar door” makes; that is the kind of awareness it takes to use language like Tolkien.
+</p>
+<p>The length of words also plays a nontrivial role in the cognitive science of language:
+</p>
+<p>Consider the phrases “recliner,” “chair,” and “furniture.” Recliner is a more specific category than chair; furniture is a more general category than chair. But the vast majority of chairs have a common use—you use the same sort of motor actions to sit down in them, and you sit down in them for the same sort of purpose (to take your weight off your feet while you eat, or read, or type, or rest). Recliners do not depart from this theme. “Furniture,” on the other hand, includes things like beds and tables which have different uses, and call up different motor functions, from chairs.
+</p>
+<p>In the terminology of cognitive psychology, “chair” is a <em>basic-level category</em>.
+</p>
+<p>People have a tendency to talk, and presumably think, at the basic level of categorization—to draw the boundary around “chairs,” rather than around the more specific category “recliner,” or the more general category “furniture.” People are more likely to say “You can sit in that chair” than “You can sit in that recliner” or “You can sit in that furniture.”
+</p>
+<p>And it is no coincidence that the word for “chair” contains fewer syllables than either “recliner” or “furniture.” Basic-level categories, in general, tend to have short names; and nouns with short names tend to refer to basic-level categories. Not a perfect rule, of course, but a definite tendency. Frequent use goes along with short words; short words go along with frequent use.
+</p>
+<p>Or as Douglas Hofstadter put it, there’s a reason why the English language uses “the” to mean “the” and “antidisestablishmentarianism” to mean “antidisestablishmentarianism” instead of antidisestablishmentarianism other way around.
+</p>
+<div class='original_lesswrong_link' class='img imgonly'> <a class='urllink' href='https://www.greaterwrong.com/lw/o1/entropy_and_short_codes#comments' title='View Less Wrong discussion thread for “Entropy, and Short Codes”' rel='nofollow'><img src='wiki/uploads/star.svg' alt='' /></a></div>
+<div class='bottom_nav bottom_nav_post' >
+<p><a class='wikilink' href='WhereToDrawTheBoundary.html'>Where to Draw the Boundary?</a>
+</p>
+<p><a class='wikilink' href='Contents.html'>Top</a>
+</p>
+<p><a class='wikilink' href='Book-III-TheMachineInTheGhost.html'>Book</a>
+</p>
+<p><a class='wikilink' href='AHumansGuideToWordsSequence.html'>Sequence</a>
+</p>
+<p><a class='wikilink' href='MutualInformationAndDensityInThingspace.html'>Mutual Information, and Density in Thingspace</a>
+</p></div>
+</div>
+
+<!--PageActionFmt--><!--/PageActionFmt-->
+<!--HTMLFooter-->
+</body>
+</html>
+
