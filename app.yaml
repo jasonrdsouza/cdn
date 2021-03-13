@@ -56,6 +56,9 @@ handlers:
 - url: /sicp/contents
   static_dir: sicp/html/
   secure: always
+- url: /sequences
+  static_dir: sequences/
+  secure: always
 - url: /css
   static_dir: dart/build/css/
   secure: always
