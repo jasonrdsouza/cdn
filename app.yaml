@@ -57,6 +57,10 @@ handlers:
   static_dir: sicp/html/
   secure: always
 - url: /sequences
+  static_files: sequences/homepage.html
+  upload: sequences/homepage.html
+  secure: always
+- url: /sequences/book/
   static_dir: sequences/
   secure: always
 - url: /css
