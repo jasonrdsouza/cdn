@@ -49,6 +49,10 @@ handlers:
   static_files: dart/build/clock.html
   upload: dart/build/clock.html
   secure: always
+- url: /notebook
+  static_files: dart/build/notebook.html
+  upload: dart/build/notebook.html
+  secure: always
 - url: /sicp
   static_files: sicp/index.xhtml
   upload: sicp/index.xhtml
