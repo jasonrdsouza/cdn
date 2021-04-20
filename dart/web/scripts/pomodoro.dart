@@ -2,15 +2,16 @@ import 'dart:html';
 import 'dart:async';
 
 Element fetchBloc(String category) {
-  return querySelector('.bloc-time.$category');
+  return querySelector('.bloc-time.$category') as Element;
 }
 
 int getInitialTimeValue(String category) {
-  String userSupplied = Uri.base.queryParameters[category];
+  String? userSupplied = Uri.base.queryParameters[category];
   if (userSupplied != null && int.tryParse(userSupplied) != null) {
     return int.parse(userSupplied);
   }
-  return int.parse(fetchBloc(category).attributes['data-init-value']);
+
+  return int.parse(fetchBloc(category).attributes['data-init-value']!);
 }
 
 void setInitialTimeValue(String category, int value) {
@@ -41,19 +42,28 @@ void animateBlocDigit(Element digit, String newValue) {
   // look right. Also, the front bottom animation is messed up
   // because it happens simultaneously (again, due to me not being able
   // to order the animation frames) with the front top animation.
-  Element digitTop = digit.querySelector('.top');
-  Element digitBottom = digit.querySelector('.bottom');
-  Element digitBackTop = digit.querySelector('.top-back');
-  Element digitBackBottom = digit.querySelector('.bottom-back');
+  Element digitTop = digit.querySelector('.top')!;
+  Element digitBottom = digit.querySelector('.bottom')!;
+  Element digitBackTop = digit.querySelector('.top-back')!;
+  Element digitBackBottom = digit.querySelector('.bottom-back')!;
 
   // Set the back to the new value
   digitBackTop.text = newValue;
   digitBackBottom.text = newValue;
 
   // Animate the old value in front to the new value in back
-  Animation animation = digitTop.animate([{"transform": "rotateX(0deg)"}, {"transform": "rotateX(-180deg)"}], {"duration": 800, "fill": "both"});
+  Animation animation = digitTop.animate([
+    {"transform": "rotateX(0deg)"},
+    {"transform": "rotateX(-180deg)"}
+  ], {
+    "duration": 800,
+    "fill": "both"
+  });
   digitTop.text = newValue;
-  digitBottom.animate([{"transform": "rotateX(180deg)"}, {"transform": "rotatex(0deg)"}], 800);
+  digitBottom.animate([
+    {"transform": "rotateX(180deg)"},
+    {"transform": "rotatex(0deg)"}
+  ], 800);
   digitBottom.text = newValue;
 }
 
@@ -70,12 +80,12 @@ void updateBloc(category, int newValue) {
     newDigit2 = newValue.toString();
   }
 
-  Element digit1 = fetchBloc(category).querySelector('.digit1');
-  Element digit2 = fetchBloc(category).querySelector('.digit2');
-  if (digit1.querySelector('.top').text != newDigit1) {
+  Element digit1 = fetchBloc(category).querySelector('.digit1')!;
+  Element digit2 = fetchBloc(category).querySelector('.digit2')!;
+  if (digit1.querySelector('.top')!.text != newDigit1) {
     animateBlocDigit(digit1, newDigit1);
   }
-  if (digit2.querySelector('.top').text != newDigit2) {
+  if (digit2.querySelector('.top')!.text != newDigit2) {
     animateBlocDigit(digit2, newDigit2);
   }
 }
@@ -111,7 +121,7 @@ void main() {
         seconds = 59;
         minutes--;
       }
-      if (minutes < 0 && hours >=0) {
+      if (minutes < 0 && hours >= 0) {
         minutes = 59;
         hours--;
       }

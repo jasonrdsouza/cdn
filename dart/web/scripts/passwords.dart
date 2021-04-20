@@ -9,8 +9,8 @@ String ambiguousCharacters = 'iIlLoO01';
 
 void main() {
   print('Password Generator Initiated');
-  HtmlElement passwordField = querySelector('#password');
-  HtmlElement generateField = querySelector('#generate-password');
+  HtmlElement passwordField = querySelector('#password') as HtmlElement;
+  HtmlElement generateField = querySelector('#generate-password') as HtmlElement;
 
   generateField.onClick.listen((_) {
     passwordField.text = constructPassword(requestedLength());
@@ -44,32 +44,31 @@ String constructPassword(int length) {
 }
 
 bool uppercaseAllowed() {
-  CheckboxInputElement element = querySelector('#uppercase-letters');
-  return element.checked;
+  CheckboxInputElement element = querySelector('#uppercase-letters') as CheckboxInputElement;
+  return element.checked!;
 }
 
 bool lowercaseAllowed() {
-  CheckboxInputElement element = querySelector('#lowercase-letters');
-  return element.checked;
+  CheckboxInputElement element = querySelector('#lowercase-letters') as CheckboxInputElement;
+  return element.checked!;
 }
 
 bool numbersAllowed() {
-  CheckboxInputElement element = querySelector('#numbers');
-  return element.checked;
+  CheckboxInputElement element = querySelector('#numbers') as CheckboxInputElement;
+  return element.checked!;
 }
 
 bool symbolsAllowed() {
-  CheckboxInputElement element = querySelector('#symbols');
-  return element.checked;
+  CheckboxInputElement element = querySelector('#symbols') as CheckboxInputElement;
+  return element.checked!;
 }
 
 bool avoidAmbiguousCharacters() {
-  CheckboxInputElement element = querySelector('#avoid-ambiguous-characters');
-  return element.checked;
+  CheckboxInputElement element = querySelector('#avoid-ambiguous-characters') as CheckboxInputElement;
+  return element.checked!;
 }
 
 int requestedLength() {
-  InputElement element = querySelector('#length');
-  return element.valueAsNumber;
+  InputElement element = querySelector('#length') as InputElement;
+  return element.valueAsNumber!.toInt();
 }
-

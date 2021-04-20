@@ -13,15 +13,15 @@ const SCRIBE_URL = "https://us-central1-dsouza-proving-ground.cloudfunctions.net
 void main() async {
   print('Article Scribe Awoken!');
 
-  FormElement urlForm = querySelector('#urlForm');
-  ButtonElement submitButton = querySelector('#submit');
-  InputElement urlInput = querySelector('#sourceUrl');
-  HeadingElement articleMetrics = querySelector('#articleMetrics');
-  AnchorElement rawContentLink = querySelector('#rawContentLink');
-  AnchorElement articleLink = querySelector('#articleLink');
-  DivElement articleContents = querySelector('#articleContents');
-  DivElement loadingIcon = querySelector('.loadingIcon');
-  DivElement errorScreen = querySelector('.errorScreen');
+  FormElement urlForm = querySelector('#urlForm') as FormElement;
+  ButtonElement submitButton = querySelector('#submit') as ButtonElement;
+  InputElement urlInput = querySelector('#sourceUrl') as InputElement;
+  HeadingElement articleMetrics = querySelector('#articleMetrics') as HeadingElement;
+  AnchorElement rawContentLink = querySelector('#rawContentLink') as AnchorElement;
+  AnchorElement articleLink = querySelector('#articleLink') as AnchorElement;
+  DivElement articleContents = querySelector('#articleContents') as DivElement;
+  DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
+  DivElement errorScreen = querySelector('.errorScreen') as DivElement;
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
@@ -39,7 +39,7 @@ void main() async {
     var headers = {'Content-Type': 'application/json'};
     HttpRequest.request('${SCRIBE_URL}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
         .then((HttpRequest resp) {
-      var readableResult = json.decode(resp.responseText);
+      var readableResult = json.decode(resp.responseText!);
       articleLink.text = readableResult['title'];
       articleLink.href = url;
       populateRawContentLink(rawContentLink, SCRIBE_URL, url);
@@ -146,7 +146,7 @@ fetchInitialUrl(InputElement urlInput, ButtonElement submitButton) {
 
 hideSearchBarIfRequested() {
   if (Uri.base.queryParameters.containsKey(VIEWER_QUERY_PARAM) && Uri.base.queryParameters[VIEWER_QUERY_PARAM] == '1') {
-    hideElement(querySelector('#formWrapper'));
+    hideElement(querySelector('#formWrapper') as DivElement);
   }
 }
 
@@ -158,12 +158,16 @@ setShareableUrl(String url) {
   window.history.replaceState('', 'Article Reader', '?${queryString}');
 }
 
-String standardizeUrl(String url) {
-  Uri initialUrl = Uri.parse(url.trim());
-  if (initialUrl.hasScheme) {
-    return initialUrl.toString();
+String standardizeUrl(String? url) {
+  if (url == null) {
+    return "";
   } else {
-    return 'https://${initialUrl}';
+    Uri initialUrl = Uri.parse(url.trim());
+    if (initialUrl.hasScheme) {
+      return initialUrl.toString();
+    } else {
+      return 'https://${initialUrl}';
+    }
   }
 }
 

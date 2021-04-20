@@ -5,18 +5,18 @@ import 'mobilenet.dart';
 void main() async {
   print('Bird Watcher Active!');
 
-  ImageElement imageElement = querySelector('#img');
-  DivElement consoleElement = querySelector('#console');
-  InputElement fileInputElement = querySelector('#fileInput');
+  ImageElement imageElement = querySelector('#img') as ImageElement;
+  DivElement consoleElement = querySelector('#console') as DivElement;
+  InputElement fileInputElement = querySelector('#fileInput') as InputElement;
 
   fileInputElement.onChange.listen((event) async {
-    FileList files = fileInputElement.files;
-    if (files.length > 0) {
-      File file = files.item(0);
+    List<File>? files = fileInputElement.files;
+    if (files != null && files.length > 0) {
+      File file = files.first;
 
       FileReader reader = new FileReader();
       reader.onLoad.listen((event) {
-        imageElement.src = reader.result;
+        imageElement.src = reader.result as String?;
       });
       reader.onError.listen((event) {
         print('Error loading image');
@@ -31,6 +31,4 @@ void main() async {
       consoleElement.innerText = "Neural Net Prediction: ${topPrediction}\nConfidence: ${predictionProbability}%";
     }
   });
-
-
 }

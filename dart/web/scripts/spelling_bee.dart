@@ -3,19 +3,19 @@ import 'dart:math';
 
 void main() async {
   print('Spelling Bee Solver Initiated');
-  InputElement lettersField = querySelector('#letters');
-  InputElement requiredLetterField = querySelector('#required-letter');
-  InputElement submitButton = querySelector('#solve');
-  DivElement resultSummaryField = querySelector('#result-summary');
-  PreElement resultsField = querySelector('#results');
+  InputElement lettersField = querySelector('#letters') as InputElement;
+  InputElement requiredLetterField = querySelector('#required-letter') as InputElement;
+  InputElement submitButton = querySelector('#solve') as InputElement;
+  DivElement resultSummaryField = querySelector('#result-summary') as DivElement;
+  PreElement resultsField = querySelector('#results') as PreElement;
 
   Iterable<String> dictionary = await fetchDictionary('assets/official_scrabble_players_dictionary.txt');
   Iterable<String> spellingBeeDictionary = pruneDictionary(dictionary);
   print('Fetched Spelling Bee dictionary');
-  
+
   submitButton.onClick.listen((_) {
-    String letters = lettersField.value.toLowerCase();
-    String requiredLetter = requiredLetterField.value.toLowerCase();
+    String letters = lettersField.value!.toLowerCase();
+    String requiredLetter = requiredLetterField.value!.toLowerCase();
     print('Solving puzzle with letters "${letters}", requiring "${requiredLetter}"');
 
     Set<String> result = findWords(requiredLetter, stringToSet(letters), spellingBeeDictionary);
@@ -37,8 +37,7 @@ Future<Iterable<String>> fetchDictionary(String dictionaryPath) {
 }
 
 Iterable<String> pruneDictionary(Iterable<String> dictionary) {
-  return Set.of(dictionary.map((s) => s.toLowerCase())
-                   .where((s) => s.length > 3));
+  return Set.of(dictionary.map((s) => s.toLowerCase()).where((s) => s.length > 3));
 }
 
 String summarizeWords(Iterable<String> words) {
@@ -51,6 +50,5 @@ bool validWord(String requiredLetter, Set<String> allLetters, String word) {
 }
 
 Set<String> findWords(String requiredLetter, Set<String> allLetters, Iterable<String> dictionary) {
-  return Set.of(dictionary.where(
-      (word) => validWord(requiredLetter, allLetters, word)));
+  return Set.of(dictionary.where((word) => validWord(requiredLetter, allLetters, word)));
 }

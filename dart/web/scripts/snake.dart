@@ -5,12 +5,12 @@ import 'dart:async';
 
 const int CELL_SIZE = 10;
 Keyboard keyboard = new Keyboard();
-CanvasElement canvas;
-CanvasRenderingContext2D ctx;
+late CanvasElement canvas;
+late CanvasRenderingContext2D ctx;
 
 void main() {
-  canvas = querySelector('#canvas');
-  ctx = canvas.getContext('2d');
+  canvas = querySelector('#canvas') as CanvasElement;
+  ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   print("Starting Snake Engine");
   new Game().run();
@@ -21,8 +21,8 @@ void drawCell(Point coords, String color) {
     ..fillStyle = color
     ..strokeStyle = "white";
 
-  final int x = coords.x * CELL_SIZE;
-  final int y = coords.y * CELL_SIZE;
+  final int x = coords.x.toInt() * CELL_SIZE;
+  final int y = coords.y.toInt() * CELL_SIZE;
 
   ctx
     ..fillRect(x, y, CELL_SIZE, CELL_SIZE)
@@ -32,7 +32,7 @@ void drawCell(Point coords, String color) {
 void clear() {
   ctx
     ..fillStyle = "white"
-    ..fillRect(0, 0, canvas.width, canvas.height);
+    ..fillRect(0, 0, canvas.width!, canvas.height!);
 }
 
 class Keyboard {
@@ -40,7 +40,7 @@ class Keyboard {
 
   Keyboard() {
     window.onKeyDown.listen((KeyboardEvent event) {
-      keys.putIfAbsent(event.keyCode, () => event.timeStamp);
+      keys.putIfAbsent(event.keyCode, () => event.timeStamp!);
     });
 
     window.onKeyUp.listen((KeyboardEvent event) {
@@ -61,7 +61,7 @@ class Snake {
   static const int START_LENGTH = 6;
 
   // coordinates of the body segments
-  List<Point> body;
+  late List<Point> body;
   // current travel direction
   Point currentDir = RIGHT;
 
@@ -128,13 +128,12 @@ class Game {
   int rightEdgeX;
   int bottomEdgeY;
 
-  Snake snake;
-  Point food;
+  late Snake snake;
+  late Point food;
 
-  Game() {
-    rightEdgeX = canvas.width ~/ CELL_SIZE;
-    bottomEdgeY = canvas.height ~/ CELL_SIZE;
-
+  Game()
+      : rightEdgeX = canvas.width! ~/ CELL_SIZE,
+        bottomEdgeY = canvas.height! ~/ CELL_SIZE {
     init();
   }
 

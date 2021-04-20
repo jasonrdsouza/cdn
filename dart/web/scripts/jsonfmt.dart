@@ -4,12 +4,15 @@ import 'dart:convert';
 void main() {
   print("Formatter Active.");
 
-  ButtonElement submitButton = querySelector('#submitFormat');
-  TextAreaElement inputElement = querySelector('#input');
-  HtmlElement formattedBlock = querySelector('#jsonOutput');
+  ButtonElement submitButton = querySelector('#submitFormat') as ButtonElement;
+  TextAreaElement inputElement = querySelector('#input') as TextAreaElement;
+  HtmlElement formattedBlock = querySelector('#jsonOutput') as HtmlElement;
 
   submitButton.onClick.listen((_) {
-    formattedBlock.text = formatJson(inputElement.value);
+    var input = inputElement.value;
+    if (input != null) {
+      formattedBlock.text = formatJson(input);
+    }
   });
 }
 
@@ -17,8 +20,8 @@ String formatJson(String inputJson) {
   print("Formatting ${inputJson}");
   try {
     return JsonEncoder.withIndent('  ').convert(json.decode(inputJson));
-  } catch (err) {
-    print("Error parsing JSON: ${err.message}");
+  } on JsonUnsupportedObjectError catch (err) {
+    print("Error parsing JSON: ${err.cause}");
     return "Unable to parse supplied JSON";
   }
 }
