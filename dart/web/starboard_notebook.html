@@ -1,0 +1,331 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Starboard Notebook</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link href="https://unpkg.com/starboard-notebook/dist/starboard-notebook.css" rel="stylesheet">
+    </head>
+    <body>
+
+<script type="application/vnd.starboard.nb">
+# %% [markdown]
+# Introducing Starboard Notebook
+Starboard brings cell-by-cell notebooks to the browser, no code is running on the backend here!
+It's probably the quickest way to visualize some data with interactivity, do some prototyping, or build a rudimentary dashboard.
+
+#### Some features
+* Mix Markdown, $\LaTeX$, HTML, CSS, Javascript, and Python.
+* The file format is a plaintext file, which plays nice with version control systems like git.
+* Runs entirely in your browser, everything is static: no server, no setup and no build step.
+* You can embed a fully functional notebook on your website.
+
+Let's see it in action!
+
+> Tip: Press the ▶ Play button on the left to run a cell's code.
+
+# %% [javascript]
+// You write vanilla Javascript
+const greeting = "Hello world!";
+
+// The last statement in a cell will be displayed if it is not undefined.
+greeting
+# %% [html]
+<div id="my-element" style="background-color: #ddf; padding: 0 1em;">
+  <b>You can mix and match different types of cells</b>
+</div>
+# %% [javascript]
+// Your browser does the work, so stuff like this just works
+document.querySelector("#my-element").style.backgroundColor = "#fdf";
+
+const titleElement = document.createElement("h3");
+titleElement.innerText = "Great!"
+
+// If you return a HTML element and it will be appended below
+titleElement
+# %% [javascript]
+// There's a little bit of (optional) magic, if you use `var` your variable will be available globally.
+var magic = "I can print this in the next cell!";
+
+// The previous cell's result is available as $_
+console.log($_)
+# %% [javascript]
+// Poof!
+console.log(magic);
+# %% [javascript]
+// We can import code dynamically, top level await is supported.
+const {default: Confetti} = await import('https://cdn.skypack.dev/canvas-confetti');
+
+function fireConfetti(event) {
+    const x = event.clientX / document.body.clientWidth;
+    const y = event.clientY / document.body.clientHeight;
+    Confetti({origin: {x, y}});
+}
+
+// You can use lit-html for templating if you want to
+html`<button @click=${fireConfetti}>Fire Confetti 🎉</button>`;
+# %% [esm]
+// There is also an ES module cell type, any variable or function you export is available in the global scope
+// In ES Modules you can use top-level imports like you are probably used to
+import twas from "https://cdn.skypack.dev/twas"
+
+// This value is now available in any cell as it is exported
+export const javascriptInventionDate = Date.parse('04 Dec 1995 00:12:00 GMT')
+
+// The default export gets printed below and used as cell return value
+export default "Javascript was invented " + twas(javascriptInventionDate)
+# %% [css]
+/* The editor itself also runs in the sandbox, you can modify or extend it however you wish as you go.
+
+Let's make the editor a bit more funky by adding some CSS, changes are applied immediately */
+
+starboard-cell:focus-within {
+    background-color: #fff;  /* Change this to #faf */
+
+    /* Uncomment the next line for a dark mode effect! */
+    /* filter: invert() hue-rotate(180deg); */
+
+}
+# %% [javascript]
+// Finally, let's create a tiny API based app in just a few lines: an advice button.
+const adviceElement = document.createElement("span");
+
+async function onClick(event) {
+    // Example response: {"slip": { "id": 163, "advice": "Big things have small beginnings."}}
+    const data = await (await fetch(`https://api.adviceslip.com/advice`, {cache: "no-store"})).json();
+    adviceElement.innerText = data.slip.advice;
+
+    // Uncomment to make it fire confetti too
+    // fireConfetti(event);
+}
+
+
+html`
+<div style="padding: 0.4em 1em; background-color: #fff; border: 1px solid">
+    <button @click=${onClick}>Give me advice</button>
+    ${adviceElement}
+</div>
+`
+# %% [markdown]
+That's it! I hope that both the advice and Starboard are useful for you.
+
+# %% [markdown]
+# 🐍 Python support in Starboard Notebook
+
+Python support is built on top of [Pyodide](https://hacks.mozilla.org/2019/04/pyodide-bringing-the-scientific-python-stack-to-the-browser/), a WebAssembly powered Python runtime in the browser that supports most of the common scientific packages such as Numpy, Pandas and Matplotlib.
+
+Using Starboard you can create a Python notebook without any backend server.
+
+> New to Starboard? Check out the [Starboard introduction notebook](https://starboard.gg/#introduction) for an overview of Starboard itself.
+# %% [python]
+# When you first run this cell it will load the Python runtime.
+# This runtime is a few megabytes in size. Your browser should cache it, so the next time it should load faster.
+message = "Hello Python!"
+print(message)
+
+x = [i**2 for i in range(5)]
+x
+# %% [js]
+// Python variables in global scope are automatically converted to Javascript variables.
+// They can be accessed from the pyodide.globals object:
+console.log(pyodide.globals.message)
+
+// Aso we can import Javascript variables into Python, let's try that
+var myFavoriteNumber = 22;
+# %% [python]
+from js import document, myFavoriteNumber
+
+el = document.createElement("h3")
+el.innerText = "My favorite number is " + str(myFavoriteNumber)
+
+# Note we created this HTML element in Python!
+el
+# %% [markdown]
+## Visualizing car data using pandas and matplotlib
+
+Analyzing, explaining and visualizing data is a great usecase for Starboard notebooks.
+
+# %% [python]
+# You can import many of the common scientific Python packages such as numpy or pandas
+# A full list can be found here https://github.com/iodide-project/pyodide/tree/master/packages
+# Packages are downloaded and installed dynamically, they are cached afterwards.
+import pandas as pd
+import matplotlib.pyplot as plt
+import pyodide
+
+# %% [python]
+# By using micropip we can install additional packages that don't ship with Pyodide by default.
+# Most pure python package work in the browser, here we install "squarify"
+import micropip
+micropip.install("squarify")
+
+# %% [markdown]
+# 💹 Visualizing Exchange Rate Data
+
+In this notebook we will visualize the US Dollar to Euro exchange rate using the [**exchangerate.host**](https://exchangerate.host/) API.
+After that we will also create a simple currency calculator.
+
+> Tip: Press the ▶ Play button on the left to run a cell.
+# %% [javascript]
+const today = new Date().toISOString().slice(0,10); // Today in yyyy-mm-dd format
+const data = await fetch(`https://api.exchangerate.host/timeseries?start_date=2020-01-01&end_date=${today}`);
+
+// var puts it in the global scope (so we can use it in the next cell)
+var jsonData = await data.json();
+jsonData
+# %% [javascript]
+// Chart.js creates a global `Chart` object when it is loaded.
+await import("https://unpkg.com/chart.js@2.9.3/dist/Chart.bundle.min.js");
+
+const canvas = document.createElement("canvas");
+const currencyChart = new Chart(canvas.getContext("2d"),
+    {
+        type: "line",
+        data: {
+            labels: Object.keys(jsonData.rates),
+            datasets: [{
+                label: 'Euro - US Dollar',
+                data: Object.values(jsonData.rates).map(c => c.USD),
+                borderColor: "#5558ff",
+                backgroundColor: "#5558ff80",
+            }],
+        },
+    },
+);
+
+canvas
+# %% [markdown]
+## Creating a currency conversion widget
+First let's insert some vanilla CSS and HTML for our widget.
+# %% [html]
+<style>
+    .conversion-widget {
+        padding: 1em;
+    }
+    .conversion-widget button {
+        background-color: #5558ff;
+        border: 0;
+        padding: 4px 8px;
+        border-radius: 3px;
+        color: #fff;
+    }
+    .conversion-widget .result {
+        margin: 6px;
+        border: 1px solid #5558ff;
+        border-radius: 6px;
+        padding: 0 8px;
+    }
+</style>
+
+<form class="conversion-widget" onsubmit="event.preventDefault()">
+    <input name="amount" type="number" min="0.00" placeholder="Amount in EUR" value="100"/>
+    <button>View conversion rates</button>
+    <div id="conversion-result" style="display: flex; flex-wrap: wrap;"></div>
+</form>
+# %% [markdown]
+When we press the button above nothing happens yet, we can add some Javascript to make it work.
+We will use the built in [lit-html](https://lit-html.polymer-project.org/) support to easily render the results into a HTML structure.
+
+# %% [javascript]
+const formElement = document.querySelector(".conversion-widget");
+const resultElement = document.querySelector("#conversion-result");
+const conversionRateTemplate = ([currencySymbol, value]) => html`
+    <div class="result">
+        <b>${currencySymbol}</b> <span style="font-size: 1.5em">${value}</span>
+    </div>
+`;
+
+formElement.onsubmit = async (e) => {
+    e.preventDefault();
+    const amount = new FormData(formElement).get("amount");
+    const data = await fetch(`https://api.exchangerate.host/latest?source=ecb&places=2&amount=${amount}`).then(r => r.json());
+    const template = Object.entries(data.rates).map(conversionRateTemplate);
+    litHtml.render(template, resultElement);
+};
+
+console.warn(`Scroll back up and click the "View conversion rates" button again!`);
+
+# %% [markdown]
+# Interactive Procedural Art
+
+In this notebook we'll create an interactive artwork using P5.js, the Javascript version of Processing.
+
+> p5.js is a JavaScript library for creative coding, with a focus on making coding accessible and inclusive for artists, designers, educators, beginners, and anyone else!
+
+# %% [javascript]
+// Import the p5 library, see the docs here: https://p5js.org/
+await import("https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.min.js");
+console.log("Ready!")
+# %% [javascript]
+// Based on the Kaleidoscope example found here https://p5js.org/examples/interaction-kaleidoscope.html
+const sketch = function(p) {
+  const width = height = document.body.scrollWidth - 100;
+
+  // Symmetry corresponding to the number of reflections. Change the number for different number of reflections
+  // Try changing this!
+  const symmetry = 12;
+  const angle = 360 / symmetry;
+
+
+  p.setup = () => {
+    p.createCanvas(width, height);
+    p.angleMode(p.DEGREES);
+    p.background(20);
+    // Default to a bright stroke color
+    p.stroke(200)
+  }
+
+  p.touchMoved = (event) => {
+    // Prevents scrolling on phones when drawing
+    if (event.target.classList.contains("p5Canvas")) {
+        event.preventDefault()
+        return false;
+    }
+  }
+
+  p.draw = () => {
+    p.translate(width / 2, height / 2);
+
+    if (p.mouseX > 0 && p.mouseX < width && p.mouseY > 0 && p.mouseY < height) {
+      const mx = p.mouseX - width / 2;
+      const my = p.mouseY - height / 2;
+      const pmx = p.pmouseX - width / 2;
+      const pmy = p.pmouseY - height / 2;
+
+      const speedX = p.abs(p.winMouseX - p.pwinMouseX);
+      const speedY = p.abs(p.winMouseY - p.pwinMouseY);
+      const speed = speedX + speedY;
+
+      if (p.mouseIsPressed) {
+        for (let i = 0; i < symmetry; i++) {
+          p.rotate(angle);
+
+          // The faster you move while drawing the thicker the line
+          p.strokeWeight((speedX + speedY)/10);
+
+          // The colors change based on horizontal and vertical speed individually
+          // Try changing or commenting this line!
+          p.stroke(speedX*6, speedY*6, 160)
+          p.line(mx, my, pmx, pmy);
+          p.push();
+          p.scale(1, -1);
+          p.line(mx, my, pmx, pmy);
+          p.pop();
+        }
+      }
+    }
+  }
+};
+
+
+const instance = new p5(sketch);
+instance.canvas.style.margin = "1em"
+instance.canvas
+# %% [markdown]
+Draw on the black canvas above! On some mobile devices (iPhones especially) it may not work well and scroll instead, sorry about that.
+</script>
+
+        <script src="https://unpkg.com/starboard-notebook/dist/starboard-notebook.js"></script>
+    </body>
+</html>
+
