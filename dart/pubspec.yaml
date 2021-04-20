@@ -8,6 +8,3 @@ dev_dependencies:
   build_web_compilers: any
 
 dependencies:
-  # hooggaa dependancies
-  googleapis: any
-  googleapis_auth: any
