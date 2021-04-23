@@ -5,10 +5,14 @@
     <title>Diagrams</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="css/paper_1.8.2.css"/>
+    <link rel="stylesheet" href="css/mermaid.css"/>
     <link rel="icon" type="image/png" href="assets/diagram.png">
 
     <script src="javascript/mermaid-8.9.2.min.js"></script>
-    <script>window.mermaid = mermaid;</script>
+    <script>
+      window.mermaid = mermaid;
+      mermaid.initialize({'theme': 'forest', 'themeVariables': {'darkMode': window.matchMedia('(prefers-color-scheme: dark)').matches}});
+    </script>
     <script defer src="scripts/diagram.dart.js"></script>
   </head>
   <body>
