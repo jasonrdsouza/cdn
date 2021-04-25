@@ -1,0 +1,85 @@
+# %% [markdown]
+# 💹 Visualizing Exchange Rate Data
+
+In this notebook we will visualize the US Dollar to Euro exchange rate using the [**exchangerate.host**](https://exchangerate.host/) API.
+After that we will also create a simple currency calculator.
+
+> Tip: Press the ▶ Play button on the left to run a cell.
+# %% [javascript]
+const today = new Date().toISOString().slice(0,10); // Today in yyyy-mm-dd format
+const data = await fetch(`https://api.exchangerate.host/timeseries?start_date=2020-01-01&end_date=${today}`);
+
+// var puts it in the global scope (so we can use it in the next cell)
+var jsonData = await data.json();
+jsonData
+# %% [javascript]
+// Chart.js creates a global `Chart` object when it is loaded.
+await import("https://unpkg.com/chart.js@2.9.3/dist/Chart.bundle.min.js");
+
+const canvas = document.createElement("canvas");
+const currencyChart = new Chart(canvas.getContext("2d"),
+    {
+        type: "line",
+        data: {
+            labels: Object.keys(jsonData.rates),
+            datasets: [{
+                label: 'Euro - US Dollar',
+                data: Object.values(jsonData.rates).map(c => c.USD),
+                borderColor: "#5558ff",
+                backgroundColor: "#5558ff80",
+            }],
+        },
+    },
+);
+
+canvas
+# %% [markdown]
+## Creating a currency conversion widget
+First let's insert some vanilla CSS and HTML for our widget.
+# %% [html]
+<style>
+    .conversion-widget {
+        padding: 1em;
+    }
+    .conversion-widget button {
+        background-color: #5558ff;
+        border: 0;
+        padding: 4px 8px;
+        border-radius: 3px;
+        color: #fff;
+    }
+    .conversion-widget .result {
+        margin: 6px;
+        border: 1px solid #5558ff;
+        border-radius: 6px;
+        padding: 0 8px;
+    }
+</style>
+
+<form class="conversion-widget" onsubmit="event.preventDefault()">
+    <input name="amount" type="number" min="0.00" placeholder="Amount in EUR" value="100"/>
+    <button>View conversion rates</button>
+    <div id="conversion-result" style="display: flex; flex-wrap: wrap;"></div>
+</form>
+# %% [markdown]
+When we press the button above nothing happens yet, we can add some Javascript to make it work.
+We will use the built in [lit-html](https://lit-html.polymer-project.org/) support to easily render the results into a HTML structure.
+
+# %% [javascript]
+const formElement = document.querySelector(".conversion-widget");
+const resultElement = document.querySelector("#conversion-result");
+const conversionRateTemplate = ([currencySymbol, value]) => html`
+    <div class="result">
+        <b>${currencySymbol}</b> <span style="font-size: 1.5em">${value}</span>
+    </div>
+`;
+
+formElement.onsubmit = async (e) => {
+    e.preventDefault();
+    const amount = new FormData(formElement).get("amount");
+    const data = await fetch(`https://api.exchangerate.host/latest?source=ecb&places=2&amount=${amount}`).then(r => r.json());
+    const template = Object.entries(data.rates).map(conversionRateTemplate);
+    litHtml.render(template, resultElement);
+};
+
+console.warn(`Scroll back up and click the "View conversion rates" button again!`);

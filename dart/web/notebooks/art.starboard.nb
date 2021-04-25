@@ -1,0 +1,81 @@
+ %% [markdown]
+# Interactive Procedural Art
+
+In this notebook we'll create an interactive artwork using P5.js, the Javascript version of Processing.
+
+> p5.js is a JavaScript library for creative coding, with a focus on making coding accessible and inclusive for artists, designers, educators, beginners, and anyone else!
+
+# %%--- [javascript]
+# properties:
+#   run_on_load: true
+# ---%%
+// Import the p5 library, see the docs here: https://p5js.org/
+await import("https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.min.js");
+console.log("Ready!")
+# %% [javascript]
+// Based on the Kaleidoscope example found here https://p5js.org/examples/interaction-kaleidoscope.html
+const sketch = function(p) {
+  const width = height = document.body.scrollWidth - 100;
+
+  // Symmetry corresponding to the number of reflections. Change the number for different number of reflections
+  // Try changing this!
+  const symmetry = 12;
+  const angle = 360 / symmetry;
+
+
+  p.setup = () => {
+    p.createCanvas(width, height);
+    p.angleMode(p.DEGREES);
+    p.background(20);
+    // Default to a bright stroke color
+    p.stroke(200)
+  }
+
+  p.touchMoved = (event) => {
+    // Prevents scrolling on phones when drawing
+    if (event.target.classList.contains("p5Canvas")) {
+        event.preventDefault()
+        return false;
+    }
+  }
+
+  p.draw = () => {
+    p.translate(width / 2, height / 2);
+
+    if (p.mouseX > 0 && p.mouseX < width && p.mouseY > 0 && p.mouseY < height) {
+      const mx = p.mouseX - width / 2;
+      const my = p.mouseY - height / 2;
+      const pmx = p.pmouseX - width / 2;
+      const pmy = p.pmouseY - height / 2;
+
+      const speedX = p.abs(p.winMouseX - p.pwinMouseX);
+      const speedY = p.abs(p.winMouseY - p.pwinMouseY);
+      const speed = speedX + speedY;
+
+      if (p.mouseIsPressed) {
+        for (let i = 0; i < symmetry; i++) {
+          p.rotate(angle);
+
+          // The faster you move while drawing the thicker the line
+          p.strokeWeight((speedX + speedY)/10);
+
+          // The colors change based on horizontal and vertical speed individually
+          // Try changing or commenting this line!
+          p.stroke(speedX*6, speedY*6, 160)
+          p.line(mx, my, pmx, pmy);
+          p.push();
+          p.scale(1, -1);
+          p.line(mx, my, pmx, pmy);
+          p.pop();
+        }
+      }
+    }
+  }
+};
+
+
+const instance = new p5(sketch);
+instance.canvas.style.margin = "1em"
+instance.canvas
+# %% [markdown]
+Draw on the black canvas above! On some mobile devices (iPhones especially) it may not work well and scroll instead, sorry about that.
