@@ -1,0 +1,25 @@
+# %% [markdown]
+# Working with Uploaded Files
+
+# %% [markdown]
+### Input File Uploader
+
+# %%--- [javascript]
+# properties:
+#   run_on_load: true
+# ---%%
+async function onFileSelection(event) {
+  const textContent = await event.target.files[0].text()
+  window.inputFile = textContent;
+}
+html`<input @change=${onFileSelection} type="file" id="file-input" name="file-input" accept=".csv, .txt">`
+
+# %% [markdown]
+## Usage
+*input file uploaded to browser with JavaScript*
+
+# %% [python]
+from js import inputFile
+import io
+f = io.StringIO(inputFile)
+print(list(f.readlines()))

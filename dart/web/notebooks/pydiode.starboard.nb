@@ -47,7 +47,7 @@ import matplotlib.pyplot as plt
 import pyodide
 
 # We use a proxy to get around CORS so we can download the dataset from github
-url = "https://data.mattwilliams.cloud/mtcars.csv"
+url = "https://data.mattwilliams.cloud/datasets/mtcars.csv"
 
 # Prepare Data
 df = pd.read_csv(pyodide.open_url(url))
@@ -78,7 +78,7 @@ micropip.install("squarify")
 # %% [python]
 import squarify
 
-url = "https://data.mattwilliams.cloud/mpg_ggplot2.csv"
+url = "https://data.mattwilliams.cloud/datasets/mpg_ggplot2.csv"
 
 df = pd.read_csv(pyodide.open_url(url))
 df = df.groupby('class').size().reset_index(name='counts')
