@@ -47,24 +47,32 @@ void animateBlocDigit(Element digit, String newValue) {
   Element digitBackTop = digit.querySelector('.top-back')!;
   Element digitBackBottom = digit.querySelector('.bottom-back')!;
 
-  // Set the back to the new value
   digitBackTop.text = newValue;
-  digitBackBottom.text = newValue;
-
-  // Animate the old value in front to the new value in back
-  Animation animation = digitTop.animate([
-    {"transform": "rotateX(0deg)"},
-    {"transform": "rotateX(-180deg)"}
-  ], {
-    "duration": 800,
-    "fill": "both"
-  });
-  digitTop.text = newValue;
-  digitBottom.animate([
-    {"transform": "rotateX(180deg)"},
-    {"transform": "rotatex(0deg)"}
-  ], 800);
   digitBottom.text = newValue;
+  digitTop
+      .animate([
+        {"transform": "rotateX(0deg)"},
+        {"transform": "rotateX(90deg)"}
+      ], {
+        "duration": 300,
+        "fill": "both"
+      })
+      .finished
+      .then((value) {
+        digitBottom
+            .animate([
+              {"transform": "rotateX(-90deg)"},
+              {"transform": "rotateX(0deg)"}
+            ], {
+              "duration": 300,
+              "fill": "backwards"
+            })
+            .finished
+            .then((value) {
+              digitBackBottom.text = newValue;
+              digitTop.text = newValue;
+            });
+      });
 }
 
 void updateBloc(category, int newValue) {
@@ -82,10 +90,10 @@ void updateBloc(category, int newValue) {
 
   Element digit1 = fetchBloc(category).querySelector('.digit1')!;
   Element digit2 = fetchBloc(category).querySelector('.digit2')!;
-  if (digit1.querySelector('.top')!.text != newDigit1) {
+  if (digit1.querySelector('.top-back')!.text != newDigit1) {
     animateBlocDigit(digit1, newDigit1);
   }
-  if (digit2.querySelector('.top')!.text != newDigit2) {
+  if (digit2.querySelector('.top-back')!.text != newDigit2) {
     animateBlocDigit(digit2, newDigit2);
   }
 }
