@@ -52,19 +52,30 @@ void animateBlocDigit(Element digit, String newValue) {
   digitBackBottom.text = newValue;
 
   // Animate the old value in front to the new value in back
-  Animation animation = digitTop.animate([
-    {"transform": "rotateX(0deg)"},
-    {"transform": "rotateX(-180deg)"}
-  ], {
-    "duration": 800,
-    "fill": "both"
-  });
-  digitTop.text = newValue;
-  digitBottom.animate([
-    {"transform": "rotateX(180deg)"},
-    {"transform": "rotatex(0deg)"}
-  ], 800);
-  digitBottom.text = newValue;
+  digitTop
+      .animate([
+        {"transform": "rotateX(0deg)"},
+        {"transform": "rotateX(180deg)"}
+      ], {
+        "duration": 300,
+        "fill": "both",
+      })
+      .finished
+      .then((_) {
+        digitBottom
+            .animate([
+              {"transform": "rotateX(-90deg)"},
+              {"transform": "rotatex(0deg)"}
+            ], {
+              "duration": 150,
+              "fill": "backwards",
+            })
+            .finished
+            .then((_) {
+              digitTop.text = newValue;
+              digitBottom.text = newValue;
+            });
+      });
 }
 
 void updateBloc(category, int newValue) {
