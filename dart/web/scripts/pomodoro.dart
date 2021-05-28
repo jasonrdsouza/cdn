@@ -32,16 +32,6 @@ List<int> normalizeTime(int totalSeconds) {
 }
 
 void animateBlocDigit(Element digit, String newValue) {
-  // This is broken and I'm not sure how to fix it. I think
-  // I need to figure out a way to order the animation, instead
-  // of everything happening at once (which is the default?).
-  // Ideally I would update the back cards to the new value,
-  // then animate the front card flip, then after the animation is
-  // done, update the front cards (which would be transparent to the
-  // user). Unfortunately, everything happens at once, so it doesn't
-  // look right. Also, the front bottom animation is messed up
-  // because it happens simultaneously (again, due to me not being able
-  // to order the animation frames) with the front top animation.
   Element digitTop = digit.querySelector('.top')!;
   Element digitBottom = digit.querySelector('.bottom')!;
   Element digitBackTop = digit.querySelector('.top-back')!;
