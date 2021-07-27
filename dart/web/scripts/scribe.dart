@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+import 'dart:math';
 
 import 'highlight.dart';
 
@@ -22,6 +23,7 @@ void main() async {
   DivElement articleContents = querySelector('#articleContents') as DivElement;
   DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
   DivElement errorScreen = querySelector('.errorScreen') as DivElement;
+  ProgressElement readingProgressBar = querySelector('#readingProgress') as ProgressElement;
 
   urlForm.onSubmit.listen((Event e) {
     e.preventDefault(); // prevent page from reloading
@@ -68,6 +70,11 @@ void main() async {
 
   fetchInitialUrl(urlInput, submitButton);
   hideSearchBarIfRequested();
+
+  // update read progress indicator
+  window.onScroll.listen((_) {
+    readingProgressBar.value = calculatePercentDone(articleContents);
+  });
 }
 
 class AllowAllUriPolicy implements UriPolicy {
@@ -183,4 +190,13 @@ String produceMetricText(String articleContents) {
   int numWords = countWords(articleContents);
   int readTimeMins = calculateReadTime(numWords).round();
   return '(${readTimeMins} minute read | ${numWords} words)';
+}
+
+int calculatePercentDone(DivElement article) {
+  int viewportHeight = window.innerHeight!;
+  int articleHeight = article.offsetHeight;
+  int scrolledHeight = window.scrollY;
+  double scrolledPercentage = ((viewportHeight + scrolledHeight) / articleHeight) * 100;
+  print('${scrolledPercentage}% done with the article');
+  return min(scrolledPercentage.round(), 100);
 }
