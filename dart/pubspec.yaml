@@ -8,4 +8,5 @@ dev_dependencies:
   build_web_compilers: any
 
 dependencies:
+  crypto: ^3.0.1
   http: ^0.13.1

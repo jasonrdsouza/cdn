@@ -60,6 +60,10 @@ handlers:
 - url: /notebooks
   static_dir: dart/build/notebooks/
   secure: always
+- url: /auth
+  static_files: dart/build/auth.html
+  upload: dart/build/auth.html
+  secure: always
 - url: /sicp
   static_files: sicp/index.xhtml
   upload: sicp/index.xhtml
