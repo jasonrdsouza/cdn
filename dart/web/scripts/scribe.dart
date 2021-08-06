@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:math';
 
+import 'auth.dart';
 import 'highlight.dart';
 
 const CACHE_WAIT_MILLISECONDS = 500;
@@ -13,6 +14,7 @@ const SCRIBE_URL = "https://us-central1-dsouza-proving-ground.cloudfunctions.net
 
 void main() async {
   print('Article Scribe Awoken!');
+  String authToken = fetchAuthToken();
 
   FormElement urlForm = querySelector('#urlForm') as FormElement;
   ButtonElement submitButton = querySelector('#submit') as ButtonElement;
@@ -22,7 +24,7 @@ void main() async {
   AnchorElement articleLink = querySelector('#articleLink') as AnchorElement;
   DivElement articleContents = querySelector('#articleContents') as DivElement;
   DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
-  DivElement errorScreen = querySelector('.errorScreen') as DivElement;
+  DivElement errorScreen = querySelector('#errorPopup') as DivElement;
   ProgressElement readingProgressBar = querySelector('#readingProgress') as ProgressElement;
 
   urlForm.onSubmit.listen((Event e) {
@@ -38,7 +40,7 @@ void main() async {
     setShareableUrl(url);
 
     var body = {'page': url};
-    var headers = {'Content-Type': 'application/json'};
+    var headers = {'Content-Type': 'application/json', 'token': authToken};
     HttpRequest.request('${SCRIBE_URL}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
         .then((HttpRequest resp) {
       var readableResult = json.decode(resp.responseText!);
