@@ -157,7 +157,9 @@ transcribeArticleContents(DivElement articleDiv, String articleContents) {
     ..allowTextElements()
     ..allowNavigation(allowAllUris)
     ..allowImages(allowAllUris)
-    ..allowSvg();
+    ..allowSvg()
+    ..allowHtml5()
+    ..allowElement('main');
 
   articleDiv.setInnerHtml(articleContents, validator: validator);
 }
