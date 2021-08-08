@@ -6,6 +6,8 @@ import 'dart:math';
 import 'auth.dart';
 import 'highlight.dart';
 
+import 'package:http/http.dart' as http;
+
 const CACHE_WAIT_MILLISECONDS = 500;
 const READER_WORDS_PER_MINUTE = 200;
 const VIEWER_QUERY_PARAM = 'v';
@@ -25,6 +27,7 @@ void main() async {
   DivElement articleContents = querySelector('#articleContents') as DivElement;
   DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
   DivElement errorScreen = querySelector('#errorPopup') as DivElement;
+  DivElement unauthenticatedScreen = querySelector('#unauthenticatedPopup') as DivElement;
   ProgressElement readingProgressBar = querySelector('#readingProgress') as ProgressElement;
 
   urlForm.onSubmit.listen((Event e) {
@@ -34,6 +37,7 @@ void main() async {
     clearText(articleLink);
     clearText(rawContentLink);
     hideElement(errorScreen);
+    hideElement(unauthenticatedScreen);
     showElement(loadingIcon);
 
     var url = standardizeUrl(urlInput.value);
@@ -41,19 +45,32 @@ void main() async {
 
     var body = {'page': url};
     var headers = {'Content-Type': 'application/json', 'token': authToken};
-    HttpRequest.request('${SCRIBE_URL}/simplify', method: 'POST', requestHeaders: headers, sendData: json.encode(body))
-        .then((HttpRequest resp) {
-      var readableResult = json.decode(resp.responseText!);
-      articleLink.text = readableResult['title'];
-      articleLink.href = url;
-      populateRawContentLink(rawContentLink, SCRIBE_URL, url);
-      articleMetrics.text = produceMetricText(readableResult['textContent']);
-      transcribeArticleContents(articleContents, readableResult['content']);
-
+    http
+        .post(Uri.parse('${SCRIBE_URL}/simplify'), headers: headers, body: json.encode(body))
+        .then((http.Response resp) {
       hideElement(loadingIcon);
-      findAndHighlightCodeBlocks();
+
+      if (resp.statusCode == 200) {
+        var readableResult = json.decode(resp.body);
+        articleLink.text = readableResult['title'];
+        articleLink.href = url;
+        populateRawContentLink(rawContentLink, SCRIBE_URL, url);
+        articleMetrics.text = produceMetricText(readableResult['textContent']);
+        transcribeArticleContents(articleContents, readableResult['content']);
+        findAndHighlightCodeBlocks();
+      } else if (resp.statusCode == 401) {
+        articleLink.text = "Unauthenticated article fetch";
+        articleLink.href = url;
+        hideElement(loadingIcon);
+        showElement(unauthenticatedScreen);
+      } else {
+        articleLink.text = "Unknown error occured";
+        articleLink.href = url;
+        hideElement(loadingIcon);
+        showElement(errorScreen);
+      }
     }).catchError((error) {
-      articleLink.text = "Error transcribing article...";
+      articleLink.text = "Error transcribing article";
       articleLink.href = url;
       hideElement(loadingIcon);
       showElement(errorScreen);
