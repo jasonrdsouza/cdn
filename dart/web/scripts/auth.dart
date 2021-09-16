@@ -19,7 +19,8 @@ void main() {
 String secureHashCookie(String key) {
   var bytes = utf8.encode(key);
   var digest = sha256.convert(bytes);
-  return "auth=${digest};secure";
+  var maxAge = 60 * 60 * 24 * 365;
+  return "auth=${digest};max-age=${maxAge};secure";
 }
 
 String fetchAuthToken() {
