@@ -27,6 +27,7 @@ void main() async {
   DivElement articleContents = querySelector('#articleContents') as DivElement;
   DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
   DivElement errorScreen = querySelector('#errorPopup') as DivElement;
+  HtmlElement footer = querySelector('.siteFooter') as HtmlElement;
   DivElement unauthenticatedScreen = querySelector('#unauthenticatedPopup') as DivElement;
   ProgressElement readingProgressBar = querySelector('#readingProgress') as ProgressElement;
 
@@ -49,6 +50,7 @@ void main() async {
         .post(Uri.parse('${SCRIBE_URL}/simplify'), headers: headers, body: json.encode(body))
         .then((http.Response resp) {
       hideElement(loadingIcon);
+      showElement(footer);
 
       if (resp.statusCode == 200) {
         var readableResult = json.decode(resp.body);
@@ -89,6 +91,7 @@ void main() async {
 
   fetchInitialUrl(urlInput, submitButton);
   hideSearchBarIfRequested();
+  hideElement(footer);
 
   // update read progress indicator
   window.onScroll.listen((_) {
@@ -129,11 +132,11 @@ setCachedStatus(String baseScribeUrl, String requestUrl, Element element) {
   });
 }
 
-hideElement(DivElement div) {
+hideElement(HtmlElement div) {
   div.style.display = 'none';
 }
 
-showElement(DivElement div) {
+showElement(HtmlElement div) {
   div.style.display = 'block';
 }
 

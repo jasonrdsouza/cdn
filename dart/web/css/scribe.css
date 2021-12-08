@@ -60,6 +60,14 @@ h1,h2,h3 {
   font-size: 1.25em;
 }
 
+footer {
+  margin-top: 3rem;
+  padding: 1.2rem 0;
+  border-top: .2rem solid darkgrey;
+  font-size: 1.2rem;
+  color: #555
+}
+
 .siteFooter {
   font-family: monospace;
   font-size: 15px;
