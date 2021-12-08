@@ -64,6 +64,14 @@ handlers:
   static_files: dart/build/auth.html
   upload: dart/build/auth.html
   secure: always
+- url: /brutalist
+  static_files: dart/build/brutalist.html
+  upload: dart/build/brutalist.html
+  secure: always
+- url: /markdown
+  static_files: dart/build/markdown.html
+  upload: dart/build/markdown.html
+  secure: always
 - url: /sicp
   static_files: sicp/index.xhtml
   upload: sicp/index.xhtml
