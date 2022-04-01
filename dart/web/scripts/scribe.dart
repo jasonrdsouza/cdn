@@ -23,6 +23,7 @@ void main() async {
   InputElement urlInput = querySelector('#sourceUrl') as InputElement;
   HeadingElement articleMetrics = querySelector('#articleMetrics') as HeadingElement;
   AnchorElement rawContentLink = querySelector('#rawContentLink') as AnchorElement;
+  AnchorElement screenshotLink = querySelector('#screenshotLink') as AnchorElement;
   AnchorElement articleLink = querySelector('#articleLink') as AnchorElement;
   DivElement articleContents = querySelector('#articleContents') as DivElement;
   DivElement loadingIcon = querySelector('.loadingIcon') as DivElement;
@@ -57,6 +58,7 @@ void main() async {
         articleLink.text = readableResult['title'];
         articleLink.href = url;
         populateRawContentLink(rawContentLink, SCRIBE_URL, url);
+        populateScreenshotLink(screenshotLink, SCRIBE_URL, url);
         articleMetrics.text = produceMetricText(readableResult['textContent']);
         transcribeArticleContents(articleContents, readableResult['content']);
         findAndHighlightCodeBlocks();
@@ -145,9 +147,17 @@ clearText(HtmlElement element) {
 }
 
 populateRawContentLink(AnchorElement link, String baseScribeUrl, String requestUrl) {
-  link.text = "SEE RAW CONTENT";
+  link.text = "RAW CONTENT";
   String encodedUrl = Uri.encodeQueryComponent(requestUrl);
-  link.href = '${baseScribeUrl}/fetch?url=${encodedUrl}';
+  String format = Uri.encodeQueryComponent('raw_content');
+  link.href = '${baseScribeUrl}/fetch?url=${encodedUrl}&format=${format}';
+}
+
+populateScreenshotLink(AnchorElement link, String baseScribeUrl, String requestUrl) {
+  link.text = "SCREENSHOT";
+  String encodedUrl = Uri.encodeQueryComponent(requestUrl);
+  String format = Uri.encodeQueryComponent('screenshot.png');
+  link.href = '${baseScribeUrl}/fetch?url=${encodedUrl}&format=${format}';
 }
 
 clearArticleContents(DivElement articleDiv) {
