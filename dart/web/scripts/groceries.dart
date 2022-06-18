@@ -2,12 +2,12 @@ import 'dart:html';
 
 void main() {
   print("Grocery list helper");
-
-  HtmlElement groceryList = querySelector('#groceryList') as HtmlElement;
-  groceryList.children.add(createGroceryListInput(groceryList));
+  List<GroceryItem> groceries = [];
+  createGroceryListInput(groceries);
 }
 
-DivElement createGroceryListInput(HtmlElement groceryList) {
+void createGroceryListInput(List<GroceryItem> groceries) {
+  HtmlElement groceryList = querySelector('#groceryList') as HtmlElement;
   final input = TextInputElement();
   final button = SubmitButtonInputElement()..value = ' ➕';
 
@@ -17,20 +17,32 @@ DivElement createGroceryListInput(HtmlElement groceryList) {
     final value = input.value;
     if (value != null && value.isNotEmpty) {
       input.value = "";
-      addGroceryListItem(groceryList, GroceryItem.fromString(value));
+      groceries.add(GroceryItem.fromString(value));
+      redraw(groceries);
     }
   });
 
-  return DivElement()..children.addAll([input, button]);
+  groceryList.children.add(DivElement()..children.addAll([input, button]));
 }
 
-void addGroceryListItem(HtmlElement groceryList, GroceryItem item) {
-  print("Adding grocery list item: ${item.toRepr()}");
+LabelElement groceryHtml(GroceryItem item) {
   final checkbox = CheckboxInputElement();
   final itemText = SpanElement()..innerText = item.toString();
-  final listItem = LabelElement()..children.addAll([checkbox, itemText]);
+  return LabelElement()..children.addAll([checkbox, itemText]);
+}
 
-  groceryList.children.add(listItem);
+void redraw(List<GroceryItem> groceries) {
+  List<Element> renderedList = [];
+  for (Category category in Category.values) {
+    var categoryItems = groceries.where((item) => item.category == category);
+    if (categoryItems.isNotEmpty) {
+      var section = Element.section()..id = category.name;
+      section.children.add(HeadingElement.h2()..text = category.name);
+      section.children.addAll(categoryItems.map(groceryHtml));
+      renderedList.add(section);
+    }
+  }
+  querySelector('#list')!.children = renderedList;
 }
 
 enum AmountType {
@@ -51,13 +63,13 @@ enum Category { PRODUCE, BAKERY, MEAT, FROZEN, HOUSEHOLD, CANNED, DAIRY, UNKNOWN
 
 class GroceryItem {
   late String name;
-  late int amount;
+  late double amount;
   late AmountType amountType;
   late Category category;
 
   RegExp categoryRegex = RegExp(r"\[([a-zA-Z])\]");
 
-  GroceryItem(String name, int amount, AmountType amountType, Category category)
+  GroceryItem(String name, double amount, AmountType amountType, Category category)
       : this.name = name.toLowerCase(),
         this.amount = amount,
         this.amountType = amountType,
@@ -73,14 +85,38 @@ class GroceryItem {
       this.amountType = AmountType.num;
       this.name = parts[0].toLowerCase();
     } else if (parts.length == 2) {
-      this.amount = int.parse(parts[0]);
-      this.amountType = AmountType.num;
-      this.name = parts.sublist(1).join(" ").toLowerCase();
+      if (isNumeric(parts[0])) {
+        this.amount = double.parse(parts[0]);
+        this.name = parts.sublist(1).join(" ").toLowerCase();
+      } else {
+        this.amount = 1;
+        this.name = parts.join(" ").toLowerCase();
+      }
+      this.amountType = AmountType.num; // assume a numeric amount type when unspecified
     } else {
-      this.amount = int.parse(parts[0]);
-      this.amountType = fromAmountTypeString(parts[1]);
-      this.name = parts.sublist(2).join(" ").toLowerCase();
+      if (isNumeric(parts[0])) {
+        this.amount = double.parse(parts[0]);
+
+        this.amountType = fromAmountTypeString(parts[1]);
+        if (this.amountType == AmountType.unknown) {
+          this.amountType = AmountType.num;
+          this.name = parts.sublist(1).join(" ").toLowerCase();
+        } else {
+          this.name = parts.sublist(2).join(" ").toLowerCase();
+        }
+      } else {
+        this.amount = 1;
+        this.amountType = AmountType.num; // if we couldn't parse an amount, we assume no amount type was specified
+        this.name = parts.join(" ").toLowerCase();
+      }
     }
+  }
+
+  bool isNumeric(String? s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
   }
 
   AmountType fromAmountTypeString(String amountTypePart) {
