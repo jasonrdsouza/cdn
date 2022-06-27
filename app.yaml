@@ -37,6 +37,10 @@ handlers:
   static_files: dart/build/snake.html
   upload: dart/build/snake.html
   secure: always
+- url: /groceries
+  static_files: dart/build/groceries.html
+  upload: dart/build/groceries.html
+  secure: always
 - url: /jsonfmt
   static_files: dart/build/jsonfmt.html
   upload: dart/build/jsonfmt.html

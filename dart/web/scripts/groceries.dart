@@ -8,7 +8,7 @@ void main() {
 
 void createGroceryListInput(List<GroceryItem> groceries) {
   HtmlElement groceryList = querySelector('#groceryList') as HtmlElement;
-  final input = TextInputElement();
+  final input = TextInputElement()..placeholder = 'Amount? Type? Item [Category]?';
   final button = SubmitButtonInputElement()..value = ' ➕';
 
   groceryList.onSubmit.listen((Event e) {
@@ -25,10 +25,17 @@ void createGroceryListInput(List<GroceryItem> groceries) {
   groceryList.children.add(DivElement()..children.addAll([input, button]));
 }
 
-LabelElement groceryHtml(GroceryItem item) {
+LabelElement groceryHtml(GroceryItem item, List<GroceryItem> groceries) {
   final checkbox = CheckboxInputElement();
-  final itemText = SpanElement()..innerText = item.toString();
-  return LabelElement()..children.addAll([checkbox, itemText]);
+  final itemText = SpanElement()..innerText = item.humanized();
+
+  final deleteButton = SpanElement()..innerText = ' ✘';
+  deleteButton.onDoubleClick.listen((_) {
+    groceries.remove(item);
+    redraw(groceries);
+  });
+
+  return LabelElement()..children.addAll([checkbox, itemText, deleteButton]);
 }
 
 void redraw(List<GroceryItem> groceries) {
@@ -38,7 +45,7 @@ void redraw(List<GroceryItem> groceries) {
     if (categoryItems.isNotEmpty) {
       var section = Element.section()..id = category.name;
       section.children.add(HeadingElement.h2()..text = category.name);
-      section.children.addAll(categoryItems.map(groceryHtml));
+      section.children.addAll(categoryItems.map((i) => groceryHtml(i, groceries)));
       renderedList.add(section);
     }
   }
@@ -81,7 +88,7 @@ class GroceryItem {
 
     if (parts.length == 1) {
       // no amount given
-      this.amount = 1;
+      this.amount = 0;
       this.amountType = AmountType.num;
       this.name = parts[0].toLowerCase();
     } else if (parts.length == 2) {
@@ -89,7 +96,7 @@ class GroceryItem {
         this.amount = double.parse(parts[0]);
         this.name = parts.sublist(1).join(" ").toLowerCase();
       } else {
-        this.amount = 1;
+        this.amount = 0;
         this.name = parts.join(" ").toLowerCase();
       }
       this.amountType = AmountType.num; // assume a numeric amount type when unspecified
@@ -105,7 +112,7 @@ class GroceryItem {
           this.name = parts.sublist(2).join(" ").toLowerCase();
         }
       } else {
-        this.amount = 1;
+        this.amount = 0;
         this.amountType = AmountType.num; // if we couldn't parse an amount, we assume no amount type was specified
         this.name = parts.join(" ").toLowerCase();
       }
@@ -162,6 +169,12 @@ class GroceryItem {
       }
     }
     return Category.UNKNOWN;
+  }
+
+  String humanized() {
+    var humanizedAmount = amount == 0 ? "" : amount.toString();
+    var humanizedType = amountType == AmountType.num ? "" : amountType.toShortString();
+    return "$humanizedAmount $humanizedType $name";
   }
 
   String toString() {
