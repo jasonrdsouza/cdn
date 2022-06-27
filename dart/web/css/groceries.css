@@ -82,7 +82,7 @@ div {
   opacity: .5;
   margin-top: 1em;
 }
-input:checked + span {
+input:checked ~ span {
   opacity: .3;
   text-decoration: line-through;
 }
@@ -101,7 +101,7 @@ span:before {
   font-size: 18pt;
   line-height: 1;
 }
-input:checked + span:before {
+input:checked ~ span:before {
   content: '\f373';
 }
 @media (min-width: 600px) {
