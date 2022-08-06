@@ -4,29 +4,76 @@ bakery:
   - sourdough
   - naan
   - pita
+  - "burger buns"
 canned:
   - flour
   - mayo
   - pasta
   - coffee
+  - cheerios
+  - sugar
+  - mustard
+  - rice
+  - "maple syrup"
+  - "olive oil"
 dairy:
   - milk
   - yogurt
   - eggs
   - "half and half"
   - tortillas
+  - "hot dogs"
+  - butter
+  - "sour cream"
+  - creamer
+  - "cream cheese"
+  - "almond milk"
+  - "heavy cream"
+  - hummus
 frozen:
   - "ice cream"
   - "chicken nuggets"
+  - "fish sticks"
 household:
   - "dish soap"
+  - "paper towels"
+  - "toilet paper"
+  - napkins
+  - tissues
+  - "aluminum foil"
+  - "plastic wrap"
+  - "sandwich bags"
+  - "freezer bags"
 meat:
   - steak
   - "chicken thighs"
   - "chicken breast"
   - sausage
+  - bacon
+  - salmon
+  - shrimp
+  - lobster
+  - charcuterie
+  - "pork shoulder"
+  - chicken
+  - tenderloin
 produce:
   - carrots
   - mushrooms
   - apples
   - bananas
+  - pears
+  - oranges
+  - berries
+  - grapes
+  - lemons
+  - limes
+  - broccoli
+  - cucumbers
+  - garlic
+  - onions
+  - lettuce
+  - tomatoes
+  - peppers
+  - potatoes
+  - squash
