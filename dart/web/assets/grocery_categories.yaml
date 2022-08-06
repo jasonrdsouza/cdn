@@ -1,0 +1,32 @@
+---
+bakery:
+  - bread
+  - sourdough
+  - naan
+  - pita
+canned:
+  - flour
+  - mayo
+  - pasta
+  - coffee
+dairy:
+  - milk
+  - yogurt
+  - eggs
+  - "half and half"
+  - tortillas
+frozen:
+  - "ice cream"
+  - "chicken nuggets"
+household:
+  - "dish soap"
+meat:
+  - steak
+  - "chicken thighs"
+  - "chicken breast"
+  - sausage
+produce:
+  - carrots
+  - mushrooms
+  - apples
+  - bananas

@@ -1,12 +1,15 @@
 import 'dart:html';
+import 'package:yaml/yaml.dart';
 
-void main() {
+void main() async {
   print("Grocery list helper");
+  var yaml = await HttpRequest.getString("assets/grocery_categories.yaml");
+  GroceryAutoCategorizer autoCategorizer = GroceryAutoCategorizer.fromYaml(yaml);
   List<GroceryItem> groceries = [];
-  createGroceryListInput(groceries);
+  createGroceryListInput(groceries, autoCategorizer);
 }
 
-void createGroceryListInput(List<GroceryItem> groceries) {
+void createGroceryListInput(List<GroceryItem> groceries, GroceryAutoCategorizer autoCategorizer) {
   HtmlElement groceryList = querySelector('#groceryList') as HtmlElement;
   final input = TextInputElement()..placeholder = 'Amount? Type? Item [Category]?';
   final button = SubmitButtonInputElement()..value = ' ➕';
@@ -17,7 +20,9 @@ void createGroceryListInput(List<GroceryItem> groceries) {
     final value = input.value;
     if (value != null && value.isNotEmpty) {
       input.value = "";
-      groceries.add(GroceryItem.fromString(value));
+      var item = GroceryItem.fromString(value);
+      item.category = autoCategorizer.categorize(item);
+      groceries.add(item);
       redraw(groceries);
     }
   });
@@ -67,6 +72,34 @@ enum AmountType {
 }
 
 enum Category { PRODUCE, BAKERY, MEAT, FROZEN, HOUSEHOLD, CANNED, DAIRY, UNKNOWN }
+
+Category categoryFromString(String str) {
+  switch (str.toUpperCase()) {
+    case 'P':
+    case 'PRODUCE':
+      return Category.PRODUCE;
+    case 'B':
+    case 'BAKERY':
+      return Category.BAKERY;
+    case 'M':
+    case 'MEAT':
+      return Category.MEAT;
+    case 'F':
+    case 'FROZEN':
+      return Category.FROZEN;
+    case 'H':
+    case 'HOUSEHOLD':
+      return Category.HOUSEHOLD;
+    case 'C':
+    case 'CANNED':
+      return Category.CANNED;
+    case 'D':
+    case 'DAIRY':
+      return Category.DAIRY;
+    default:
+      return Category.UNKNOWN;
+  }
+}
 
 class GroceryItem {
   late String name;
@@ -149,24 +182,7 @@ class GroceryItem {
       if (categoryString == null) {
         return Category.UNKNOWN;
       }
-      switch (categoryString.toUpperCase()) {
-        case 'P':
-          return Category.PRODUCE;
-        case 'B':
-          return Category.BAKERY;
-        case 'M':
-          return Category.MEAT;
-        case 'F':
-          return Category.FROZEN;
-        case 'H':
-          return Category.HOUSEHOLD;
-        case 'C':
-          return Category.CANNED;
-        case 'D':
-          return Category.DAIRY;
-        default:
-          return Category.UNKNOWN;
-      }
+      return categoryFromString(categoryString);
     }
     return Category.UNKNOWN;
   }
@@ -183,5 +199,29 @@ class GroceryItem {
 
   String toRepr() {
     return "{ Category: ${this.category}, Amount: ${this.amount}, Type: ${this.amountType}, Name: ${this.name} }";
+  }
+}
+
+class GroceryAutoCategorizer {
+  late Map<String, Category> knownCategorizations;
+
+  GroceryAutoCategorizer(Map<String, Category> this.knownCategorizations);
+  GroceryAutoCategorizer.fromYaml(String yaml) {
+    this.knownCategorizations = {};
+
+    YamlMap doc = loadYaml(yaml);
+    doc.forEach((category, items) {
+      var categoryEnum = categoryFromString(category);
+      List.from(items).forEach((item) => knownCategorizations[item] = categoryEnum);
+    });
+  }
+
+  Category categorize(GroceryItem item) {
+    if (item.category != Category.UNKNOWN) {
+      return item.category;
+    } else if (knownCategorizations.containsKey(item.name)) {
+      return knownCategorizations[item.name]!;
+    }
+    return Category.UNKNOWN;
   }
 }
