@@ -71,11 +71,13 @@ enum AmountType {
   String toShortString() => this.toString().split('.').last;
 }
 
-enum Category { PRODUCE, BAKERY, MEAT, FROZEN, HOUSEHOLD, CANNED, DAIRY, UNKNOWN }
+enum Category { PRODUCE, BAKERY, MEAT, FROZEN, HOUSEHOLD, CANNED, DAIRY, ALCOHOL, UNKNOWN }
 
 Category categoryFromString(String str) {
   switch (str.toUpperCase()) {
     case 'P':
+    case 'FRUIT':
+    case 'VEGETABLES':
     case 'PRODUCE':
       return Category.PRODUCE;
     case 'B':
@@ -96,6 +98,9 @@ Category categoryFromString(String str) {
     case 'D':
     case 'DAIRY':
       return Category.DAIRY;
+    case 'A':
+    case 'ALCOHOL':
+      return Category.ALCOHOL;
     default:
       return Category.UNKNOWN;
   }
