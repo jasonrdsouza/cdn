@@ -49,6 +49,10 @@ handlers:
   static_files: dart/build/unixtime.html
   upload: dart/build/unixtime.html
   secure: always
+- url: /calendar
+  static_files: dart/build/calendar.html
+  upload: dart/build/calendar.html
+  secure: always
 - url: /diagram
   static_files: dart/build/diagram.html
   upload: dart/build/diagram.html

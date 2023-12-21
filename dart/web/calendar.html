@@ -1,0 +1,30 @@
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>Calendar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:title" content="Calendar">
+<meta property="og:url" content="https://studio.dsouza.io/calendar">
+<meta property="og:description" content="A simple printable calendar with the full year on a single page">
+
+<link rel="icon" type="image/png" href="assets/calendar.png">
+<link rel='stylesheet' type='text/css' href='css/calendar.css'></link>
+<script defer src="scripts/calendar.dart.js"></script>
+</head>
+
+<body>
+  <div id="info">
+  <p>👋 <strong>Hello!</strong> If you print this page, you’ll get a nifty calendar that displays all of the year’s dates on a single page. It will automatically fit on a single sheet of paper of any size. For best results, adjust your print settings to landscape orientation and disable the header and footer.</p>
+  <p>Take in the year all at once. Fold it up and carry it with you. Jot down your notes on it. Plan things out and observe the passage of time.</p>
+  <p style="font-size: 80%; color: #999;">Made by <a href="https://jasondsouza.org/">Jason Dsouza</a> &#183; Forked from <a href="https://github.com/neatnik/calendar">Neatnik</a></p>
+  </div>
+
+  <p id="year"></p>
+
+  <table>
+    <thead id="months"></thead>
+    <tbody id="days"></tbody>
+  </table>
+  </body>
+  </html>
