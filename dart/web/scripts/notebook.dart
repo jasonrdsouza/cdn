@@ -11,7 +11,7 @@ void main() {
 
   if (Uri.base.queryParameters.containsKey(LOCAL_NOTEBOOK_URL_KEY)) {
     var notebookName = Uri.base.queryParameters[LOCAL_NOTEBOOK_URL_KEY]!;
-    var source = Uri.https('cdn.dsouza.io', 'notebooks/${notebookName}.starboard.nb');
+    var source = Uri.https('studio.dsouza.io', 'notebooks/${notebookName}.starboard.nb');
     loadNotebook(source, notebookElement);
   } else if (Uri.base.queryParameters.containsKey(NAS_NOTEBOOK_URL_KEY)) {
     var notebookName = Uri.base.queryParameters[NAS_NOTEBOOK_URL_KEY]!;

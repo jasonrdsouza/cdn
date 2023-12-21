@@ -32,10 +32,10 @@ Simple pomodoro timer. Specify custom start time via the `hours`, `min`, and `se
 
 Examples:
 ```
-https://cdn.dsouza.io/pomodoro?min=3
-https://cdn.dsouza.io/pomodoro?hours=1&min=30
-https://cdn.dsouza.io/pomodoro?min=90
-https://cdn.dsouza.io/pomodoro?min=90
+https://studio.dsouza.io/pomodoro?min=3
+https://studio.dsouza.io/pomodoro?hours=1&min=30
+https://studio.dsouza.io/pomodoro?min=90
+https://studio.dsouza.io/pomodoro?min=90
 ```
 
 ## Hooggaa

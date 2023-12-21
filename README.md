@@ -1,5 +1,5 @@
-# AppEngine CDN
-Simple AppEngine app to host static (mostly dartlang) experiments. I'm using AppEngine instead of a regular bucket because setting up HTTPS with a cloud bucket is a pain, and involves either a third-party CDN, or a load balancer. Using the AppEngine app, with the `static_dir` directive, I can achieve the same result.
+# Studio
+Repository to hold my code experiments and one-off projects... effectively my virtual studio.
 
 ## Running Locally
 Entire AppEngine app

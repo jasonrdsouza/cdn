@@ -24,5 +24,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprint(w, "Dsouza CDN")
+	fmt.Fprint(w, "Dsouza Studio")
 }
