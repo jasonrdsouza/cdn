@@ -41,6 +41,10 @@ handlers:
   static_files: dart/build/groceries.html
   upload: dart/build/groceries.html
   secure: always
+- url: /sherlock
+  static_files: dart/build/sherlock.html
+  upload: dart/build/sherlock.html
+  secure: always
 - url: /jsonfmt
   static_files: dart/build/jsonfmt.html
   upload: dart/build/jsonfmt.html
