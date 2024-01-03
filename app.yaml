@@ -45,6 +45,10 @@ handlers:
   static_files: dart/build/sherlock.html
   upload: dart/build/sherlock.html
   secure: always
+- url: /dilution
+  static_files: dart/build/dilution.html
+  upload: dart/build/dilution.html
+  secure: always
 - url: /jsonfmt
   static_files: dart/build/jsonfmt.html
   upload: dart/build/jsonfmt.html

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dilution Calculator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/paper_1.8.2.css"/>
+  <link rel="icon" type="image/png" href="assets/whiskey.png">
+
+  <script defer src="scripts/dilution.dart.js"></script>
+</head>
+
+<body>
+  <div class="container paper">
+
+    <h2>Whiskey Dilution Calculator</h2>
+
+    <div class="row flex-center">
+      <div class="col">
+        <label for="input">Ounces of spirit</label>
+        <textarea id="inputVolume" placeholder="2 (oz)"></textarea>
+      </div>
+      <div class="col">
+        <label for="input">Current % Alcohol</label>
+        <textarea id="inputConcentration" placeholder="68 (%)"></textarea>
+      </div>
+      <div class="col">
+        <label for="input">Desired % Alcohol</label>
+        <textarea id="desiredConcentration" placeholder="50 (%)"></textarea>
+      </div>
+    </div>
+
+    <div class="row flex-center">
+      <div class="col-6 col">
+        <button id="submitConvert" class="btn-block btn-success-outline">Calculate!</button>
+      </div>
+    </div>
+
+    <div>
+      <label for="output">Dilution Calculation:</label>
+      <pre id="output" class="border"><code id="output"></code></pre>
+    </div>
+
+  </div>
+</body>
+</html>
