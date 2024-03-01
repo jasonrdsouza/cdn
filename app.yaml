@@ -61,6 +61,14 @@ handlers:
   static_files: dart/build/calendar.html
   upload: dart/build/calendar.html
   secure: always
+- url: /graphpaper
+  static_files: dart/build/graphpaper.html
+  upload: dart/build/graphpaper.html
+  secure: always
+- url: /ruledpaper
+  static_files: dart/build/ruledpaper.html
+  upload: dart/build/ruledpaper.html
+  secure: always
 - url: /diagram
   static_files: dart/build/diagram.html
   upload: dart/build/diagram.html

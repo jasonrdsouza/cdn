@@ -1,0 +1,21 @@
+:root {
+  --bg-color: #fff;
+  --line-color-1: #366;
+  --line-color-2: #a9a9a9;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+}
+
+.graph-paper {
+  height: 100%;
+  background-color: var(--bg-color);
+  background-image:
+    conic-gradient(at calc(100% - 2px) calc(100% - 2px),var(--line-color-1) 270deg, #0000 0),
+    conic-gradient(at calc(100% - 1px) calc(100% - 1px),var(--line-color-2) 270deg, #0000 0);
+  background-size: 100px 100px, 20px 20px;
+}
