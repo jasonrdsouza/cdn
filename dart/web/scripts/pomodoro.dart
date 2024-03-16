@@ -1,6 +1,9 @@
 import 'dart:html';
 import 'dart:async';
 
+const TRUE_TIME_PARAM = 't';
+const ALLOWABLE_SECONDS_DRIFT = 5;
+
 Element fetchBloc(String category) {
   return querySelector('.bloc-time.$category') as Element;
 }
@@ -92,6 +95,19 @@ String padTime(int timeValue) {
   return timeValue.toString().padLeft(2, '0');
 }
 
+int trueElapsedSeconds(DateTime startTime) {
+  return DateTime.now().difference(startTime).inSeconds;
+}
+
+bool timeDilationDetected(DateTime startTime, int elapsedSeconds) {
+  if (Uri.base.queryParameters.containsKey(TRUE_TIME_PARAM) && Uri.base.queryParameters[TRUE_TIME_PARAM] == '1') {
+    return (trueElapsedSeconds(startTime) - elapsedSeconds).abs() > ALLOWABLE_SECONDS_DRIFT;
+  }
+
+  // otherwise, allow background tab throttling to artificially extend the Pomodoro session
+  return false;
+}
+
 void main() {
   int hours = getInitialTimeValue('hours');
   int minutes = getInitialTimeValue('min');
@@ -107,21 +123,33 @@ void main() {
   seconds = normalizedTime[2];
   print('The normalized time is $hours hours, $minutes minutes, and $seconds seconds');
 
+  var startTime = DateTime.now();
+  var elapsedSeconds = 1;
+
   if (totalSeconds > 0) {
     Timer.periodic(Duration(seconds: 1), (timer) {
-      if (totalSeconds <= 1) {
+      if (elapsedSeconds >= totalSeconds) {
         timer.cancel();
       }
-      totalSeconds--;
+      elapsedSeconds++;
 
-      seconds--;
-      if (seconds < 0 && minutes >= 0) {
-        seconds = 59;
-        minutes--;
-      }
-      if (minutes < 0 && hours >= 0) {
-        minutes = 59;
-        hours--;
+      if (timeDilationDetected(startTime, elapsedSeconds)) {
+        print('Time dilation detected... fixing');
+        elapsedSeconds = trueElapsedSeconds(startTime);
+        var normalizedTime = normalizeTime(totalSeconds - elapsedSeconds);
+        hours = normalizedTime[0];
+        minutes = normalizedTime[1];
+        seconds = normalizedTime[2];
+      } else {
+        seconds--;
+        if (seconds < 0 && minutes >= 0) {
+          seconds = 59;
+          minutes--;
+        }
+        if (minutes < 0 && hours >= 0) {
+          minutes = 59;
+          hours--;
+        }
       }
 
       // Update DOM values
