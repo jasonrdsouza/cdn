@@ -22,3 +22,9 @@ html, body, .container {
   border: none;
   background: transparent;
 }
+
+@media (prefers-color-scheme: dark) {
+  #status {
+    background-color: rgb(76, 78, 78);
+  }
+}
