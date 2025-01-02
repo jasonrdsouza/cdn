@@ -74,7 +74,7 @@ pre {
 }
 
 .collumn{
-  font-size: 14px;
+  font-size: 18px;
   line-height: 20px;
   width: 17.5%;
   display: inline-block;
@@ -168,7 +168,6 @@ border-left: 1px solid #2f2f2f;
   height: 10px;
   display: block;
   margin: 0 auto;
-
 }
 
 .collumn .headline.bl3{
@@ -192,7 +191,6 @@ border-left: 1px solid #2f2f2f;
   height: 10px;
   display: block;
   margin: 0 auto;
-
 }
 
 .collumn .headline.hl7{
