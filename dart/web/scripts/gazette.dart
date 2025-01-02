@@ -13,6 +13,7 @@ void main() async {
   print("Fetching Gazette");
 
   DivElement subheadElement = querySelector('.subhead') as DivElement;
+  subheadElement.text = DateFormat.yMMMMEEEEd().format(DateTime(2021, 2, 2));
   DivElement articlesElement = querySelector('#articles') as DivElement;
 
   if (Uri.base.queryParameters.containsKey(LOCAL_EDITION_URL_KEY)) {
