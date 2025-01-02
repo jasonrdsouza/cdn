@@ -1,4 +1,4 @@
-runtime: go120
+runtime: go123
 
 handlers:
 - url: /spelling-bee
@@ -20,6 +20,10 @@ handlers:
 - url: /scribe
   static_files: dart/build/scribe.html
   upload: dart/build/scribe.html
+  secure: always
+- url: /gazette
+  static_files: dart/build/gazette.html
+  upload: dart/build/gazette.html
   secure: always
 - url: /smartcam
   static_files: dart/build/smartcam.html

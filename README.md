@@ -1,5 +1,5 @@
 # Studio
-Repository to hold my code experiments and one-off projects... effectively my virtual studio.
+Repository to hold my code experiments and one-off projects... effectively my virtual studio. See an up to date listing of projects at [https://studio.dsouza.io](https://studio.dsouza.io).
 
 ## Running Locally
 Entire AppEngine app
