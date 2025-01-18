@@ -23,7 +23,7 @@ void main() async {
   } else if (Uri.base.queryParameters.containsKey(EXTERNAL_EDITION_URL_KEY)) {
     var editionName = Uri.base.queryParameters[EXTERNAL_EDITION_URL_KEY]!;
     var source =
-        Uri.http('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
+        Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
     loadGazette(source, subheadElement, articlesElement);
   } else {
     // todo: load gazette with today's content?
