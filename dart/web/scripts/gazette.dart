@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 const LOCAL_EDITION_URL_KEY = "le";
-const EXTERNAL_EDITION_URL_KEY = "ee";
+const EXTERNAL_EDITION_URL_KEY = "edition";
 var bylineStyler = BylineStyler();
 
 // todo: fix weather box
@@ -18,12 +18,12 @@ void main() async {
 
   if (Uri.base.queryParameters.containsKey(LOCAL_EDITION_URL_KEY)) {
     var notebookName = Uri.base.queryParameters[LOCAL_EDITION_URL_KEY]!;
-    var source =
-        Uri.http('localhost:8080', 'gazettes/${notebookName}.json'); // todo: change to https:// and studio domain
+    var source = Uri.http('localhost:8080', 'gazettes/${notebookName}.json');
     loadGazette(source, subheadElement, articlesElement);
   } else if (Uri.base.queryParameters.containsKey(EXTERNAL_EDITION_URL_KEY)) {
-    // todo: limit to an access controlled external location
-    var source = Uri.parse(Uri.base.queryParameters[EXTERNAL_EDITION_URL_KEY]!);
+    var editionName = Uri.base.queryParameters[EXTERNAL_EDITION_URL_KEY]!;
+    var source =
+        Uri.http('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
     loadGazette(source, subheadElement, articlesElement);
   } else {
     // todo: load gazette with today's content?
