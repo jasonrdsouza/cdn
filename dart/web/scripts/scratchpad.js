@@ -29,6 +29,7 @@ require(['vs/editor/editor.main', 'monaco-vim'], function(a, MonacoVim) {
     ].join('\n'),
     language: 'markdown',
     theme: colorSchemeTheme(),
+    wordWrap: 'on',
     minimap: {
       enabled: true,
       renderCharacters: true,
