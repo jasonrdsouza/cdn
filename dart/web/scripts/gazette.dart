@@ -171,8 +171,6 @@ Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesEle
 
     print('Gazette successfully loaded from ${source}');
   } else {
-    subheadElement.text = DateFormat.yMMMMEEEEd().format(DateTime.now());
-    articlesElement.text = "Couldn't load gazette from ${source}";
     print("Couldn't load gazette from ${source}");
   }
 }
