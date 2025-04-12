@@ -64,27 +64,29 @@ pre {
   margin: 0 50px 20px -360px;
 }
 .content{
-  font-size: 0;
-  line-height: 0;
-  word-spacing: -.31em;
-  display: inline-block;
+  font-size: 14px;
+  line-height: 1.4;
+  word-spacing: normal;
   margin: 30px 2% 0 2%;
+  column-gap: 2%;
+  column-rule: 1px solid #2f2f2f;
 }
 .collumns{
+  column-count: 5;
+  column-width: 17.5%;
 }
 
 .collumn{
   font-size: 18px;
   line-height: 20px;
-  width: 17.5%;
-  display: inline-block;
+  display: block;
   padding: 0 1% 0 1%;
-  vertical-align: top;
-  margin-bottom: 50px;
-  transition: all .7s;
+  margin-bottom: 30px;
+  break-inside: avoid;
+  overflow: hidden;
 }
 .collumn + .collumn {
-border-left: 1px solid #2f2f2f;
+  border-left: none;
 }
 .collumn .headline{
   text-align: center;
@@ -269,25 +271,19 @@ font-size: 12px;
 
 }
 @media only all and (max-width: 1600px) {
-  .collumn{
-      width: 31%;
+  .collumns{
+    column-count: 3;
   }
-
 }
-  @media only all and (max-width: 1200px) {
-  .collumn{
-      width: 47%;
+@media only all and (max-width: 1200px) {
+  .collumns{
+    column-count: 2;
   }
-
 }
 @media only all and (max-width: 600px) {
-  .collumn{
-      width: 100%;
+  .collumns{
+    column-count: 1;
   }
-.collumn + .collumn {
-      border-left: none;
-      border-bottom: 1px solid #2f2f2f;
-}
   header{
       max-width: 320px;
       font-size: 60px;
