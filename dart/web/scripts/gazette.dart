@@ -26,8 +26,11 @@ void main() async {
         Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
     loadGazette(source, subheadElement, articlesElement);
   } else {
-    // todo: load gazette with today's content?
-    print("No Gazette loaded.");
+    // Load yesterday's gazette by default
+    var yesterday = DateTime.now().subtract(Duration(days: 1));
+    var yesterdayFormatted = DateFormat('yyyyMMdd').format(yesterday);
+    var source = Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${yesterdayFormatted}.json');
+    loadGazette(source, subheadElement, articlesElement);
   }
 }
 
