@@ -26,7 +26,7 @@ void main() async {
         Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
     loadGazette(source, subheadElement, articlesElement);
   } else {
-    // Load yesterday's gazette by default
+    print("Loading yesterday's gazette");
     var yesterday = DateTime.now().subtract(Duration(days: 1));
     var yesterdayFormatted = DateFormat('yyyyMMdd').format(yesterday);
     var source = Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${yesterdayFormatted}.json');
@@ -158,6 +158,12 @@ Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesEle
     var edition = Edition.fromJson(data);
 
     subheadElement.text = DateFormat.yMMMMEEEEd().format(edition.publishDate);
+
+    SpanElement articleCountDiv = new SpanElement();
+    articleCountDiv.classes.add("articlecount");
+    articleCountDiv.text = "${edition.articles.length} articles";
+    subheadElement.append(articleCountDiv);
+
     SpanElement lookbackDiv = new SpanElement();
     lookbackDiv.classes.add("lookback");
     lookbackDiv.text = "${edition.lookbackDays} days lookback";

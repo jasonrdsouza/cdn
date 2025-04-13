@@ -46,6 +46,13 @@ pre {
 
 }
 
+.articlecount{
+  float: left;
+  margin-left: 15px;
+  color: grey;
+  font-style: italic;
+}
+
 .lookback{
   float: right;
   margin-right: 15px;
@@ -69,7 +76,7 @@ pre {
   word-spacing: normal;
   margin: 30px 2% 0 2%;
   column-gap: 2%;
-  column-rule: 1px solid #2f2f2f;
+  column-rule: 1px solid #cccccc;
 }
 .collumns{
   column-count: 5;
@@ -84,6 +91,8 @@ pre {
   margin-bottom: 30px;
   break-inside: avoid;
   overflow: hidden;
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 20px;
 }
 .collumn + .collumn {
   border-left: none;
