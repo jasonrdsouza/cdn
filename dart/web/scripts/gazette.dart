@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 const LOCAL_EDITION_URL_KEY = "le";
 const EXTERNAL_EDITION_URL_KEY = "edition";
+const FULL_TEXT_URL_KEY = "fulltext";
 var bylineStyler = BylineStyler();
 
 // todo: fix weather box
@@ -15,22 +16,23 @@ void main() async {
   DivElement subheadElement = querySelector('.subhead') as DivElement;
   subheadElement.text = DateFormat.yMMMMEEEEd().format(DateTime(2021, 2, 2));
   DivElement articlesElement = querySelector('#articles') as DivElement;
+  bool fullText = Uri.base.queryParameters.containsKey(FULL_TEXT_URL_KEY);
 
   if (Uri.base.queryParameters.containsKey(LOCAL_EDITION_URL_KEY)) {
     var notebookName = Uri.base.queryParameters[LOCAL_EDITION_URL_KEY]!;
     var source = Uri.http('localhost:8080', 'gazettes/${notebookName}.json');
-    loadGazette(source, subheadElement, articlesElement);
+    loadGazette(source, subheadElement, articlesElement, fullText);
   } else if (Uri.base.queryParameters.containsKey(EXTERNAL_EDITION_URL_KEY)) {
     var editionName = Uri.base.queryParameters[EXTERNAL_EDITION_URL_KEY]!;
     var source =
         Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${editionName}.json');
-    loadGazette(source, subheadElement, articlesElement);
+    loadGazette(source, subheadElement, articlesElement, fullText);
   } else {
     print("Loading yesterday's gazette");
     var yesterday = DateTime.now().subtract(Duration(days: 1));
     var yesterdayFormatted = DateFormat('yyyyMMdd').format(yesterday);
     var source = Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/editions/${yesterdayFormatted}.json');
-    loadGazette(source, subheadElement, articlesElement);
+    loadGazette(source, subheadElement, articlesElement, fullText);
   }
 }
 
@@ -111,7 +113,7 @@ class BylineStyler {
   }
 }
 
-DivElement constructArticleElement(Article) {
+DivElement constructArticleElement(Article Article, bool fullText) {
   DivElement columnDiv = new DivElement();
   columnDiv.classes.add("collumn");
 
@@ -139,9 +141,13 @@ DivElement constructArticleElement(Article) {
     ..allowSvg()
     ..allowHtml5();
 
-  ParagraphElement articleSummary = new ParagraphElement();
-  articleSummary.setInnerHtml(Article.summary, validator: validator);
-  columnDiv.append(articleSummary);
+  ParagraphElement articleContents = new ParagraphElement();
+  if (fullText) {
+    articleContents.setInnerHtml(Article.content.join("\n"), validator: validator);
+  } else {
+    articleContents.setInnerHtml(Article.summary, validator: validator);
+  }
+  columnDiv.append(articleContents);
 
   AnchorElement headlineLink = new AnchorElement();
   headlineLink.href = Article.link.toString();
@@ -151,7 +157,7 @@ DivElement constructArticleElement(Article) {
   return columnDiv;
 }
 
-Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesElement) async {
+Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesElement, bool fullText) async {
   var response = await http.get(source);
   if (response.statusCode == 200) {
     var data = jsonDecode(response.body);
@@ -171,7 +177,7 @@ Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesEle
 
     articlesElement.children.clear();
     for (var article in edition.articles) {
-      var articleElement = constructArticleElement(article);
+      var articleElement = constructArticleElement(article, fullText);
       articlesElement.append(articleElement);
     }
 
