@@ -9,13 +9,26 @@ html, body {
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Bebas Neue', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: #333;
     touch-action: none; /* Prevent default touch behaviors like scrolling on canvas */
+}
+
+h1 {
+    font-size: 3.5rem;
+    text-align: center;
+    margin: 1rem 0;
+    letter-spacing: 2px;
+}
+
+button {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
 }
 
 #gameContainer {
