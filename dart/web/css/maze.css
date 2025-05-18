@@ -1,0 +1,109 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    touch-action: none; /* Prevent default touch behaviors like scrolling on canvas */
+}
+
+#gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center canvas and controls within container */
+    background-color: #fff;
+    padding: 2vmin; /* Use viewport units for padding */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    width: 95vw; /* Take up most of viewport width */
+    max-width: 700px; /* But not too wide on large screens */
+    height: 95vh; /* Take up most of viewport height */
+    max-height: 900px; /* Max height */
+    box-sizing: border-box;
+}
+
+canvas {
+    border: 1px solid #ccc;
+    background-color: #fff; /* Ensure canvas background is white before drawing */
+    display: block; /* Remove extra space below canvas */
+}
+
+.controls {
+    margin-top: 1.5vmin;
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+    justify-content: center; /* Center buttons */
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.controls button {
+    padding: clamp(8px, 1.5vmin, 12px) clamp(12px, 2.5vmin, 20px);
+    font-size: clamp(12px, 2vmin, 18px);
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50; /* Default Green for New Game */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    flex-grow: 1;
+    flex-basis: 90px; /* Adjust basis for more buttons */
+    max-width: 160px; 
+}
+.controls button:hover {
+    opacity: 0.9;
+}
+.controls button:active {
+    opacity: 0.7;
+}
+
+#resetButton {
+    background-color: #FBC02D; /* Yellow */
+}
+#resetButton:hover {
+    background-color: #F9A825; /* Darker Yellow */
+}
+
+#cheatButton { 
+    background-color: #D32F2F; /* Red */
+}
+#cheatButton:hover {
+    background-color: #C62828; /* Darker Red */
+}
+
+#shareButton { 
+    background-color: #007bff; /* Blue */
+}
+#shareButton:hover {
+    background-color: #0069d9; /* Darker Blue */
+}
+
+
+.infoPanel {
+    margin-top: 1.5vmin;
+    font-size: clamp(12px, 2vmin, 18px);
+    text-align: center;
+    width: 100%;
+    max-width: 100%; 
+    box-sizing: border-box;
+}
+
+.infoPanel div {
+    margin-bottom: 0.5vmin;
+    padding: clamp(5px, 0.8vmin, 10px);
+    background-color: #e9e9e9;
+    border-radius: 4px;
+}
