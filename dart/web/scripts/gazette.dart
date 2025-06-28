@@ -10,6 +10,53 @@ const EXTERNAL_EDITION_URL_KEY = "edition";
 const FULL_TEXT_URL_KEY = "fulltext";
 var bylineStyler = BylineStyler();
 
+// Dark mode management
+class DarkModeManager {
+  static const String _darkModeKey = 'darkMode';
+  static const String _moonEmoji = '🌙';
+  static const String _sunEmoji = '☀️';
+  
+  late ButtonElement _toggleButton;
+  late Element _body;
+  
+  DarkModeManager() {
+    _body = document.body!;
+    _createToggleButton();
+    _initializeDarkMode();
+  }
+  
+  void _createToggleButton() {
+    _toggleButton = ButtonElement()
+      ..className = 'dark-mode-toggle'
+      ..text = _moonEmoji
+      ..onClick.listen((_) => toggleDarkMode());
+    
+    document.body!.append(_toggleButton);
+  }
+  
+  void _initializeDarkMode() {
+    final savedMode = window.localStorage[_darkModeKey];
+    final prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedMode == 'true' || (savedMode == null && prefersDark)) {
+      _body.classes.add('dark-mode');
+      _toggleButton.text = _sunEmoji;
+    }
+  }
+  
+  void toggleDarkMode() {
+    if (_body.classes.contains('dark-mode')) {
+      _body.classes.remove('dark-mode');
+      _toggleButton.text = _moonEmoji;
+      window.localStorage[_darkModeKey] = 'false';
+    } else {
+      _body.classes.add('dark-mode');
+      _toggleButton.text = _sunEmoji;
+      window.localStorage[_darkModeKey] = 'true';
+    }
+  }
+}
+
 // Generate permalink URL for a specific date
 String generatePermalink(DateTime date) {
   var dateFormatted = DateFormat('yyyyMMdd').format(date);
@@ -71,6 +118,9 @@ Element createDateLink(DateTime date) {
 // todo: fix weather box
 void main() async {
   print("Fetching Gazette");
+
+  // Initialize dark mode manager
+  final darkModeManager = DarkModeManager();
 
   DivElement subheadElement = querySelector('.subhead') as DivElement;
   // Set initial date as a clickable link
