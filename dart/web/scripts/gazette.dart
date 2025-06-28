@@ -3,18 +3,82 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'dart:async';
 
 const LOCAL_EDITION_URL_KEY = "le";
 const EXTERNAL_EDITION_URL_KEY = "edition";
 const FULL_TEXT_URL_KEY = "fulltext";
 var bylineStyler = BylineStyler();
 
+// Generate permalink URL for a specific date
+String generatePermalink(DateTime date) {
+  var dateFormatted = DateFormat('yyyyMMdd').format(date);
+  var currentUri = Uri.base;
+  var queryParams = Map<String, String>.from(currentUri.queryParameters);
+  queryParams[EXTERNAL_EDITION_URL_KEY] = dateFormatted;
+  // Remove other edition-related parameters to avoid conflicts
+  queryParams.remove(LOCAL_EDITION_URL_KEY);
+
+  return Uri(
+    scheme: currentUri.scheme,
+    host: currentUri.host,
+    port: currentUri.port,
+    path: currentUri.path,
+    queryParameters: queryParams,
+  ).toString();
+}
+
+// Copy text to clipboard
+Future<void> copyToClipboard(String text) async {
+  try {
+    await window.navigator.clipboard?.writeText(text);
+    print('Permalink copied to clipboard: $text');
+  } catch (e) {
+    print('Failed to copy to clipboard: $e');
+  }
+}
+
+// Create clickable date element
+Element createDateLink(DateTime date) {
+  var dateFormatted = DateFormat.yMMMMEEEEd().format(date);
+  var permalink = generatePermalink(date);
+
+  var dateLink = AnchorElement()
+    ..href = '#'
+    ..text = dateFormatted
+    ..style.cursor = 'pointer'
+    ..style.textDecoration = 'underline'
+    ..style.color = 'inherit';
+
+  dateLink.onClick.listen((event) {
+    event.preventDefault();
+    copyToClipboard(permalink);
+
+    // Visual feedback
+    var originalText = dateLink.text;
+    dateLink.text = 'Copied!';
+    dateLink.style.color = '#4CAF50';
+
+    Timer(Duration(seconds: 2), () {
+      dateLink.text = originalText;
+      dateLink.style.color = 'inherit';
+    });
+  });
+
+  return dateLink;
+}
+
 // todo: fix weather box
 void main() async {
   print("Fetching Gazette");
 
   DivElement subheadElement = querySelector('.subhead') as DivElement;
-  subheadElement.text = DateFormat.yMMMMEEEEd().format(DateTime(2021, 2, 2));
+  // Set initial date as a clickable link
+  var initialDate = DateTime(2021, 2, 2);
+  var dateLink = createDateLink(initialDate);
+  subheadElement.children.clear();
+  subheadElement.append(dateLink);
+
   DivElement articlesElement = querySelector('#articles') as DivElement;
   bool fullText = Uri.base.queryParameters.containsKey(FULL_TEXT_URL_KEY);
 
@@ -163,7 +227,10 @@ Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesEle
     var data = jsonDecode(response.body);
     var edition = Edition.fromJson(data);
 
-    subheadElement.text = DateFormat.yMMMMEEEEd().format(edition.publishDate);
+    // Clear existing content and add the date link
+    subheadElement.children.clear();
+    var dateLink = createDateLink(edition.publishDate);
+    subheadElement.append(dateLink);
 
     SpanElement articleCountDiv = new SpanElement();
     articleCountDiv.classes.add("articlecount");
