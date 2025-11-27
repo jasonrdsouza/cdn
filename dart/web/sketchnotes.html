@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sketchnote Generator with Gemini</title>
+        <link rel="stylesheet" href="css/sketchnotes.css" />
+        <link rel="icon" type="image/png" href="assets/sketchboard.png" />
+    </head>
+    <body>
+        <main class="page">
+            <header>
+                <h1>Sketchnote Generator</h1>
+                <p>
+                    Generate a sketchnote-style image from your raw notes using
+                    the latest Gemini image model.
+                </p>
+            </header>
+
+            <section class="card">
+                <form id="generator-form">
+                    <div class="field">
+                        <label for="apiKey">Google AI Studio API Key</label>
+                        <input
+                            id="apiKey"
+                            name="apiKey"
+                            type="password"
+                            autocomplete="off"
+                            required
+                        />
+                        <p class="hint">
+                            Your key is only used in this browser to call the
+                            Gemini image generation endpoint.
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="model">Model ID</label>
+                        <input
+                            id="model"
+                            name="model"
+                            type="text"
+                            value="gemini-3-pro-image-preview"
+                            required
+                        />
+                        <p class="hint">
+                            Use the latest Gemini image generation model ID (for
+                            example, <code>gemini-3-pro-image-preview</code> or
+                            another image model available in your project).
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="notes">Raw notes</label>
+                        <textarea
+                            id="notes"
+                            name="notes"
+                            rows="10"
+                            placeholder="Paste your rough notes here"
+                            required
+                        ></textarea>
+                        <p class="hint">
+                            Try to include the key points, examples, and
+                            relationships you want the sketchnote to highlight.
+                        </p>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Generate sketchnote</button>
+                        <button type="button" id="clear">Clear</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card" id="result-card">
+                <div id="status" role="status"></div>
+                <div id="image-container" class="hidden">
+                    <img id="result" alt="Generated sketchnote" />
+                    <a id="download" class="download" download="sketchnote.png"
+                        >Download PNG</a
+                    >
+                </div>
+            </section>
+        </main>
+
+        <script src="scripts/sketchnotes.js"></script>
+    </body>
+</html>

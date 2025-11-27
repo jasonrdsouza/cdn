@@ -1,155 +1,158 @@
 runtime: go123
 
 handlers:
-- url: /spelling-bee
-  static_files: dart/build/spelling_bee.html
-  upload: dart/build/spelling_bee.html
-  secure: always
-- url: /passwords
-  static_files: dart/build/passwords.html
-  upload: dart/build/passwords.html
-  secure: always
-- url: /teatimer
-  static_files: dart/build/teatimer.html
-  upload: dart/build/teatimer.html
-  secure: always
-- url: /hooggaa
-  static_files: dart/build/hooggaa.html
-  upload: dart/build/hooggaa.html
-  secure: always
-- url: /pomodoro
-  static_files: dart/build/pomodoro.html
-  upload: dart/build/pomodoro.html
-  secure: always
-- url: /maze
-  static_files: dart/build/maze.html
-  upload: dart/build/maze.html
-  secure: always
-- url: /scribe
-  static_files: dart/build/scribe.html
-  upload: dart/build/scribe.html
-  secure: always
-- url: /gazette
-  static_files: dart/build/gazette.html
-  upload: dart/build/gazette.html
-  secure: always
-- url: /smartcam
-  static_files: dart/build/smartcam.html
-  upload: dart/build/smartcam.html
-  secure: always
-- url: /birdwatcher
-  static_files: dart/build/birdwatcher.html
-  upload: dart/build/birdwatcher.html
-  secure: always
-- url: /mushrooms
-  static_files: dart/build/mushrooms.html
-  upload: dart/build/mushrooms.html
-  secure: always
-- url: /snake
-  static_files: dart/build/snake.html
-  upload: dart/build/snake.html
-  secure: always
-- url: /groceries
-  static_files: dart/build/groceries.html
-  upload: dart/build/groceries.html
-  secure: always
-- url: /sherlock
-  static_files: dart/build/sherlock.html
-  upload: dart/build/sherlock.html
-  secure: always
-- url: /ocr
-  static_files: dart/build/ocr.html
-  upload: dart/build/ocr.html
-  secure: always
-- url: /dilution
-  static_files: dart/build/dilution.html
-  upload: dart/build/dilution.html
-  secure: always
-- url: /jsonfmt
-  static_files: dart/build/jsonfmt.html
-  upload: dart/build/jsonfmt.html
-  secure: always
-- url: /unixtime
-  static_files: dart/build/unixtime.html
-  upload: dart/build/unixtime.html
-  secure: always
-- url: /calendar
-  static_files: dart/build/calendar.html
-  upload: dart/build/calendar.html
-  secure: always
-- url: /graphpaper
-  static_files: dart/build/graphpaper.html
-  upload: dart/build/graphpaper.html
-  secure: always
-- url: /ruledpaper
-  static_files: dart/build/ruledpaper.html
-  upload: dart/build/ruledpaper.html
-  secure: always
-- url: /diagram
-  static_files: dart/build/diagram.html
-  upload: dart/build/diagram.html
-  secure: always
-- url: /clock
-  static_files: dart/build/clock.html
-  upload: dart/build/clock.html
-  secure: always
-- url: /scratchpad
-  static_files: dart/build/scratchpad.html
-  upload: dart/build/scratchpad.html
-  secure: always
-- url: /notebook
-  static_files: dart/build/notebook.html
-  upload: dart/build/notebook.html
-  secure: always
-- url: /notebooks
-  static_dir: dart/build/notebooks/
-  secure: always
-- url: /auth
-  static_files: dart/build/auth.html
-  upload: dart/build/auth.html
-  secure: always
-- url: /brutalist
-  static_files: dart/build/brutalist.html
-  upload: dart/build/brutalist.html
-  secure: always
-- url: /markdown
-  static_files: dart/build/markdown.html
-  upload: dart/build/markdown.html
-  secure: always
-- url: /sicp
-  static_files: sicp/index.xhtml
-  upload: sicp/index.xhtml
-  secure: always
-- url: /sicp/contents
-  static_dir: sicp/html/
-  secure: always
-- url: /sequences
-  static_files: sequences/HomePage.html
-  upload: sequences/HomePage.html
-  secure: always
-- url: /sequences/book/
-  static_dir: sequences/
-  secure: always
-- url: /css
-  static_dir: dart/build/css/
-  secure: always
-- url: /scripts
-  static_dir: dart/build/scripts/
-  secure: always
-- url: /assets
-  static_dir: dart/build/assets/
-  secure: always
-- url: /javascript
-  static_dir: dart/build/javascript/
-  secure: always
-- url: /fonts
-  static_dir: dart/build/fonts/
-  secure: always
-- url: /
-  static_files: dart/build/index.html
-  upload: dart/build/index.html
-  secure: always
-- url: /.*
-  script: auto
-  secure: always
-
+  - url: /spelling-bee
+    static_files: dart/build/spelling_bee.html
+    upload: dart/build/spelling_bee.html
+    secure: always
+  - url: /passwords
+    static_files: dart/build/passwords.html
+    upload: dart/build/passwords.html
+    secure: always
+  - url: /teatimer
+    static_files: dart/build/teatimer.html
+    upload: dart/build/teatimer.html
+    secure: always
+  - url: /hooggaa
+    static_files: dart/build/hooggaa.html
+    upload: dart/build/hooggaa.html
+    secure: always
+  - url: /pomodoro
+    static_files: dart/build/pomodoro.html
+    upload: dart/build/pomodoro.html
+    secure: always
+  - url: /maze
+    static_files: dart/build/maze.html
+    upload: dart/build/maze.html
+    secure: always
+  - url: /scribe
+    static_files: dart/build/scribe.html
+    upload: dart/build/scribe.html
+    secure: always
+  - url: /gazette
+    static_files: dart/build/gazette.html
+    upload: dart/build/gazette.html
+    secure: always
+  - url: /smartcam
+    static_files: dart/build/smartcam.html
+    upload: dart/build/smartcam.html
+    secure: always
+  - url: /birdwatcher
+    static_files: dart/build/birdwatcher.html
+    upload: dart/build/birdwatcher.html
+    secure: always
+  - url: /mushrooms
+    static_files: dart/build/mushrooms.html
+    upload: dart/build/mushrooms.html
+    secure: always
+  - url: /snake
+    static_files: dart/build/snake.html
+    upload: dart/build/snake.html
+    secure: always
+  - url: /groceries
+    static_files: dart/build/groceries.html
+    upload: dart/build/groceries.html
+    secure: always
+  - url: /sherlock
+    static_files: dart/build/sherlock.html
+    upload: dart/build/sherlock.html
+    secure: always
+  - url: /ocr
+    static_files: dart/build/ocr.html
+    upload: dart/build/ocr.html
+    secure: always
+  - url: /dilution
+    static_files: dart/build/dilution.html
+    upload: dart/build/dilution.html
+    secure: always
+  - url: /jsonfmt
+    static_files: dart/build/jsonfmt.html
+    upload: dart/build/jsonfmt.html
+    secure: always
+  - url: /unixtime
+    static_files: dart/build/unixtime.html
+    upload: dart/build/unixtime.html
+    secure: always
+  - url: /calendar
+    static_files: dart/build/calendar.html
+    upload: dart/build/calendar.html
+    secure: always
+  - url: /graphpaper
+    static_files: dart/build/graphpaper.html
+    upload: dart/build/graphpaper.html
+    secure: always
+  - url: /ruledpaper
+    static_files: dart/build/ruledpaper.html
+    upload: dart/build/ruledpaper.html
+    secure: always
+  - url: /diagram
+    static_files: dart/build/diagram.html
+    upload: dart/build/diagram.html
+    secure: always
+  - url: /clock
+    static_files: dart/build/clock.html
+    upload: dart/build/clock.html
+    secure: always
+  - url: /scratchpad
+    static_files: dart/build/scratchpad.html
+    upload: dart/build/scratchpad.html
+    secure: always
+  - url: /sketchnotes
+    static_files: dart/build/sketchnotes.html
+    upload: dart/build/sketchnotes.html
+    secure: always
+  - url: /notebook
+    static_files: dart/build/notebook.html
+    upload: dart/build/notebook.html
+    secure: always
+  - url: /notebooks
+    static_dir: dart/build/notebooks/
+    secure: always
+  - url: /auth
+    static_files: dart/build/auth.html
+    upload: dart/build/auth.html
+    secure: always
+  - url: /brutalist
+    static_files: dart/build/brutalist.html
+    upload: dart/build/brutalist.html
+    secure: always
+  - url: /markdown
+    static_files: dart/build/markdown.html
+    upload: dart/build/markdown.html
+    secure: always
+  - url: /sicp
+    static_files: sicp/index.xhtml
+    upload: sicp/index.xhtml
+    secure: always
+  - url: /sicp/contents
+    static_dir: sicp/html/
+    secure: always
+  - url: /sequences
+    static_files: sequences/HomePage.html
+    upload: sequences/HomePage.html
+    secure: always
+  - url: /sequences/book/
+    static_dir: sequences/
+    secure: always
+  - url: /css
+    static_dir: dart/build/css/
+    secure: always
+  - url: /scripts
+    static_dir: dart/build/scripts/
+    secure: always
+  - url: /assets
+    static_dir: dart/build/assets/
+    secure: always
+  - url: /javascript
+    static_dir: dart/build/javascript/
+    secure: always
+  - url: /fonts
+    static_dir: dart/build/fonts/
+    secure: always
+  - url: /
+    static_files: dart/build/index.html
+    upload: dart/build/index.html
+    secure: always
+  - url: /.*
+    script: auto
+    secure: always
