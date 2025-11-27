@@ -1,32 +1,34 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momentum Maze</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/maze.css">
-    <link rel="icon" type="image/png" href="assets/maze.png">
-</head>
-<body>
-    <h1>Momentum Maze</h1>
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
-        <div class="infoPanel">
-            <div id="scoreDisplay">Goals Completed: 0</div>
-            <div id="moveDisplay">Moves: 0 (Optimal: 0)</div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Momentum Maze</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="css/maze.css" />
+        <link rel="icon" type="image/png" href="assets/maze.png" />
+    </head>
+    <body>
+        <h1>Momentum Maze</h1>
+        <div id="gameContainer">
+            <canvas id="gameCanvas"></canvas>
+            <div class="infoPanel">
+                <div id="scoreDisplay">Goals Completed: 0</div>
+                <div id="moveDisplay">Moves: 0 (Optimal: 0)</div>
+            </div>
+            <div class="controls">
+                <button id="newGameButton">New Game</button>
+                <button id="resetButton">Reset</button>
+                <button id="cheatButton">Cheat</button>
+                <button id="shareButton">Share Puzzle</button>
+            </div>
         </div>
-        <div class="controls">
-            <button id="newGameButton">New Game</button>
-            <button id="resetButton">Reset</button>
-            <button id="cheatButton">Cheat</button>
-            <button id="shareButton">Share Puzzle</button>
-        </div>
-    </div>
 
-    <script src="javascript/maze.js"></script>
-</body>
+        <script src="scripts/maze.js"></script>
+    </body>
 </html>
-
