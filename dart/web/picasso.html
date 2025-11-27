@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Picasso Line Drawing Generator</title>
+        <link rel="stylesheet" href="css/picasso.css" />
+        <link rel="icon" type="image/png" href="assets/pen.png" />
+    </head>
+    <body>
+        <main class="page">
+            <header>
+                <h1>Picasso Line Drawing Generator</h1>
+                <p>
+                    Generate a Picasso-style line drawing from a subject using
+                    the latest Gemini image model.
+                </p>
+            </header>
+
+            <section class="card">
+                <form id="generator-form">
+                    <div class="field">
+                        <label for="apiKey">Google AI Studio API Key</label>
+                        <input
+                            id="apiKey"
+                            name="apiKey"
+                            type="password"
+                            autocomplete="off"
+                            required
+                        />
+                        <p class="hint">
+                            Your key is only used in this browser to call the
+                            Gemini image generation endpoint.
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="model">Model ID</label>
+                        <input
+                            id="model"
+                            name="model"
+                            type="text"
+                            value="gemini-3-pro-image-preview"
+                            required
+                        />
+                        <p class="hint">
+                            Use the latest Gemini image generation model ID (for
+                            example, <code>gemini-3-pro-image-preview</code> or
+                            another image model available in your project).
+                        </p>
+                    </div>
+
+                    <div class="field">
+                        <label for="subject">Subject</label>
+                        <input
+                            id="subject"
+                            name="subject"
+                            type="text"
+                            placeholder="e.g. 'cat', 'face', 'still life'"
+                            required
+                        />
+                        <p class="hint">
+                            Enter a single subject for the line drawing.
+                        </p>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit">Generate</button>
+                        <button type="button" id="clear">Clear</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card" id="result-card">
+                <div id="status" role="status"></div>
+                <div id="image-container" class="hidden">
+                    <img id="result" alt="Generated Picasso line drawing" />
+                    <a
+                        id="download"
+                        class="download"
+                        download="picasso_line_drawing.png"
+                        >Download PNG</a
+                    >
+                </div>
+            </section>
+        </main>
+
+        <script src="scripts/picasso.js"></script>
+    </body>
+</html>

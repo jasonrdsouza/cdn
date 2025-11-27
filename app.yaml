@@ -101,6 +101,10 @@ handlers:
     static_files: dart/build/sketchnotes.html
     upload: dart/build/sketchnotes.html
     secure: always
+  - url: /picasso
+    static_files: dart/build/picasso.html
+    upload: dart/build/picasso.html
+    secure: always
   - url: /notebook
     static_files: dart/build/notebook.html
     upload: dart/build/notebook.html
