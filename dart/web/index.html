@@ -1,204 +1,598 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-    <title>Experimental Projects Studio</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1.0"
+        />
+        <title>Experimental Projects Studio</title>
 
-    <link rel="stylesheet" href="css/paper_1.8.2.css">
-  </head>
+        <link rel="stylesheet" href="css/paper_1.8.2.css" />
+    </head>
 
-  <body>
+    <body>
+        <div>
+            <div class="container paper border">
+                <h2>Experimental Projects Studio</h2>
 
-    <div>
-    <div class="container paper border">
-      <h2>Experimental Projects Studio</h2>
+                <ul>
+                    <li>
+                        <a href="/gazette">Gazette - A Personal Newspaper</a>
+                        <ul>
+                            <li>
+                                A newspaper tailored to my personal interests,
+                                fed by RSS feeds and various other interesting
+                                sources of information.
+                            </li>
+                            <li>
+                                My attempt at a calm
+                                <a
+                                    href="https://tomcritchlow.com/2018/10/10/of-gardens-and-wikis/"
+                                    >digital stream</a
+                                >
+                                I can consume at my own pace.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://recipes.dsouza.io"
+                            >Family Recipes and Gastronomic Observations</a
+                        >
+                        <ul>
+                            <li>
+                                A recipe site styled the way I want all recipes
+                                to be presented... minimal cruft, with no ads,
+                                popups, popovers, or calls to action.
+                            </li>
+                            <li>
+                                Legible on any screen size with the ingredients
+                                and steps shown up front, followed by personal
+                                notes and learnings where appropriate.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://wiki.dsouza.io">Personal Wiki</a>
+                        <ul>
+                            <li>
+                                Based on
+                                <a href="https://tiddlywiki.com/">TiddlyWiki</a
+                                >, customized as a computer-aided
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Zettelkasten"
+                                    >Zettelkasten</a
+                                >. No longer served publicly.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://cubby.dsouza.io"
+                            >Cubby - A web-native object store</a
+                        >
+                        <ul>
+                            <li>
+                                An internet accessible object store to simplify
+                                persistence for experimental web projects.
+                            </li>
+                            <li>
+                                Cubby aims for a high "practical usage" to
+                                "conceptual complexity" ratio, deferring to
+                                existing HTTP concepts and patterns wherever
+                                possible.
+                            </li>
+                            <li>
+                                See more information in the
+                                <a href="https://github.com/jasonrdsouza/cubby"
+                                    >Github repo</a
+                                >.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/scribe">Article Scribe</a>
+                        <ul>
+                            <li>
+                                Article readability as a service, optimized for
+                                mobile reading.
+                            </li>
+                            <li>
+                                My attempt at a more personalized
+                                <a href="https://getpocket.com">Pocket</a>.
+                            </li>
+                            <li>
+                                Integrated with various other personal tooling
+                                and workflows.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://pub.dev/packages/cork_site"
+                            >Cork - Minimalist static site generator</a
+                        >
+                        <ul>
+                            <li>
+                                Attempt to write the simplest possible static
+                                site generator that satisfies my own personal
+                                use cases.
+                            </li>
+                            <li>
+                                Native support for
+                                <a href="https://en.wikipedia.org/wiki/Markdown"
+                                    >Markdown</a
+                                >,
+                                <a href="https://mustache.github.io/"
+                                    >Mustache</a
+                                >, and <a href="https://dart.dev/">Dartlang</a>.
+                            </li>
+                            <li>
+                                Not meant as a general purpose solution like
+                                <a href="https://jekyllrb.com/">Jekyll</a> or
+                                <a href="https://gohugo.io/">Hugo</a>.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://scratch.dsouza.io/">Scratchpad</a>
+                        <ul>
+                            <li>
+                                A browser based, web first, vim backed, AI
+                                assisted scratchpad for quick notes,
+                                brainstorming, and brain dumping.
+                            </li>
+                            <li>
+                                Includes persistence of buffers, commands,
+                                settings and more in browser local storage.
+                            </li>
+                            <li>
+                                Supports native javascript and python (via
+                                <a href="https://pyodide.org/en/stable/"
+                                    >pyodide</a
+                                >) code execution.
+                            </li>
+                            <li>
+                                Contains various AI assisted functionality and
+                                easter eggs.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/maze">Momentum Maze</a>
+                        <ul>
+                            <li>
+                                A short, infinite puzzle game based off of
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Ricochet_Robots"
+                                    >Ricochet Robots</a
+                                >.
+                            </li>
+                            <li>
+                                Built as a fun way to exercise my lateral
+                                thinking/ spatial reasoning skills.
+                            </li>
+                            <li>
+                                Ideation and game mechanics explained by me, and
+                                then predominantly implemented by Gemini2.5 Pro.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/sketchnotes">Sketchnotes</a>
+                        <ul>
+                            <li>
+                                Generates
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Sketchnoting"
+                                    >sketchnotes</a
+                                >
+                                from user supplied raw text notes through the
+                                power of multi-modal LLM language processing and
+                                image generation.
+                            </li>
+                            <li>
+                                For years I have been interested in taking more
+                                engaging, handwritten notes, and even bought the
+                                <a href="https://rohdesign.com/handbook"
+                                    >original sketchnote handbook</a
+                                >
+                                when it first came out in 2013.
+                            </li>
+                            <li>
+                                Having been stymied in that original endeavor by
+                                my inability to draw, this project is an attempt
+                                to turn the type of notes I do take well (typed
+                                out bullet points and markdown) into the type of
+                                notes I want to consume.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/picasso">Line Drawing Generator</a>
+                        <ul>
+                            <li>
+                                Generates Picasso-style line drawings of user
+                                supplied subjects using AI image generation.
+                            </li>
+                            <li>
+                                Predominantly built as a way to improve my
+                                drawing skills to appease my daughter.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/sherlock">Sherlock Holmes LLM Stories</a>
+                        <ul>
+                            <li>
+                                Experiments with Large Language Models (LLMs)
+                                and text generation using Sir Arthur Conan
+                                Doyle's Sherlock Holmes corpus as a starting
+                                point.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/ocr">Browser-native OCR Tool</a>
+                        <ul>
+                            <li>
+                                Fully local, in-browser Optical Character
+                                Recognition utility to easily extract text from
+                                PDFs and images.
+                            </li>
+                            <li>
+                                Inspired by
+                                <a
+                                    href="https://simonwillison.net/2024/Mar/30/ocr-pdfs-images/"
+                                    >Simon Willison's OCR tool</a
+                                >.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/notebook">Literate Dev Notebook</a>
+                        <ul>
+                            <li>
+                                In-browser
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Literate_programming"
+                                    >literate programming</a
+                                >
+                                notebook (in the style of
+                                <a href="https://ipython.org/">iPython</a>) for
+                                shareable, editable, runnable code snippets.
+                            </li>
+                            <li>
+                                This is a fork of
+                                <a href="https://starboard.gg/">Starboard</a>
+                                with native support for my personal stack and
+                                tooling.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/diagram">Diagramming Tool</a>
+                        <ul>
+                            <li>
+                                Self hosted diagramming tool using the wonderful
+                                <a
+                                    href="https://mermaid-js.github.io/mermaid/#/"
+                                    >Mermaid</a
+                                >
+                                library
+                            </li>
+                            <li>
+                                Creates various diagram types via a custom text
+                                DSL, allowing easy creation, diffing, updating,
+                                and maintenance of the result.
+                            </li>
+                            <li>
+                                Useful diagram types:
+                                <ul>
+                                    <li>Flowcharts</li>
+                                    <li>Sequence diagrams</li>
+                                    <li>Class diagrams</li>
+                                    <li>State diagrams</li>
+                                    <li>Entity relationships</li>
+                                    <li>Gantt charts</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/calendar">Yearly Calendar</a>
+                        <ul>
+                            <li>
+                                Minimalist yearly calendar view that displays
+                                all of the dates in a single view. Great for
+                                high level planning, and resizes automatically
+                                to print on any size paper (for best results use
+                                "landscape" mode).
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/dilution">Whiskey Dilution Calculator</a>
+                        <ul>
+                            <li>
+                                Simple utility to calculate the amount of water
+                                to add to (barrel strength) whiskey to dilute it
+                                to a desired proof. Technically works with any
+                                spirit and any proof...
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/teatimer">Tea Timer</a>
+                        <ul>
+                            <li>
+                                Straightfoward tea steeping timer with preset
+                                steep times and a subtle alarm sound.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/clock">Wall Clock</a>
+                        <ul>
+                            <li>
+                                Themeable analog clock to display on screen.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/unixtime">Unix Timestamp Converter</a>
+                        <ul>
+                            <li>
+                                Simple utility to convert from
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Unix_time"
+                                    >Unix time</a
+                                >
+                                to a human readable timestamp.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/jsonfmt">Json Formatter</a>
+                        <ul>
+                            <li>Simple utility to pretty-print JSON blobs.</li>
+                            <li>
+                                Usually I'd use something like
+                                <a href="https://stedolan.github.io/jq/">JQ</a>,
+                                but sometimes it's easier to just copy paste
+                                into a browser tab, and this way I know my data
+                                isn't being siphoned off.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/snake">Snake Game</a>
+                        <ul>
+                            <li>
+                                First foray into writing games with web
+                                technologies, by way of recreating the well
+                                known game
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Snake_(video_game_genre)"
+                                    >Snake</a
+                                >
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/birdwatcher">AI Bird Watcher</a>
+                        <ul>
+                            <li>
+                                Experiment with machine learning to
+                                <a href="https://xkcd.com/1425/"
+                                    >identify the birds I take pictures of</a
+                                >
+                                while quarantining during
+                                <a
+                                    href="https://en.wikipedia.org/wiki/COVID-19_pandemic"
+                                    >Covid-19</a
+                                >
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/smartcam">Smart Security Camera</a>
+                        <ul>
+                            <li>
+                                Proof of concept to enable easily turning old
+                                phones and computers with webcams into a mesh
+                                security camera network
+                            </li>
+                            <li>
+                                Uses machine learning to identify interesting
+                                objects (people, pets, etc), and auto-record
+                                when they enter the frame
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/sqsrd"
+                            >SQS Message Redriving Utility</a
+                        >
+                        <ul>
+                            <li>
+                                Command line utility to "redrive" SQS messages.
+                            </li>
+                            <li>
+                                Useful for high throughput services with
+                                <a
+                                    href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html"
+                                    >dead-letter queues</a
+                                >
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/sequences">Sequences Mirror</a>
+                        <ul>
+                            <li>
+                                Browser (and mobile) friendly version of the
+                                rationalist bible (aka
+                                <a href="https://www.lesswrong.com/rationality"
+                                    >The Sequences</a
+                                >) by Eliezer Yudkowsky.
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/sicp">SICP Mirror</a>
+                        <ul>
+                            <li>
+                                Browser (and mobile) friendly version of the
+                                legendary computer science text
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs"
+                                    >Structure and Interpretation of Computer
+                                    Programs</a
+                                >
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/spelling-bee">Spelling Bee Solver</a>
+                        <ul>
+                            <li>
+                                Solver for the addictive New York Times
+                                <a
+                                    href="https://www.nytimes.com/puzzles/spelling-bee"
+                                    >Spelling Bee</a
+                                >
+                                game
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/pomodoro">Pomodoro Timer</a>
+                        <ul>
+                            <li>
+                                Minimalist
+                                <a
+                                    href="https://en.wikipedia.org/wiki/Pomodoro_Technique"
+                                    >Pomodoro Timer</a
+                                >
+                                with a RESTful UI
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/passwords">Password Generator</a>
+                        <ul>
+                            <li>
+                                Simple, client-side password generator using
+                                cryptographically secure randomly generated
+                                characters
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="/hooggaa">Hooggaa POC</a>
+                        <ul>
+                            <li>
+                                Proof of concept onboarding flow for Hooggaa
+                                startup (now disabled)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/paste"
+                            >Paste</a
+                        >
+                        <ul>
+                            <li>A serverless, secure, personal pastebin.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/kron">Kron</a>
+                        <ul>
+                            <li>
+                                Implementation of cron, with modern features
+                                like retries and job dependancies (unfinished)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/banktorrent"
+                            >BankTorrent</a
+                        >
+                        <ul>
+                            <li>
+                                A third app to track shared expenses, this time
+                                CLI focused (2013)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/transactor"
+                            >Transactor</a
+                        >
+                        <ul>
+                            <li>
+                                Another webapp to track shared expenses, focused
+                                on couples (2013)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://github.com/jasonrdsouza/commoncents"
+                            >CommonCents</a
+                        >
+                        <ul>
+                            <li>
+                                Webapp to track shared expenses between friends
+                                (2012, predating the rise of SplitWise ;-)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/jasonrdsouza/foosball_monkey"
+                            >Foosball Monkey</a
+                        >
+                        <ul>
+                            <li>
+                                Webapp to track office Foosball rankings (2012)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a
+                            href="https://nodule-volume-estimation.jasondsouza.org/"
+                            >Computer vision lung nodule volume estimation
+                            project (2011)</a
+                        >
+                    </li>
+                    <li>
+                        <a href="https://www.jasondsouza.org/unscramble/"
+                            >Unscramble</a
+                        >
+                        <ul>
+                            <li>
+                                Small utility (with UI) to unscramble letters
+                                into valid words (ala Scrabble, Words with
+                                Friends, etc.)
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/jasonrdsouza/MongoBenchmarks"
+                            >Simple MongoDB Benchmarking Suite</a
+                        >
+                        <ul>
+                            <li>(unsupported as of 2011)</li>
+                        </ul>
+                    </li>
+                </ul>
 
-      <ul>
-        <li><a href="/gazette">Gazette - A Personal Newspaper</a>
-          <ul>
-            <li>A newspaper tailored to my personal interests, fed by RSS feeds and various other interesting sources of information.</li>
-            <li>My attempt at a calm <a href="https://tomcritchlow.com/2018/10/10/of-gardens-and-wikis/">digital stream</a> I can consume at my own pace.</li>
-          </ul>
-        </li>
-        <li><a href="https://recipes.dsouza.io">Family Recipes and Gastronomic Observations</a>
-          <ul>
-            <li>A recipe site styled the way I want all recipes to be presented... minimal cruft, with no ads, popups, popovers, or calls to action.</li>
-            <li>Legible on any screen size with the ingredients and steps shown up front, followed by personal notes and learnings where appropriate.</li>
-          </ul>
-        </li>
-        <li><a href="https://wiki.dsouza.io">Personal Wiki</a>
-          <ul><li>Based on <a href="https://tiddlywiki.com/">TiddlyWiki</a>, customized as a computer-aided <a href="https://en.wikipedia.org/wiki/Zettelkasten">Zettelkasten</a>. No longer served publicly.</li></ul>
-        </li>
-        <li><a href="https://cubby.dsouza.io">Cubby - A web-native object store</a>
-          <ul>
-            <li>An internet accessible object store to simplify persistence for experimental web projects.</li>
-            <li>Cubby aims for a high "practical usage" to "conceptual complexity" ratio, deferring to existing HTTP concepts and patterns wherever possible.</li>
-            <li>See more information in the <a href="https://github.com/jasonrdsouza/cubby">Github repo</a>.</li>
-          </ul>
-        </li>
-        <li><a href="/scribe">Article Scribe</a>
-          <ul>
-            <li>Article readability as a service, optimized for mobile reading.</li>
-            <li>My attempt at a more personalized <a href="https://getpocket.com">Pocket</a>.</li>
-            <li>Integrated with various other personal tooling and workflows.</li>
-          </ul>
-        </li>
-        <li><a href="https://pub.dev/packages/cork_site">Cork - Minimalist static site generator</a>
-          <ul>
-            <li>Attempt to write the simplest possible static site generator that satisfies my own personal use cases.</li>
-            <li>Native support for <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>, <a href="https://mustache.github.io/">Mustache</a>, and <a href="https://dart.dev/">Dartlang</a>.</li>
-            <li>Not meant as a general purpose solution like <a href="https://jekyllrb.com/">Jekyll</a> or <a href="https://gohugo.io/">Hugo</a>.</li>
-          </ul>
-        </li>
-        <li><a href="https://scratch.dsouza.io/">Scratchpad</a>
-          <ul>
-            <li>A browser based, web first, vim backed, AI assisted scratchpad for quick notes, brainstorming, and brain dumping.</li>
-            <li>Includes persistence of buffers, commands, settings and more in browser local storage.</li>
-            <li>Supports native javascript and python (via <a href="https://pyodide.org/en/stable/">pyodide</a>) code execution.</li>
-            <li>Contains various AI assisted functionality and easter eggs.</li>
-          </ul>
-        </li>
-        <li><a href="/maze">Momentum Maze</a>
-          <ul>
-            <li>A short, infinite puzzle game based off of <a href="https://en.wikipedia.org/wiki/Ricochet_Robots">Ricochet Robots</a>.</li>
-            <li>Built as a fun way to exercise my lateral thinking/ spatial reasoning skills.</li>
-            <li>Ideation and game mechanics explained by me, and then predominantly implemented by Gemini2.5 Pro.</li>
-          </ul>
-        </li>
-        <li><a href="/diagram">Diagramming Tool</a>
-          <ul>
-            <li>Self hosted diagramming tool using the wonderful <a href="https://mermaid-js.github.io/mermaid/#/">Mermaid</a> library</li>
-            <li>Creates various diagram types via a custom text DSL, allowing easy creation, diffing, updating, and maintenance of the result.</li>
-            <li>Useful diagram types:
-              <ul>
-                <li>Flowcharts</li>
-                <li>Sequence diagrams</li>
-                <li>Class diagrams</li>
-                <li>State diagrams</li>
-                <li>Entity relationships</li>
-                <li>Gantt charts</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="/sherlock">Sherlock Holmes LLM Stories</a>
-          <ul>
-            <li>Experiments with Large Language Models (LLMs) and text generation using Sir Arthur Conan Doyle's Sherlock Holmes corpus as a starting point.</li>
-          </ul>
-        </li>
-        <li><a href="/ocr">Browser-native OCR Tool</a>
-          <ul>
-            <li>Fully local, in-browser Optical Character Recognition utility to easily extract text from PDFs and images.</li>
-            <li>Inspired by <a href="https://simonwillison.net/2024/Mar/30/ocr-pdfs-images/">Simon Willison's OCR tool</a>.</li>
-          </ul>
-        </li>
-        <li><a href="/notebook">Literate Dev Notebook</a>
-          <ul>
-            <li>In-browser <a href="https://en.wikipedia.org/wiki/Literate_programming">literate programming</a> notebook (in the style of <a href="https://ipython.org/">iPython</a>) for shareable, editable, runnable code snippets.</li>
-            <li>This is a fork of <a href="https://starboard.gg/">Starboard</a> with native support for my personal stack and tooling.</li>
-          </ul>
-        </li>
-        <li><a href="/calendar">Yearly Calendar</a>
-          <ul>
-            <li>Minimalist yearly calendar view that displays all of the dates in a single view. Great for high level planning, and resizes automatically to print on any size paper (for best results use "landscape" mode).</li>
-          </ul>
-        </li>
-        <li><a href="/dilution">Whiskey Dilution Calculator</a>
-          <ul>
-            <li>Simple utility to calculate the amount of water to add to (barrel strength) whiskey to dilute it to a desired proof. Technically works with any spirit and any proof...</li>
-          </ul>
-        </li>
-        <li><a href="/teatimer">Tea Timer</a>
-          <ul>
-            <li>Straightfoward tea steeping timer with preset steep times and a subtle alarm sound.</li>
-          </ul>
-        </li>
-        <li><a href="/clock">Wall Clock</a>
-          <ul>
-            <li>Themeable analog clock to display on screen.</li>
-          </ul>
-        </li>
-        <li><a href="/unixtime">Unix Timestamp Converter</a>
-          <ul>
-            <li>Simple utility to convert from <a href="https://en.wikipedia.org/wiki/Unix_time">Unix time</a> to a human readable timestamp.</li>
-          </ul>
-        </li>
-        <li><a href="/jsonfmt">Json Formatter</a>
-          <ul>
-            <li>Simple utility to pretty-print JSON blobs.</li>
-            <li>Usually I'd use something like <a href="https://stedolan.github.io/jq/">JQ</a>, but sometimes it's easier to just copy paste into a browser tab, and this way I know my data isn't being siphoned off.</li>
-          </ul>
-        </li>
-        <li><a href="/snake">Snake Game</a>
-          <ul><li>First foray into writing games with web technologies, by way of recreating the well known game <a href="https://en.wikipedia.org/wiki/Snake_(video_game_genre)">Snake</a></li></ul>
-        </li>
-        <li><a href="/birdwatcher">AI Bird Watcher</a>
-          <ul><li>Experiment with machine learning to <a href="https://xkcd.com/1425/">identify the birds I take pictures of</a> while quarantining during <a href="https://en.wikipedia.org/wiki/COVID-19_pandemic">Covid-19</a></li></ul>
-        </li>
-        <li><a href="/smartcam">Smart Security Camera</a>
-          <ul>
-            <li>Proof of concept to enable easily turning old phones and computers with webcams into a mesh security camera network</li>
-            <li>Uses machine learning to identify interesting objects (people, pets, etc), and auto-record when they enter the frame</li>
-          </ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/sqsrd">SQS Message Redriving Utility</a>
-          <ul>
-            <li>Command line utility to "redrive" SQS messages.</li>
-            <li>Useful for high throughput services with <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">dead-letter queues</a></li>
-          </ul>
-        </li>
-        <li><a href="/sequences">Sequences Mirror</a>
-          <ul><li>Browser (and mobile) friendly version of the rationalist bible (aka <a href="https://www.lesswrong.com/rationality">The Sequences</a>) by Eliezer Yudkowsky.</li></ul>
-        </li>
-        <li><a href="/sicp">SICP Mirror</a>
-          <ul><li>Browser (and mobile) friendly version of the legendary computer science text <a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">Structure and Interpretation of Computer Programs</a></li></ul>
-        </li>
-        <li><a href="/spelling-bee">Spelling Bee Solver</a>
-          <ul><li>Solver for the addictive New York Times <a href="https://www.nytimes.com/puzzles/spelling-bee">Spelling Bee</a> game</li></ul>
-        </li>
-        <li><a href="/pomodoro">Pomodoro Timer</a>
-          <ul><li>Minimalist <a href="https://en.wikipedia.org/wiki/Pomodoro_Technique">Pomodoro Timer</a> with a RESTful UI</li></ul>
-        </li>
-        <li><a href="/passwords">Password Generator</a>
-          <ul>
-            <li>Simple, client-side password generator using cryptographically secure randomly generated characters</li>
-          </ul>
-        </li>
-        <li><a href="/hooggaa">Hooggaa POC</a>
-          <ul><li>Proof of concept onboarding flow for Hooggaa startup (now disabled)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/paste">Paste</a>
-          <ul><li>A serverless, secure, personal pastebin.</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/kron">Kron</a>
-          <ul><li>Implementation of cron, with modern features like retries and job dependancies (unfinished)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/banktorrent">BankTorrent</a>
-          <ul><li>A third app to track shared expenses, this time CLI focused (2013)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/transactor">Transactor</a>
-          <ul><li>Another webapp to track shared expenses, focused on couples (2013)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/commoncents">CommonCents</a>
-          <ul><li>Webapp to track shared expenses between friends (2012, predating the rise of SplitWise ;-)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/foosball_monkey">Foosball Monkey</a>
-          <ul><li>Webapp to track office Foosball rankings (2012)</li></ul>
-        </li>
-        <li><a href="https://nodule-volume-estimation.jasondsouza.org/">Computer vision lung nodule volume estimation project (2011)</a></li>
-        <li><a href="https://www.jasondsouza.org/unscramble/">Unscramble</a>
-          <ul><li>Small utility (with UI) to unscramble letters into valid words (ala Scrabble, Words with Friends, etc.)</li></ul>
-        </li>
-        <li><a href="https://github.com/jasonrdsouza/MongoBenchmarks">Simple MongoDB Benchmarking Suite</a>
-          <ul><li>(unsupported as of 2011)</li></ul>
-        </li>
-      </ul>
-
-      <hr>
-      <footer class="text-center">Made by <a href="https://www.jasondsouza.org">Jason Dsouza</a></footer>
-    </div>
-    </div>
-
-  </body>
+                <hr />
+                <footer class="text-center">
+                    Made by
+                    <a href="https://www.jasondsouza.org">Jason Dsouza</a>
+                </footer>
+            </div>
+        </div>
+    </body>
 </html>
