@@ -105,6 +105,10 @@ handlers:
     static_files: dart/build/picasso.html
     upload: dart/build/picasso.html
     secure: always
+  - url: /truchet
+    static_files: dart/build/truchet.html
+    upload: dart/build/truchet.html
+    secure: always
   - url: /notebook
     static_files: dart/build/notebook.html
     upload: dart/build/notebook.html
