@@ -1,9 +1,44 @@
 // State
 const state = {
-  seed: Date.now(),
+  seed: 0,
+  seedPhrase: "",
   colors: { bg: "#ffffff", fg: "#000000" },
   rng: null,
 };
+
+/**
+ * String to Integer Hash Function (cyrb53)
+ * Provides a good distribution for converting seed phrases to integers.
+ */
+function cyrb53(str, seed = 0) {
+  let h1 = 0xdeadbeef ^ seed,
+    h2 = 0x41c6ce57 ^ seed;
+  for (let i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 =
+    Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^
+    Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 =
+    Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^
+    Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return 4294967296 * (2097151 & h2) + (h1 >>> 0);
+}
+
+/**
+ * Generates a random alphanumeric string.
+ */
+function generateRandomString(length = 10) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
 
 // Configuration
 // Parameters derived from Alex Chan's blog post source:
@@ -340,13 +375,28 @@ function generateTileSVG(tilePositions, seed) {
 
 const svgElement = document.getElementById("pattern-svg");
 
-function render(newSeed = false) {
-  if (newSeed) {
-    state.seed = Math.floor(Math.random() * 2147483647);
+function render(regenerate = false) {
+  if (regenerate) {
+    state.seedPhrase = generateRandomString();
+    state.seed = cyrb53(state.seedPhrase);
     initRNG(state.seed);
   } else {
+    // Ensure numeric seed is derived from phrase if not set (sanity check)
+    if (!state.seed && state.seedPhrase) {
+      state.seed = cyrb53(state.seedPhrase);
+    }
     // Reset RNG to same state
     initRNG(state.seed);
+  }
+
+  // Update URL with seed state
+  try {
+    const url = new URL(window.location);
+    url.searchParams.set("seed", state.seedPhrase);
+    window.history.replaceState({}, "", url);
+  } catch (e) {
+    // Ignore errors in file:// protocol or other restricted environments
+    console.warn("Could not update URL history:", e);
   }
 
   // Update Body BG
@@ -398,11 +448,20 @@ document.getElementById("download-btn").addEventListener("click", () => {
 
   const downloadLink = document.createElement("a");
   downloadLink.href = url;
-  downloadLink.download = `truchet-pattern-${state.seed}.svg`;
+  downloadLink.download = `dsouza-truchet-${state.seedPhrase}.svg`;
   document.body.appendChild(downloadLink);
   downloadLink.click();
   document.body.removeChild(downloadLink);
 });
 
 // Init
-render(true);
+const params = new URLSearchParams(window.location.search);
+const seedParam = params.get("seed");
+
+if (seedParam) {
+  state.seedPhrase = seedParam;
+  state.seed = cyrb53(state.seedPhrase);
+  render(false);
+} else {
+  render(true);
+}
