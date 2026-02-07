@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>bqn-calc</title>
+        <link rel="stylesheet" href="css/calc.css" />
+        <link rel="icon" type="image/png" href="assets/calculator.png" />
+    </head>
+    <body>
+        <div id="app">
+            <header>
+                <h1>BQN Calculator</h1>
+                <div id="controls">
+                    <button id="settings-btn" title="Settings">⚙️</button>
+                    <button id="clear-btn" title="Clear History">Clear</button>
+                </div>
+            </header>
+
+            <div id="history">
+                <!-- History items will be appended here -->
+            </div>
+
+            <div id="input-area">
+                <div id="keypad">
+                    <!-- Keypad buttons will be generated here -->
+                </div>
+                <div id="input-container">
+                    <input
+                        type="text"
+                        id="code-input"
+                        placeholder="Type BQN code (e.g., \!)"
+                        autocomplete="off"
+                        spellcheck="false"
+                    />
+                    <button id="run-btn">Run</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load BQN.js -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>Settings</h2>
+                <div class="form-group">
+                    <label for="api-key">Gemini API Key:</label>
+                    <input
+                        type="password"
+                        id="api-key"
+                        placeholder="Enter your API Key"
+                    />
+                </div>
+                <div class="modal-actions">
+                    <button id="save-settings-btn">Save</button>
+                    <button id="close-settings-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="javascript/bqn.js"></script>
+        <script src="javascript/marked.min.js"></script>
+        <script src="scripts/calc.js"></script>
+    </body>
+</html>
