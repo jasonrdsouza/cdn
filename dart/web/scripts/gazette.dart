@@ -8,6 +8,8 @@ import 'dart:async';
 const LOCAL_EDITION_URL_KEY = "le";
 const EXTERNAL_EDITION_URL_KEY = "edition";
 const FULL_TEXT_URL_KEY = "fulltext";
+const VIEW_URL_KEY = "view";
+const SOURCES_VIEW = "sources";
 var bylineStyler = BylineStyler();
 
 // Dark mode management
@@ -132,7 +134,11 @@ void main() async {
   DivElement articlesElement = querySelector('#articles') as DivElement;
   bool fullText = Uri.base.queryParameters.containsKey(FULL_TEXT_URL_KEY);
 
-  if (Uri.base.queryParameters.containsKey(LOCAL_EDITION_URL_KEY)) {
+  if (Uri.base.queryParameters[VIEW_URL_KEY] == SOURCES_VIEW) {
+    print("Loading the masthead of contributors");
+    var source = Uri.https('raw.githubusercontent.com', '/jasonrdsouza/gazette/refs/heads/main/gazette/sources.json');
+    loadSources(source, subheadElement, articlesElement);
+  } else if (Uri.base.queryParameters.containsKey(LOCAL_EDITION_URL_KEY)) {
     var notebookName = Uri.base.queryParameters[LOCAL_EDITION_URL_KEY]!;
     var source = Uri.http('localhost:8080', 'gazettes/${notebookName}.json');
     loadGazette(source, subheadElement, articlesElement, fullText);
@@ -301,5 +307,84 @@ Future loadGazette(Uri source, DivElement subheadElement, DivElement articlesEle
     print('Gazette successfully loaded from ${source}');
   } else {
     print("Couldn't load gazette from ${source}");
+  }
+}
+
+class Source {
+  Source({required this.name, required this.url});
+
+  final String name;
+  final Uri url;
+
+  factory Source.fromJson(Map<String, dynamic> data) {
+    return Source(
+      name: data['name'] as String,
+      url: Uri.parse(data['url'] as String),
+    );
+  }
+}
+
+// Render a single contributor as a byline, reusing the article byline styling
+// so the masthead reads like a wall of newspaper bylines.
+DivElement constructSourceElement(Source source) {
+  DivElement columnDiv = new DivElement();
+  columnDiv.classes.add("collumn");
+
+  DivElement headDiv = new DivElement();
+  headDiv.classes.add("head");
+  columnDiv.append(headDiv);
+
+  AnchorElement bylineLink = new AnchorElement();
+  bylineLink.href = source.url.toString();
+  bylineLink.style.color = 'inherit';
+  bylineLink.style.textDecoration = 'none';
+
+  SpanElement nameSpan = new SpanElement();
+  nameSpan.classes.add("headline");
+  nameSpan.classes.add(bylineStyler.chooseStyle(source.name));
+  nameSpan.text = source.name;
+  bylineLink.append(nameSpan);
+
+  headDiv.append(bylineLink);
+
+  // Show the raw feed URL as visible text so it can be ctrl-f'd to check
+  // whether a feed already exists before adding a new one.
+  ParagraphElement feedUrl = new ParagraphElement();
+  feedUrl.text = source.url.toString();
+  feedUrl.style.textAlign = 'center';
+  feedUrl.style.fontSize = '11px';
+  feedUrl.style.fontStyle = 'italic';
+  feedUrl.style.color = 'var(--grey-color)';
+  feedUrl.style.wordBreak = 'break-all';
+  columnDiv.append(feedUrl);
+
+  return columnDiv;
+}
+
+Future loadSources(Uri source, DivElement subheadElement, DivElement articlesElement) async {
+  var response = await http.get(source);
+  if (response.statusCode == 200) {
+    var data = jsonDecode(response.body) as List<dynamic>;
+    var sources = data.map((dynamicSource) => Source.fromJson(dynamicSource)).toList();
+    sources.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+    subheadElement.children.clear();
+    SpanElement titleSpan = new SpanElement();
+    titleSpan.text = "Masthead";
+    subheadElement.append(titleSpan);
+
+    SpanElement countSpan = new SpanElement();
+    countSpan.classes.add("articlecount");
+    countSpan.text = "${sources.length} contributors";
+    subheadElement.append(countSpan);
+
+    articlesElement.children.clear();
+    for (var s in sources) {
+      articlesElement.append(constructSourceElement(s));
+    }
+
+    print('Masthead successfully loaded from ${source}');
+  } else {
+    print("Couldn't load sources from ${source}");
   }
 }
