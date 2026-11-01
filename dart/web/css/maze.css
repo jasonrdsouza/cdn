@@ -18,11 +18,40 @@ body {
     touch-action: none; /* Prevent default touch behaviors like scrolling on canvas */
 }
 
+.titleBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
 h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2.2rem, 11vw, 3.5rem);
     text-align: center;
     margin: 1rem 0;
     letter-spacing: 2px;
+}
+
+#helpButton {
+    width: 2.2rem;
+    height: 2.2rem;
+    padding: 0;
+    border: 2px solid #333;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+#helpButton svg {
+    width: 80%;
+    height: 80%;
+}
+#helpButton:hover {
+    background-color: #333;
+    color: #fff;
 }
 
 button {
@@ -45,6 +74,7 @@ button {
     height: 95vh; /* Take up most of viewport height */
     max-height: 900px; /* Max height */
     box-sizing: border-box;
+    position: relative; /* Anchor for the overlay */
 }
 
 canvas {
@@ -83,25 +113,23 @@ canvas {
     opacity: 0.7;
 }
 
-#resetButton {
+#undoButton {
     background-color: #FBC02D; /* Yellow */
 }
-#resetButton:hover {
+#undoButton:hover {
     background-color: #F9A825; /* Darker Yellow */
 }
 
-#cheatButton { 
+#solveButton {
     background-color: #D32F2F; /* Red */
 }
-#cheatButton:hover {
+#solveButton:hover {
     background-color: #C62828; /* Darker Red */
 }
 
-#shareButton { 
-    background-color: #007bff; /* Blue */
-}
-#shareButton:hover {
-    background-color: #0069d9; /* Darker Blue */
+.controls button:disabled {
+    opacity: 0.4;
+    cursor: default;
 }
 
 
@@ -119,4 +147,164 @@ canvas {
     padding: clamp(5px, 0.8vmin, 10px);
     background-color: #e9e9e9;
     border-radius: 4px;
+}
+
+.infoPanel {
+    display: flex;
+    gap: 10px;
+}
+.infoPanel div {
+    flex: 1;
+}
+
+/* Between-puzzle and results screens */
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(240, 240, 240, 0.85);
+    border-radius: 10px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+.overlay[hidden] {
+    display: none;
+}
+
+.overlayContent {
+    max-height: 100%;
+    overflow-y: auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    padding: 24px 32px;
+    text-align: center;
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+}
+.overlayContent h2 {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: normal;
+}
+.overlayContent p {
+    margin: 8px 0;
+}
+.overlayContent .overlayBig {
+    font-size: 4rem;
+    line-height: 1;
+    margin: 12px 0;
+}
+.overlayContent .muted {
+    color: #888;
+}
+.overlayContent button {
+    margin: 12px 0 4px;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+.overlayContent button:hover {
+    opacity: 0.9;
+}
+#overlayShareButton {
+    background-color: #007bff !important;
+}
+
+.resultList {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+}
+.resultList li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* How-to-play screen */
+#helpOverlay {
+    position: fixed; /* Covers the whole page, above the puzzle/results overlay */
+    z-index: 2;
+    border-radius: 0;
+}
+
+.helpContent {
+    max-width: 420px;
+    padding: 16px 20px;
+    text-align: left;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: normal;
+    line-height: 1.3;
+}
+.helpContent h2,
+.helpContent h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-align: center;
+}
+.helpContent h2 {
+    margin-bottom: 4px;
+}
+.helpContent h3 {
+    margin: 8px 0 2px;
+    font-size: 1.4rem;
+}
+.helpContent ul {
+    margin: 6px 0;
+    padding-left: 1.2em;
+}
+.helpContent li {
+    margin: 3px 0;
+}
+.helpContent .muted {
+    text-align: center;
+}
+.helpContent button {
+    display: block;
+    margin: 10px auto 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+}
+
+.slideDemo {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 6px auto;
+}
+.slideDemoOrb {
+    animation: slideDemo 2.4s ease-in infinite;
+}
+@keyframes slideDemo {
+    0%, 20% { transform: translateX(0); }
+    45%, 85% { transform: translateX(160px); }
+    86%, 100% { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .slideDemoOrb {
+        animation: none;
+        transform: translateX(160px);
+    }
+}
+
+/* Show the control instructions that match the device */
+.touchOnly {
+    display: none;
+}
+@media (hover: none) {
+    .touchOnly { display: list-item; }
+    .mouseOnly { display: none; }
 }

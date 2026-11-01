@@ -14,18 +14,63 @@
         <link rel="icon" type="image/png" href="assets/maze.png" />
     </head>
     <body>
-        <h1>Momentum Maze</h1>
+        <header class="titleBar">
+            <h1>Momentum Maze</h1>
+            <button id="helpButton" aria-label="How to play" title="How to play">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <g transform="translate(0 0.2)">
+                        <path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.2v.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="18.2" r="1.4" fill="currentColor" />
+                    </g>
+                </svg>
+            </button>
+        </header>
         <div id="gameContainer">
             <canvas id="gameCanvas"></canvas>
             <div class="infoPanel">
-                <div id="scoreDisplay">Goals Completed: 0</div>
-                <div id="moveDisplay">Moves: 0 (Optimal: 0)</div>
+                <div id="puzzleDisplay">Puzzle 1 of 4</div>
+                <div id="moveDisplay">Moves: 0 · Par: 0</div>
             </div>
             <div class="controls">
-                <button id="newGameButton">New Game</button>
-                <button id="resetButton">Reset</button>
-                <button id="cheatButton">Cheat</button>
-                <button id="shareButton">Share Puzzle</button>
+                <button id="undoButton">Undo</button>
+                <button id="solveButton">Solve</button>
+            </div>
+            <div id="overlay" class="overlay" hidden>
+                <div id="overlayContent" class="overlayContent"></div>
+            </div>
+        </div>
+
+        <div id="helpOverlay" class="overlay" hidden>
+            <div class="overlayContent helpContent" role="dialog" aria-labelledby="helpTitle">
+                <h2 id="helpTitle">How to play</h2>
+                <p>Get the orb that matches the ✕ to stop on the ✕.</p>
+                <svg class="slideDemo" viewBox="0 0 200 40" aria-hidden="true">
+                    <g stroke="#e0e0e0" stroke-width="1">
+                        <line x1="40" y1="0" x2="40" y2="40" />
+                        <line x1="80" y1="0" x2="80" y2="40" />
+                        <line x1="120" y1="0" x2="120" y2="40" />
+                        <line x1="160" y1="0" x2="160" y2="40" />
+                    </g>
+                    <rect x="0.5" y="0.5" width="199" height="39" fill="none" stroke="#ccc" />
+                    <line x1="199" y1="2" x2="199" y2="38" stroke="#333" stroke-width="4" stroke-linecap="round" />
+                    <path d="M168 8 L192 32 M192 8 L168 32" stroke="#1976D2" stroke-width="3" stroke-linecap="round" />
+                    <circle class="slideDemoOrb" cx="20" cy="20" r="12" fill="#1976D2" stroke="#000" stroke-width="2" />
+                </svg>
+                <ul>
+                    <li><strong>Orbs slide until they hit something:</strong> a wall or another orb. They can't stop partway.</li>
+                    <li class="mouseOnly"><strong>To move:</strong> hover over an orb, then click the side you want it to go.</li>
+                    <li class="touchOnly"><strong>To move:</strong> touch an orb and drag your finger towards the side you want it to go.</li>
+                    <li><strong>Use the other orbs as blockers.</strong> Moving one into place can create the stop you need.</li>
+                </ul>
+                <h3>Scoring</h3>
+                <ul>
+                    <li>Four puzzles a day, each harder than the last. Everyone gets the same set.</li>
+                    <li>Each puzzle has a <strong>par</strong>: the fewest moves possible. Your score is your total moves over par. <strong>+0 is perfect.</strong></li>
+                    <li><strong>Undo is free</strong>, so experiment as much as you like.</li>
+                    <li><strong>Solve</strong> shows the answer, but that puzzle won't count toward your score.</li>
+                </ul>
+                <p class="muted">New puzzles every day at midnight.</p>
+                <button id="helpCloseButton">Play</button>
             </div>
         </div>
 

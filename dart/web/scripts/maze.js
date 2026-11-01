@@ -1,12 +1,39 @@
-// Grid constants
+// Momentum Maze — daily edition.
+//
+// Every day has a fixed set of puzzles, generated deterministically from the
+// player's local date, so everyone who plays on a given day sees the same set.
+// Puzzles get progressively harder (optimal solution length follows
+// DIFFICULTY_RAMP). The score is the total number of moves over par across
+// the set, golf-style. Undo is free; using "Solve" marks a puzzle as assisted.
+//
+// IMPORTANT: anything that affects puzzle generation (grid size, wall
+// probability, the ramp, the RNG, candidate ordering, ...) changes every
+// day's puzzles. If you change generation, bump GENERATOR_VERSION and avoid
+// deploying mid-day.
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
 const ROWS = 8;
 const COLS = 8;
-let CELL_SIZE; 
-let ORB_RADIUS; // Renamed from PUCK_RADIUS
+const NUM_CELLS = ROWS * COLS;
+const NUM_ORBS = 4;
+const WALL_PROBABILITY = 0.15;
+const DIFFICULTY_RAMP = [3, 4, 5, 6]; // optimal moves for each puzzle of the day
+// From this optimal length up, a puzzle must not be solvable by moving only
+// the goal orb in that many moves (forces using other orbs as blockers).
+const MIN_TARGET_FOR_BLOCKER_RULE = 4;
+const GENERATOR_VERSION = 1;
+const MAX_BOARD_ATTEMPTS = 500;
 
-const WALL_PROBABILITY = 0.15; // Used for random wall generation
+// Puzzle #1 is November 1st, 2026.
+const EPOCH_UTC_MS = Date.UTC(2026, 10, 1);
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
-// Orb colors (Renamed from PUCK_COLORS)
+const STORAGE_KEY = "momentumMaze.daily.v1";
+const HELP_SEEN_KEY = "momentumMaze.helpSeen";
+
 const COLORS = [
     "#D32F2F", // red
     "#1976D2", // blue
@@ -14,65 +41,321 @@ const COLORS = [
     "#388E3C", // green
 ];
 
-// Walls data - these will be populated by createWalls or deserializeGameState
-let verticalWalls = Array(COLS + 1).fill(null).map(() => Array(ROWS).fill(false));
-let horizontalWalls = Array(ROWS + 1).fill(null).map(() => Array(COLS).fill(false));
-const TOTAL_VERTICAL_WALL_BITS = (COLS + 1) * ROWS;
-const TOTAL_HORIZONTAL_WALL_BITS = (ROWS + 1) * COLS;
-const TOTAL_WALL_BITS = TOTAL_VERTICAL_WALL_BITS + TOTAL_HORIZONTAL_WALL_BITS;
+// Directions: index -> name / delta
+const DIRS = ["left", "right", "up", "down"];
+const DIR_DX = [-1, 1, 0, 0];
+const DIR_DY = [0, 0, -1, 1];
 
+// ---------------------------------------------------------------------------
+// Seeded randomness
+// ---------------------------------------------------------------------------
 
-// Orbs - populated by initGame or deserializeGameState (Renamed from pucks)
+function hashString(str) { // FNV-1a, 32-bit
+    let h = 2166136261;
+    for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+}
+
+function mulberry32(seed) {
+    let a = seed >>> 0;
+    return function () {
+        a = (a + 0x6D2B79F5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Dates
+// ---------------------------------------------------------------------------
+
+function localDateKey(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+}
+
+function puzzleNumberForDateKey(dateKey) {
+    const [y, m, d] = dateKey.split("-").map(Number);
+    return Math.round((Date.UTC(y, m - 1, d) - EPOCH_UTC_MS) / MS_PER_DAY) + 1;
+}
+
+// ---------------------------------------------------------------------------
+// Board model
+//
+// verticalWalls[x][y]: wall on the left edge of cell (x, y)  (x in 0..COLS)
+// horizontalWalls[y][x]: wall on the top edge of cell (x, y) (y in 0..ROWS)
+// Cells are indexed as y * COLS + x.
+// ---------------------------------------------------------------------------
+
+function generateWalls(rng) {
+    const verticalWalls = Array.from({ length: COLS + 1 }, () => Array(ROWS).fill(false));
+    const horizontalWalls = Array.from({ length: ROWS + 1 }, () => Array(COLS).fill(false));
+    for (let y = 0; y < ROWS; y++) { verticalWalls[0][y] = true; verticalWalls[COLS][y] = true; }
+    for (let x = 0; x < COLS; x++) { horizontalWalls[0][x] = true; horizontalWalls[ROWS][x] = true; }
+    for (let x = 1; x < COLS; x++) for (let y = 0; y < ROWS; y++) if (rng() < WALL_PROBABILITY) verticalWalls[x][y] = true;
+    for (let y = 1; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (rng() < WALL_PROBABILITY) horizontalWalls[y][x] = true;
+    return { verticalWalls, horizontalWalls };
+}
+
+// blocked[cell * 4 + dir] is true if a wall stops movement out of `cell` in `dir`.
+function buildBlockedTable(walls) {
+    const blocked = new Uint8Array(NUM_CELLS * 4);
+    for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+            const c = y * COLS + x;
+            blocked[c * 4 + 0] = walls.verticalWalls[x][y] ? 1 : 0;
+            blocked[c * 4 + 1] = walls.verticalWalls[x + 1][y] ? 1 : 0;
+            blocked[c * 4 + 2] = walls.horizontalWalls[y][x] ? 1 : 0;
+            blocked[c * 4 + 3] = walls.horizontalWalls[y + 1][x] ? 1 : 0;
+        }
+    }
+    return blocked;
+}
+
+// positions: array of NUM_ORBS cell indices. Returns the cell where orb `orbIndex`
+// stops when pushed in `dir` (equal to its current cell if it can't move).
+function slideCell(blocked, positions, orbIndex, dir) {
+    const delta = DIR_DX[dir] + DIR_DY[dir] * COLS;
+    let c = positions[orbIndex];
+    while (!blocked[c * 4 + dir]) {
+        const n = c + delta;
+        let occupied = false;
+        for (let j = 0; j < positions.length; j++) {
+            if (j !== orbIndex && positions[j] === n) { occupied = true; break; }
+        }
+        if (occupied) break;
+        c = n;
+    }
+    return c;
+}
+
+// State encoding: 6 bits per orb.
+function encodeState(positions) {
+    let s = 0;
+    for (let i = NUM_ORBS - 1; i >= 0; i--) s = s * 64 + positions[i];
+    return s;
+}
+function decodeState(s, out) {
+    for (let i = 0; i < NUM_ORBS; i++) { out[i] = s % 64; s = Math.floor(s / 64); }
+    return out;
+}
+
+// Breadth-first search over full board states up to maxDepth moves.
+// Returns, for every (orb, cell), the minimal number of moves needed for that
+// orb to stop on that cell (-1 if not reachable within maxDepth), along with
+// enough bookkeeping to reconstruct an optimal path.
+function exploreBoard(blocked, startPositions, maxDepth) {
+    const reachDepth = new Int8Array(NUM_ORBS * NUM_CELLS).fill(-1);
+    const reachState = new Float64Array(NUM_ORBS * NUM_CELLS);
+    const parent = new Map(); // state -> prevState * 16 + move  (move = orb * 4 + dir)
+    const start = encodeState(startPositions);
+    parent.set(start, -1);
+
+    let frontier = [start];
+    const pos = new Array(NUM_ORBS);
+    for (let depth = 0; depth <= maxDepth && frontier.length > 0; depth++) {
+        const next = [];
+        for (const s of frontier) {
+            decodeState(s, pos);
+            for (let i = 0; i < NUM_ORBS; i++) {
+                const k = i * NUM_CELLS + pos[i];
+                if (reachDepth[k] === -1) { reachDepth[k] = depth; reachState[k] = s; }
+            }
+            if (depth === maxDepth) continue;
+            for (let i = 0; i < NUM_ORBS; i++) {
+                const original = pos[i];
+                for (let dir = 0; dir < 4; dir++) {
+                    const end = slideCell(blocked, pos, i, dir);
+                    if (end === original) continue;
+                    pos[i] = end;
+                    const ns = encodeState(pos);
+                    pos[i] = original;
+                    if (!parent.has(ns)) {
+                        parent.set(ns, s * 16 + i * 4 + dir);
+                        next.push(ns);
+                    }
+                }
+            }
+        }
+        frontier = next;
+    }
+    return { reachDepth, reachState, parent };
+}
+
+function reconstructPath(parent, endState) {
+    const path = [];
+    let s = endState;
+    while (true) {
+        const p = parent.get(s);
+        if (p === -1 || p === undefined) break;
+        const move = p % 16;
+        path.push({ orbIndex: move >> 2, dir: DIRS[move & 3] });
+        s = Math.floor(p / 16);
+    }
+    return path.reverse();
+}
+
+// Minimal moves for orb `orbIndex` to reach `goalCell` moving only that orb.
+function singleOrbDistance(blocked, startPositions, orbIndex, goalCell) {
+    const pos = startPositions.slice();
+    const dist = new Int16Array(NUM_CELLS).fill(-1);
+    dist[pos[orbIndex]] = 0;
+    let queue = [pos[orbIndex]];
+    while (queue.length) {
+        const next = [];
+        for (const c of queue) {
+            if (c === goalCell) return dist[c];
+            pos[orbIndex] = c;
+            for (let dir = 0; dir < 4; dir++) {
+                const end = slideCell(blocked, pos, orbIndex, dir);
+                if (dist[end] === -1) { dist[end] = dist[c] + 1; next.push(end); }
+            }
+        }
+        queue = next;
+    }
+    return Infinity;
+}
+
+function generatePuzzle(rng, targetMoves) {
+    for (let attempt = 0; attempt < MAX_BOARD_ATTEMPTS; attempt++) {
+        const walls = generateWalls(rng);
+        const blocked = buildBlockedTable(walls);
+        const positions = [];
+        while (positions.length < NUM_ORBS) {
+            const c = Math.floor(rng() * NUM_CELLS);
+            if (!positions.includes(c)) positions.push(c);
+        }
+
+        const { reachDepth, reachState, parent } = exploreBoard(blocked, positions, targetMoves);
+        const candidates = [];
+        for (let i = 0; i < NUM_ORBS; i++) {
+            for (let c = 0; c < NUM_CELLS; c++) {
+                if (reachDepth[i * NUM_CELLS + c] !== targetMoves) continue;
+                if (positions.includes(c)) continue;
+                if (targetMoves >= MIN_TARGET_FOR_BLOCKER_RULE &&
+                    singleOrbDistance(blocked, positions, i, c) <= targetMoves) continue;
+                candidates.push({ orbIndex: i, cell: c });
+            }
+        }
+        if (candidates.length === 0) continue;
+
+        const pick = candidates[Math.floor(rng() * candidates.length)];
+        const solution = reconstructPath(parent, reachState[pick.orbIndex * NUM_CELLS + pick.cell]);
+        return {
+            walls,
+            orbs: positions.map(c => ({ cellX: c % COLS, cellY: Math.floor(c / COLS) })),
+            goal: { orbIndex: pick.orbIndex, cellX: pick.cell % COLS, cellY: Math.floor(pick.cell / COLS) },
+            par: targetMoves,
+            solution,
+        };
+    }
+    throw new Error("Could not generate a puzzle with " + targetMoves + " moves");
+}
+
+function generateDailySet(dateKey) {
+    const rng = mulberry32(hashString(`momentum-maze-v${GENERATOR_VERSION}-${dateKey}`));
+    return DIFFICULTY_RAMP.map(target => generatePuzzle(rng, target));
+}
+
+// ---------------------------------------------------------------------------
+// Scoring & sharing
+// ---------------------------------------------------------------------------
+
+function formatOverPar(n) { return "+" + n; }
+
+function summarizeResults(results) {
+    const solved = results.filter(r => !r.assisted);
+    const overPar = solved.reduce((sum, r) => sum + (r.moves - r.par), 0);
+    return { overPar, solvedCount: solved.length, total: results.length };
+}
+
+function resultEmoji(r) {
+    if (r.assisted) return "💡";
+    const over = r.moves - r.par;
+    if (over === 0) return "🟩";
+    if (over <= 2) return "🟨";
+    return "🟥";
+}
+
+function buildShareText(puzzleNumber, results, url) {
+    const { overPar, solvedCount, total } = summarizeResults(results);
+    let header = `Momentum Maze #${puzzleNumber}`;
+    if (solvedCount < total) header += ` ${solvedCount}/${total}`;
+    header += ` ${formatOverPar(overPar)}`;
+    const lines = [header, results.map(resultEmoji).join("")];
+    if (url) lines.push(url);
+    return lines.join("\n");
+}
+
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+        generateDailySet, generatePuzzle, exploreBoard, buildBlockedTable, slideCell,
+        singleOrbDistance, mulberry32, hashString, puzzleNumberForDateKey, localDateKey,
+        buildShareText, summarizeResults, DIRS, DIFFICULTY_RAMP, NUM_CELLS, COLS,
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Game state (browser)
+// ---------------------------------------------------------------------------
+
+let CELL_SIZE;
+let ORB_RADIUS;
+const MAX_CANVAS_WIDTH_CONFIG = 640;
+
+let todayKey, puzzleNumber, dailyPuzzles;
+let progress; // { date, results: [{moves, par, assisted}], history: [{o, d}], assisted }
+let currentPuzzleIndex = 0;
+
+let verticalWalls, horizontalWalls;
 let orbs = [];
-
-// Goal - populated by placeNewGoal or deserializeGameState
 let goal = { cellX: 0, cellY: 0, color: COLORS[0] };
-let goalActive = true;
-let goalReached = false;
+let goalActive = false;
 
-// Animation & Interaction states
-let selectedOrbIndex = -1; // Renamed from selectedPuckIndex
-let isAnyOrbMoving = false; // Renamed from isAnyPuckMoving
+let moveHistory = []; // [{ orbIndex, dir, fromX, fromY }]
+let selectedOrbIndex = -1;
+let isAnyOrbMoving = false;
 let solvingInProgress = false;
+let assistedThisPuzzle = false;
 let solutionMovesQueue = [];
+let inputLocked = false;
+let pendingCompletion = false;
 
-// Scoring & game logic
-let goalsCompleted = 0; 
-
-// Move counters
-let userMoves = 0; // Moves for the current goal
-let optimalMovesForCurrentGoal = 0;
-
-// Canvas & context
 let canvas, ctx;
-const MAX_CANVAS_WIDTH_CONFIG = 640; 
-
-// Touch tracking
 let lastTouchX = 0;
 let lastTouchY = 0;
 
-// UI Elements
-let scoreDisplayElem, moveDisplayElem; 
+let puzzleDisplayElem, moveDisplayElem;
 let gameContainerElem, controlsElem, infoPanelElem;
-let shareButtonElem, resetButtonElem; 
+let undoButtonElem, solveButtonElem;
+let overlayElem, overlayContentElem, helpOverlayElem;
+let countdownTimer = null;
 
-// Base64 characters for custom encoding/decoding
-const BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+if (typeof window !== "undefined") {
+    window.onload = onLoad;
+}
 
-
-window.onload = () => {
+function onLoad() {
     canvas = document.getElementById("gameCanvas");
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = true;
 
-    scoreDisplayElem = document.getElementById("scoreDisplay");
+    puzzleDisplayElem = document.getElementById("puzzleDisplay");
     moveDisplayElem = document.getElementById("moveDisplay");
-    shareButtonElem = document.getElementById("shareButton"); 
-    resetButtonElem = document.getElementById("resetButton");
-
-    gameContainerElem = document.getElementById('gameContainer');
-    controlsElem = document.querySelector('.controls');
-    infoPanelElem = document.querySelector('.infoPanel');
+    undoButtonElem = document.getElementById("undoButton");
+    solveButtonElem = document.getElementById("solveButton");
+    gameContainerElem = document.getElementById("gameContainer");
+    controlsElem = document.querySelector(".controls");
+    infoPanelElem = document.querySelector(".infoPanel");
+    overlayElem = document.getElementById("overlay");
+    overlayContentElem = document.getElementById("overlayContent");
+    helpOverlayElem = document.getElementById("helpOverlay");
 
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("click", onClick);
@@ -80,16 +363,245 @@ window.onload = () => {
     canvas.addEventListener("touchstart", onTouchStart, { passive: false });
     canvas.addEventListener("touchmove", onTouchMove, { passive: false });
     canvas.addEventListener("touchend", onTouchEnd, { passive: false });
-    document.getElementById("cheatButton").addEventListener("click", onCheatClick);
-    document.getElementById("newGameButton").addEventListener("click", onNewGameClick);
-    resetButtonElem.addEventListener("click", onResetClick);
-    shareButtonElem.addEventListener("click", onShareClick); 
-    window.addEventListener('resize', resizeCanvas);
+    undoButtonElem.addEventListener("click", undoMove);
+    solveButtonElem.addEventListener("click", onSolveClick);
+    document.getElementById("helpButton").addEventListener("click", showHelp);
+    document.getElementById("helpCloseButton").addEventListener("click", hideHelp);
+    helpOverlayElem.addEventListener("click", e => { if (e.target === helpOverlayElem) hideHelp(); });
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", resizeCanvas);
 
-    resizeCanvas(); 
-    initGame(); 
+    // Old "share puzzle" links carried the board in the hash; no longer used.
+    if (window.location.hash && history.replaceState) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+    }
+
+    todayKey = localDateKey(new Date());
+    puzzleNumber = puzzleNumberForDateKey(todayKey);
+    dailyPuzzles = generateDailySet(todayKey);
+    progress = loadProgress(todayKey);
+
+    resizeCanvas();
+    if (progress.results.length >= dailyPuzzles.length) {
+        loadPuzzle(dailyPuzzles.length - 1, []);
+        goalActive = false;
+        inputLocked = true;
+        showResults();
+    } else {
+        loadPuzzle(progress.results.length, progress.history || []);
+        // Using Solve sticks to the puzzle, even across a refresh.
+        assistedThisPuzzle = progress.assisted;
+        if (!hasSeenHelp()) showHelp();
+    }
     requestAnimationFrame(gameLoop);
-};
+}
+
+// --- Persistence ---
+
+function loadProgress(dateKey) {
+    try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const saved = JSON.parse(raw);
+            if (saved && saved.date === dateKey && Array.isArray(saved.results)) {
+                return {
+                    date: dateKey,
+                    results: saved.results,
+                    history: Array.isArray(saved.history) ? saved.history : [],
+                    assisted: saved.assisted === true,
+                };
+            }
+        }
+    } catch (e) {
+        console.warn("Could not load saved progress:", e);
+    }
+    return { date: dateKey, results: [], history: [], assisted: false };
+}
+
+function saveProgress() {
+    progress.history = moveHistory.map(m => ({ o: m.orbIndex, d: m.dir }));
+    progress.assisted = assistedThisPuzzle;
+    try {
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    } catch (e) {
+        console.warn("Could not save progress:", e);
+    }
+}
+
+// --- How-to-play screen ---
+
+function hasSeenHelp() {
+    try {
+        return window.localStorage.getItem(HELP_SEEN_KEY) === "1";
+    } catch (e) {
+        return false;
+    }
+}
+
+function showHelp() {
+    clearSelection();
+    helpOverlayElem.hidden = false;
+    document.getElementById("helpCloseButton").focus();
+}
+
+function hideHelp() {
+    helpOverlayElem.hidden = true;
+    try {
+        window.localStorage.setItem(HELP_SEEN_KEY, "1");
+    } catch (e) {
+        console.warn("Could not save help preference:", e);
+    }
+}
+
+function isHelpOpen() { return helpOverlayElem && !helpOverlayElem.hidden; }
+
+// --- Puzzle lifecycle ---
+
+function loadPuzzle(index, savedHistory) {
+    currentPuzzleIndex = index;
+    const puzzle = dailyPuzzles[index];
+    verticalWalls = puzzle.walls.verticalWalls;
+    horizontalWalls = puzzle.walls.horizontalWalls;
+    resetOrbsToStart();
+    goal = { cellX: puzzle.goal.cellX, cellY: puzzle.goal.cellY, color: COLORS[puzzle.goal.orbIndex] };
+    goalActive = true;
+    moveHistory = [];
+    selectedOrbIndex = -1;
+    solvingInProgress = false;
+    solutionMovesQueue = [];
+    assistedThisPuzzle = false;
+    inputLocked = false;
+    pendingCompletion = false;
+
+    // Replay saved (non-undone) moves instantly so a refresh resumes where you were.
+    for (const m of savedHistory) {
+        const orb = orbs[m.o];
+        if (!orb || !DIRS.includes(m.d)) break;
+        const r = findMoveDestination(m.o, m.d);
+        if (r.cellsToMove === 0) break;
+        moveHistory.push({ orbIndex: m.o, dir: m.d, fromX: orb.cellX, fromY: orb.cellY });
+        orb.cellX = r.endX; orb.cellY = r.endY;
+    }
+    updateDisplays();
+    drawGame();
+}
+
+function resetOrbsToStart() {
+    const puzzle = dailyPuzzles[currentPuzzleIndex];
+    orbs = puzzle.orbs.map((o, i) => ({ cellX: o.cellX, cellY: o.cellY, color: COLORS[i], selected: false, anim: null }));
+}
+
+function completePuzzle() {
+    goalActive = false;
+    inputLocked = true;
+    const puzzle = dailyPuzzles[currentPuzzleIndex];
+    const result = assistedThisPuzzle
+        ? { moves: puzzle.par, par: puzzle.par, assisted: true }
+        : { moves: moveHistory.length, par: puzzle.par, assisted: false };
+    progress.results.push(result);
+    moveHistory = [];
+    assistedThisPuzzle = false; // the next puzzle starts unassisted
+    saveProgress();
+    updateDisplays();
+    showPuzzleComplete(result);
+}
+
+function advanceToNextPuzzle() {
+    hideOverlay();
+    if (progress.results.length >= dailyPuzzles.length) {
+        showResults();
+    } else {
+        loadPuzzle(progress.results.length, []);
+    }
+}
+
+// --- Overlay screens ---
+
+function showOverlay(html) {
+    overlayContentElem.innerHTML = html;
+    overlayElem.hidden = false;
+}
+
+function hideOverlay() {
+    overlayElem.hidden = true;
+    overlayContentElem.innerHTML = "";
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+}
+
+function showPuzzleComplete(result) {
+    const isLast = progress.results.length >= dailyPuzzles.length;
+    let detail;
+    if (result.assisted) {
+        detail = `<p class="overlayBig">💡</p><p>Solved with help — this puzzle won't count toward your score.</p>`;
+    } else {
+        const over = result.moves - result.par;
+        detail = `<p class="overlayBig">${formatOverPar(over)}</p>` +
+            `<p>${result.moves} move${result.moves === 1 ? "" : "s"} · par ${result.par}</p>`;
+    }
+    showOverlay(
+        `<h2>Puzzle ${currentPuzzleIndex + 1} of ${dailyPuzzles.length}</h2>` +
+        detail +
+        `<button id="overlayNextButton">${isLast ? "See results" : "Next puzzle"}</button>`
+    );
+    document.getElementById("overlayNextButton").addEventListener("click", advanceToNextPuzzle);
+}
+
+function showResults() {
+    const results = progress.results;
+    const { overPar, solvedCount, total } = summarizeResults(results);
+    const rows = results.map((r, i) => {
+        const value = r.assisted ? "helped" : `${formatOverPar(r.moves - r.par)} <span class="muted">(${r.moves}/${r.par})</span>`;
+        return `<li><span>${resultEmoji(r)} Puzzle ${i + 1}</span><span>${value}</span></li>`;
+    }).join("");
+    showOverlay(
+        `<h2>Momentum Maze #${puzzleNumber}</h2>` +
+        `<p class="overlayBig">${formatOverPar(overPar)}</p>` +
+        (solvedCount < total ? `<p>${solvedCount} of ${total} solved without help</p>` : "") +
+        `<ul class="resultList">${rows}</ul>` +
+        `<button id="overlayShareButton">Share</button>` +
+        `<p class="muted">Next puzzles in <span id="countdown"></span></p>`
+    );
+    document.getElementById("overlayShareButton").addEventListener("click", onShareClick);
+    updateCountdown();
+    countdownTimer = setInterval(updateCountdown, 1000);
+}
+
+function updateCountdown() {
+    const el = document.getElementById("countdown");
+    if (!el) return;
+    const now = new Date();
+    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const remaining = midnight - now;
+    if (remaining <= 0 || localDateKey(now) !== todayKey) { window.location.reload(); return; }
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    el.textContent = `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
+function onShareClick() {
+    const url = window.location.origin + window.location.pathname;
+    const text = buildShareText(puzzleNumber, progress.results, url);
+    const button = document.getElementById("overlayShareButton");
+    const flash = (label) => {
+        if (!button) return;
+        button.textContent = label;
+        setTimeout(() => { button.textContent = "Share"; }, 1500);
+    };
+    const copy = () => navigator.clipboard.writeText(text)
+        .then(() => flash("Copied!"))
+        .catch(() => { window.prompt("Copy your result:", text); });
+
+    if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+        navigator.share({ text }).catch(err => { if (err && err.name !== "AbortError") copy(); });
+    } else if (navigator.clipboard) {
+        copy();
+    } else {
+        window.prompt("Copy your result:", text);
+    }
+}
+
+// --- Layout ---
 
 function resizeCanvas() {
     const controlsStyle = window.getComputedStyle(controlsElem);
@@ -97,397 +609,81 @@ function resizeCanvas() {
     const containerStyle = window.getComputedStyle(gameContainerElem);
     const controlsHeight = controlsElem.offsetHeight + parseFloat(controlsStyle.marginTop) + parseFloat(controlsStyle.marginBottom);
     const infoPanelHeight = infoPanelElem.offsetHeight + parseFloat(infoPanelStyle.marginTop) + parseFloat(infoPanelStyle.marginBottom);
-    const containerPaddingTop = parseFloat(containerStyle.paddingTop);
-    const containerPaddingBottom = parseFloat(containerStyle.paddingBottom);
-    const containerPaddingLeft = parseFloat(containerStyle.paddingLeft);
-    const containerPaddingRight = parseFloat(containerStyle.paddingRight);
-    let availableWidthForCanvas = gameContainerElem.clientWidth - containerPaddingLeft - containerPaddingRight;
-    let availableHeightForCanvas = gameContainerElem.clientHeight - containerPaddingTop - containerPaddingBottom - controlsHeight - infoPanelHeight;
-    availableWidthForCanvas = Math.max(0, availableWidthForCanvas);
-    availableHeightForCanvas = Math.max(0, availableHeightForCanvas);
-    let newCanvasSize = Math.min(availableWidthForCanvas, availableHeightForCanvas);
-    newCanvasSize = Math.min(newCanvasSize, MAX_CANVAS_WIDTH_CONFIG); 
-    newCanvasSize = Math.max(100, newCanvasSize); 
-    canvas.width = newCanvasSize;
-    canvas.height = newCanvasSize;
+    const paddingX = parseFloat(containerStyle.paddingLeft) + parseFloat(containerStyle.paddingRight);
+    const paddingY = parseFloat(containerStyle.paddingTop) + parseFloat(containerStyle.paddingBottom);
+    const availableWidth = Math.max(0, gameContainerElem.clientWidth - paddingX);
+    const availableHeight = Math.max(0, gameContainerElem.clientHeight - paddingY - controlsHeight - infoPanelHeight);
+    let size = Math.min(availableWidth, availableHeight, MAX_CANVAS_WIDTH_CONFIG);
+    size = Math.max(100, size);
+    canvas.width = size;
+    canvas.height = size;
     CELL_SIZE = canvas.width / COLS;
-    ORB_RADIUS = CELL_SIZE * 0.3; // Renamed
-    if (ctx && typeof drawGame === 'function' && orbs && orbs.length > 0) { // Changed pucks to orbs
-        drawGame();
-    }
+    ORB_RADIUS = CELL_SIZE * 0.3;
+    if (orbs.length > 0) drawGame();
 }
 
-function getCanvasCoordinatesFromMouseEvent(e) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    return { mx: (e.clientX - rect.left) * scaleX, my: (e.clientY - rect.top) * scaleY };
+function updateDisplays() {
+    puzzleDisplayElem.textContent = `Puzzle ${Math.min(currentPuzzleIndex + 1, dailyPuzzles.length)} of ${dailyPuzzles.length}`;
+    const par = dailyPuzzles[currentPuzzleIndex].par;
+    moveDisplayElem.textContent = `Moves: ${moveHistory.length} · Par: ${par}`;
+    const busy = inputLocked || solvingInProgress;
+    undoButtonElem.disabled = busy || moveHistory.length === 0;
+    solveButtonElem.disabled = busy;
 }
 
-function getCanvasCoordinatesFromTouch(touch) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    return { mx: (touch.clientX - rect.left) * scaleX, my: (touch.clientY - rect.top) * scaleY };
-}
-
-// --- Serialization / Deserialization ---
-// Strategy:
-// The game state for a specific puzzle is serialized into a URL fragment (hash).
-// This allows sharing a link to a specific puzzle configuration.
-// The format is: [Base64WallString]_[GoalX]_[GoalY]_[GoalColorIndex]_[Orb0Coords][Orb1Coords][Orb2Coords][Orb3Coords]
-// Example:  `AbCdEfGhIjKlMnOpQrStUvWx_3_4_1_01234567`
-//
-// [Base64WallString]:
-//   - Vertical walls and horizontal walls are first converted into a single long binary string (0s and 1s).
-//   - This binary string represents TOTAL_WALL_BITS (currently (9*8) + (9*8) = 72 + 72 = 144 bits).
-//   - This long binary string is then encoded into Base64.
-//   - Each Base64 character represents 6 bits. So, 144 bits / 6 bits/char = 24 Base64 characters.
-//   - This is a significant reduction from 144 '0'/'1' characters.
-//
-// [GoalX]_[GoalY]_[GoalColorIndex]: Single digits representing goal's X, Y, and color index in COLORS array.
-//
-// [OrbCoords]: A sequence of 8 digits: O0X, O0Y, O1X, O1Y, O2X, O2Y, O3X, O3Y.
-//   - Orb colors are implicit by their order (Orb0 is COLORS[0], Orb1 is COLORS[1], etc.).
-//   - Each coordinate is a single digit.
-
-function wallsToBinaryString() {
-    let binaryString = "";
-    for (let x = 0; x <= COLS; x++) { // Vertical walls
-        for (let y = 0; y < ROWS; y++) {
-            binaryString += verticalWalls[x][y] ? "1" : "0";
-        }
-    }
-    for (let y = 0; y <= ROWS; y++) { // Horizontal walls
-        for (let x = 0; x < COLS; x++) {
-            binaryString += horizontalWalls[y][x] ? "1" : "0";
-        }
-    }
-    return binaryString;
-}
-
-function binaryStringToBase64(binaryStr) {
-    let base64 = "";
-    let paddedBinaryStr = binaryStr;
-    while (paddedBinaryStr.length % 6 !== 0) {
-        paddedBinaryStr += "0";
-    }
-    for (let i = 0; i < paddedBinaryStr.length; i += 6) {
-        const chunk = paddedBinaryStr.substring(i, i + 6);
-        const decimalValue = parseInt(chunk, 2);
-        base64 += BASE64_CHARS[decimalValue];
-    }
-    return base64;
-}
-
-function base64ToBinaryString(base64Str, expectedOriginalLength) {
-    let binaryString = "";
-    for (let i = 0; i < base64Str.length; i++) {
-        const char = base64Str[i];
-        const decimalValue = BASE64_CHARS.indexOf(char);
-        if (decimalValue === -1) {
-            console.error("Deserialize ERROR: Invalid Base64 character encountered:", char);
-            return null; 
-        }
-        binaryString += decimalValue.toString(2).padStart(6, '0');
-    }
-    const result = binaryString.substring(0, expectedOriginalLength);
-    return result;
-}
-
-function binaryStringToWalls(fullBinaryWallStr) {
-    if (!fullBinaryWallStr || fullBinaryWallStr.length !== TOTAL_WALL_BITS) {
-        return false;
-    }
-    let currentBit = 0;
-    for (let x = 0; x <= COLS; x++) {
-        for (let y = 0; y < ROWS; y++) {
-            verticalWalls[x][y] = fullBinaryWallStr[currentBit++] === "1";
-        }
-    }
-    for (let y = 0; y <= ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-            horizontalWalls[y][x] = fullBinaryWallStr[currentBit++] === "1";
-        }
-    }
-    return true;
-}
-
-
-function serializeGameState() {
-    const wallBinaryString = wallsToBinaryString();
-    const base64WallString = binaryStringToBase64(wallBinaryString);
-
-    const goalColorIndex = COLORS.indexOf(goal.color);
-    if (goalColorIndex === -1) { 
-        console.error("Serialize ERROR: Goal color not found in COLORS array."); return ""; 
-    }
-    
-    let orbsDataString = ""; // Renamed from pucksDataString
-    for (let i = 0; i < COLORS.length; i++) {
-        const orb = orbs.find(o => o.color === COLORS[i]); // Changed p to o for orb
-        if (orb) {
-            orbsDataString += `${orb.cellX}${orb.cellY}`;
-        } else {
-            console.error(`Serialize ERROR: Orb for color ${COLORS[i]} not found. Using 00.`);
-            orbsDataString += "00"; 
-        }
-    }
-    const finalString = `${base64WallString}_${goal.cellX}_${goal.cellY}_${goalColorIndex}_${orbsDataString}`;
-    return finalString;
-}
-
-function deserializeGameState(stateString) {
-    try {
-        const parts = stateString.split('_');
-        if (parts.length !== 5) { 
-            console.error("Deserialize ERROR: Invalid parts count. Expected 5, got " + parts.length); 
-            return false; 
-        }
-
-        const base64WallString = parts[0];
-        const goalX = parseInt(parts[1]);
-        const goalY = parseInt(parts[2]);
-        const goalColorIndex = parseInt(parts[3]);
-        const orbsStr = parts[4]; // Renamed from pucksStr
-
-        if (base64WallString.length !== TOTAL_WALL_BITS / 6) {
-            console.error("Deserialize ERROR: Base64 wall string has incorrect length. Expected:", TOTAL_WALL_BITS / 6, "Got:", base64WallString.length);
-            return false;
-        }
-
-        const fullBinaryWallStr = base64ToBinaryString(base64WallString, TOTAL_WALL_BITS);
-        if (!fullBinaryWallStr) { 
-             console.error("Deserialize ERROR: base64ToBinaryString failed."); return false;
-        }
-        if (!binaryStringToWalls(fullBinaryWallStr)) {
-            console.error("Deserialize ERROR: binaryStringToWalls failed."); return false;
-        }
-        
-        if (orbsStr.length !== 4 * 2) { // Check length for orbs
-            console.error("Deserialize ERROR: Invalid orbs string length. Expected 8, Got:", orbsStr.length); return false;
-        }
-        if (isNaN(goalX) || isNaN(goalY) || isNaN(goalColorIndex) ||
-            goalX < 0 || goalX >= COLS || goalY < 0 || goalY >= ROWS ||
-            goalColorIndex < 0 || goalColorIndex >= COLORS.length) {
-            console.error("Deserialize ERROR: Invalid goal parameters after parsing."); return false;
-        }
-
-        goal.cellX = goalX;
-        goal.cellY = goalY;
-        goal.color = COLORS[goalColorIndex];
-        goalActive = true;
-        goalReached = false;
-
-        orbs = []; // Clear existing orbs
-        let currentOrbStrIndex = 0; // Renamed
-        for (let i = 0; i < 4; i++) { 
-            if (currentOrbStrIndex + 1 >= orbsStr.length) { 
-                console.error("Deserialize ERROR: Orbs string too short while parsing orb", i); return false; 
-            }
-            const oX = parseInt(orbsStr[currentOrbStrIndex++]); // Renamed pX to oX
-            const oY = parseInt(orbsStr[currentOrbStrIndex++]); // Renamed pY to oY
-            if (isNaN(oX) || isNaN(oY) || oX < 0 || oX >= COLS || oY < 0 || oY >= ROWS) {
-                console.error(`Deserialize ERROR: Invalid position for orb ${i} (X=${oX}, Y=${oY}).`); return false;
-            }
-            orbs.push({ // Changed pucks.push to orbs.push
-                cellX: oX, cellY: oY, color: COLORS[i], 
-                selected: false, anim: null
-            });
-        }
-        return true;
-    } catch (e) {
-        console.error("Deserialize CATCH ERROR:", e);
-        return false;
-    }
-}
-
-function updateURLFragmentWithCurrentState() {
-    const stateString = serializeGameState();
-    if (stateString) { 
-        if (history.replaceState) {
-            history.replaceState(null, null, '#' + stateString);
-        } else {
-            window.location.hash = stateString; 
-        }
-    } else {
-        console.warn("Failed to serialize game state, URL fragment not updated.");
-    }
-}
-
-
-function initGame() {
-    let loadedFromHash = false;
-    if (window.location.hash && window.location.hash.length > 1) {
-        if (deserializeGameState(window.location.hash.substring(1))) {
-            loadedFromHash = true;
-            goalsCompleted = 0; 
-            userMoves = 0;      
-            let goalOrbIndex = orbs.findIndex(o => o.color === goal.color); // Renamed
-            if (goalOrbIndex !== -1) {
-                optimalMovesForCurrentGoal = computeMinimalMovesForStateGoal(getCurrentState(), goalOrbIndex, goal.cellX, goal.cellY);
-            } else {
-                optimalMovesForCurrentGoal = Math.max(ROWS, COLS); 
-                console.error("Could not find goal orb in loaded state to calculate optimal moves.");
-            }
-        } else {
-            console.warn("Invalid URL hash, could not deserialize. Generating random puzzle.");
-            if (history.replaceState) history.replaceState(null, null, window.location.pathname + window.location.search);
-            else window.location.hash = ""; 
-        }
-    }
-
-    if (!loadedFromHash) {
-        createWalls(); 
-        orbs = []; // Renamed
-        let usedCells = new Set();
-        for (let i = 0; i < 4; i++) {
-            let { x, y } = getRandomEmptyCell(usedCells);
-            orbs.push({ cellX: x, cellY: y, color: COLORS[i], selected: false, anim: null }); // Renamed
-            usedCells.add(x + "," + y);
-        }
-        goalsCompleted = 0; 
-        placeNewGoal(); 
-    }
-    
-    selectedOrbIndex = -1; // Renamed
-    solvingInProgress = false; 
-    solutionMovesQueue = [];
-    
-    updateScoreDisplay();
-    updateMoveDisplay(); 
-    
-    resizeCanvas(); 
-    drawGame(); 
-}
-
-function createWalls() {
-    verticalWalls = Array(COLS + 1).fill(null).map(() => Array(ROWS).fill(false));
-    horizontalWalls = Array(ROWS + 1).fill(null).map(() => Array(COLS).fill(false));
-    for (let y = 0; y < ROWS; y++) { verticalWalls[0][y] = true; verticalWalls[COLS][y] = true; }
-    for (let x = 0; x < COLS; x++) { horizontalWalls[0][x] = true; horizontalWalls[ROWS][x] = true; }
-    for (let x = 1; x < COLS; x++) for (let y = 0; y < ROWS; y++) if (Math.random() < WALL_PROBABILITY) verticalWalls[x][y] = true;
-    for (let y = 1; y < ROWS; y++) for (let x = 0; x < COLS; x++) if (Math.random() < WALL_PROBABILITY) horizontalWalls[y][x] = true;
-}
-
-function getRandomEmptyCell(usedCells) {
-    let x, y;
-    do {
-        x = Math.floor(Math.random() * COLS);
-        y = Math.floor(Math.random() * ROWS);
-    } while (usedCells.has(x + "," + y));
-    return { x, y };
-}
-
-function placeNewGoal() {
-    goalActive = true; goalReached = false;
-    userMoves = 0; 
-
-    let candidates = [];
-    for (let c of COLORS) {
-        for (let x = 0; x < COLS; x++) {
-            for (let y = 0; y < ROWS; y++) {
-                if (!orbs.some(o => o.cellX === x && o.cellY === y)) { // Renamed
-                    candidates.push({ color: c, x, y });
-                }
-            }
-        }
-    }
-    shuffleArray(candidates);
-    let startState = getCurrentState(); 
-    let foundSuitableGoal = false;
-
-    for (let cand of candidates) {
-        let orbIndex = orbs.findIndex(o => o.color === cand.color); // Renamed
-        if (orbIndex < 0) continue; 
-        let path = boundedIdaStar(startState, orbIndex, cand.x, cand.y, 6);
-        if (path && (path.length === 5 || path.length === 6) && !hasTripleConsecutiveSameOrb(path)) { // Renamed
-            goal.cellX = cand.x; goal.cellY = cand.y; goal.color = cand.color;
-            optimalMovesForCurrentGoal = computeMinimalMovesForStateGoal(startState, orbIndex, cand.x, cand.y);
-            foundSuitableGoal = true; break;
-        }
-    }
-
-    if (!foundSuitableGoal) { 
-        if (candidates.length > 0) {
-            let cand = candidates[0]; 
-            goal.cellX = cand.x; goal.cellY = cand.y; goal.color = cand.color;
-            let gIdx = orbs.findIndex(o => o.color === goal.color); // Renamed
-            optimalMovesForCurrentGoal = (gIdx !== -1) ? computeMinimalMovesForStateGoal(startState, gIdx, goal.cellX, goal.cellY) : Math.max(ROWS,COLS);
-        } else { 
-            let { x, y } = getRandomEmptyCell(new Set(orbs.map(o => `${o.cellX},${o.cellY}`))); // Renamed
-            goal.cellX = x; goal.cellY = y; goal.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-            let gIdx = orbs.findIndex(o => o.color === goal.color); // Renamed
-            optimalMovesForCurrentGoal = (gIdx !== -1) ? computeMinimalMovesForStateGoal(startState, gIdx, goal.cellX, goal.cellY) : Math.max(ROWS,COLS);
-        }
-    }
-    updateMoveDisplay(); 
-    updateURLFragmentWithCurrentState(); 
-}
-
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-}
-
-function hasTripleConsecutiveSameOrb(path) { // Renamed
-    if (!path || path.length < 3) return false;
-    for (let i = 0; i < path.length - 2; i++) {
-        if (path[i].orbIndex === path[i+1].orbIndex && path[i].orbIndex === path[i+2].orbIndex) return true; // Renamed
-    }
-    return false;
-}
+// --- Main loop ---
 
 function gameLoop(timestamp) {
     updateAnimation(timestamp);
     drawGame();
-    if (solvingInProgress && !isAnyOrbMoving) { // Renamed
+    if (solvingInProgress && !isAnyOrbMoving && !pendingCompletion) {
         if (solutionMovesQueue.length > 0) {
-            let move = solutionMovesQueue.shift();
-            moveOrb(move.orbIndex, move.dir, true); // Renamed
-        } else { solvingInProgress = false; }
+            const move = solutionMovesQueue.shift();
+            moveOrb(move.orbIndex, move.dir);
+        } else {
+            solvingInProgress = false;
+            updateDisplays();
+        }
     }
-    if (goalReached) {
-        goalReached = false; 
-        goalsCompleted++; 
-        updateScoreDisplay();
-        goalActive = false;
-        requestAnimationFrame(() => { placeNewGoal(); }); 
+    if (pendingCompletion && !isAnyOrbMoving) {
+        pendingCompletion = false;
+        solvingInProgress = false;
+        solutionMovesQueue = [];
+        completePuzzle();
     }
-    requestAnimationFrame(gameLoop); 
+    requestAnimationFrame(gameLoop);
 }
 
-
 function updateAnimation(now) {
-    isAnyOrbMoving = false; // Renamed
-    orbs.forEach(orb => { // Renamed
-        if (orb.anim) {
-            let frac = (now - orb.anim.startTime) / orb.anim.duration;
-            if (frac >= 1) {
-                orb.cellX = orb.animEndCellX; orb.cellY = orb.animEndCellY; orb.anim = null;
-                checkGoal(orb); // Renamed
-            } else {
-                orb.animFraction = Math.max(0, frac); isAnyOrbMoving = true; // Renamed
-            }
+    isAnyOrbMoving = false;
+    orbs.forEach(orb => {
+        if (!orb.anim) return;
+        const frac = (now - orb.anim.startTime) / orb.anim.duration;
+        if (frac >= 1) {
+            orb.cellX = orb.animEndCellX; orb.cellY = orb.animEndCellY; orb.anim = null;
+            checkGoal(orb);
+        } else {
+            orb.animFraction = Math.max(0, frac);
+            isAnyOrbMoving = true;
         }
     });
 }
 
-function checkGoal(orb) { // Renamed
-    if (goalActive && orb.cellX === goal.cellX && orb.cellY === goal.cellY && orb.color === goal.color) { // Renamed
-        goalReached = true;
+function checkGoal(orb) {
+    if (goalActive && orb.cellX === goal.cellX && orb.cellY === goal.cellY && orb.color === goal.color) {
+        pendingCompletion = true;
     }
 }
 
+// --- Drawing ---
+
 function drawGame() {
-    if (!ctx) return;
+    if (!ctx || !verticalWalls) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGridLines();
     drawWalls();
-    if (goalActive) drawGoal(); 
-    drawOrbs(); // Renamed
+    if (goalActive) drawGoal();
+    drawOrbs();
 }
 
 function drawGridLines() {
@@ -505,337 +701,174 @@ function drawWalls() {
 }
 
 function drawGoal() {
-    let m = CELL_SIZE * 0.2, x1 = goal.cellX*CELL_SIZE, y1 = goal.cellY*CELL_SIZE, x2 = x1+CELL_SIZE, y2 = y1+CELL_SIZE;
+    const m = CELL_SIZE * 0.2, x1 = goal.cellX * CELL_SIZE, y1 = goal.cellY * CELL_SIZE, x2 = x1 + CELL_SIZE, y2 = y1 + CELL_SIZE;
     ctx.save(); ctx.strokeStyle = goal.color; ctx.lineWidth = Math.max(2, CELL_SIZE * 0.075); ctx.lineCap = "round";
-    ctx.beginPath(); ctx.moveTo(x1+m, y1+m); ctx.lineTo(x2-m, y2-m); ctx.moveTo(x2-m, y1+m); ctx.lineTo(x1+m, y2-m); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1 + m, y1 + m); ctx.lineTo(x2 - m, y2 - m); ctx.moveTo(x2 - m, y1 + m); ctx.lineTo(x1 + m, y2 - m); ctx.stroke();
     ctx.restore();
 }
 
-function drawOrbs() { orbs.forEach(drawOrb); } // Renamed
-function drawOrb(orb) { // Renamed
+function drawOrbs() { orbs.forEach(drawOrb); }
+function drawOrb(orb) {
     let cx, cy;
-    if (orb.anim) { // Renamed
-        let f = orb.animFraction, sx=orb.animStartCellX, sy=orb.animStartCellY, ex=orb.animEndCellX, ey=orb.animEndCellY; // Renamed
+    if (orb.anim) {
+        const f = orb.animFraction, sx = orb.animStartCellX, sy = orb.animStartCellY, ex = orb.animEndCellX, ey = orb.animEndCellY;
         cx = (sx + (ex - sx) * f + 0.5) * CELL_SIZE; cy = (sy + (ey - sy) * f + 0.5) * CELL_SIZE;
-    } else { cx = (orb.cellX + 0.5) * CELL_SIZE; cy = (orb.cellY + 0.5) * CELL_SIZE; } // Renamed
+    } else { cx = (orb.cellX + 0.5) * CELL_SIZE; cy = (orb.cellY + 0.5) * CELL_SIZE; }
     ctx.save();
-    ctx.lineWidth = orb.selected ? Math.max(3, ORB_RADIUS * 0.2) : Math.max(2, ORB_RADIUS * 0.1); // Renamed
-    ctx.strokeStyle = "#000"; ctx.fillStyle = orb.color; // Renamed
-    ctx.beginPath(); ctx.arc(cx, cy, ORB_RADIUS, 0, 2 * Math.PI); ctx.fill(); ctx.stroke(); // Renamed
+    ctx.lineWidth = orb.selected ? Math.max(3, ORB_RADIUS * 0.2) : Math.max(2, ORB_RADIUS * 0.1);
+    ctx.strokeStyle = "#000"; ctx.fillStyle = orb.color;
+    ctx.beginPath(); ctx.arc(cx, cy, ORB_RADIUS, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
     ctx.restore();
+}
+
+// --- Input ---
+
+function canInteract() { return !isAnyOrbMoving && !solvingInProgress && !inputLocked && !pendingCompletion && !isHelpOpen(); }
+
+function getCanvasCoordinates(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    return { mx: (clientX - rect.left) * (canvas.width / rect.width), my: (clientY - rect.top) * (canvas.height / rect.height) };
 }
 
 function onMouseMove(e) {
-    if (isAnyOrbMoving || solvingInProgress) return; // Renamed
-    const { mx, my } = getCanvasCoordinatesFromMouseEvent(e); 
+    if (!canInteract()) return;
+    const { mx, my } = getCanvasCoordinates(e.clientX, e.clientY);
     handleSelection(mx, my);
 }
 function onClick(e) {
-    if (isAnyOrbMoving || solvingInProgress || selectedOrbIndex < 0) return; // Renamed
-    const { mx, my } = getCanvasCoordinatesFromMouseEvent(e); 
+    if (!canInteract() || selectedOrbIndex < 0) return;
+    const { mx, my } = getCanvasCoordinates(e.clientX, e.clientY);
     handleClick(mx, my);
 }
-function onMouseLeave(e) {
-    if (selectedOrbIndex >= 0 && orbs[selectedOrbIndex]) { // Renamed
-        orbs[selectedOrbIndex].selected = false; // Renamed
-        selectedOrbIndex = -1; // Renamed
-        drawGame(); 
-    }
-}
+function onMouseLeave() { clearSelection(); }
 function onTouchStart(e) {
-    e.preventDefault(); 
-    if (isAnyOrbMoving || solvingInProgress) return; // Renamed
-    if (e.touches.length > 0) {
-        const { mx, my } = getCanvasCoordinatesFromTouch(e.touches[0]);
-        lastTouchX = mx; lastTouchY = my; 
-        handleSelection(mx, my); 
-    }
+    e.preventDefault();
+    if (!canInteract() || e.touches.length === 0) return;
+    const { mx, my } = getCanvasCoordinates(e.touches[0].clientX, e.touches[0].clientY);
+    lastTouchX = mx; lastTouchY = my;
+    handleSelection(mx, my);
 }
 function onTouchMove(e) {
-    e.preventDefault(); 
-    if (isAnyOrbMoving || solvingInProgress) return; // Renamed
-    if (e.touches.length > 0) {
-        const { mx, my } = getCanvasCoordinatesFromTouch(e.touches[0]);
-        lastTouchX = mx; lastTouchY = my; 
-    }
+    e.preventDefault();
+    if (!canInteract() || e.touches.length === 0) return;
+    const { mx, my } = getCanvasCoordinates(e.touches[0].clientX, e.touches[0].clientY);
+    lastTouchX = mx; lastTouchY = my;
 }
 function onTouchEnd(e) {
-    e.preventDefault(); 
-    if (isAnyOrbMoving || solvingInProgress || selectedOrbIndex < 0) return; // Renamed
-    handleClick(lastTouchX, lastTouchY); 
+    e.preventDefault();
+    if (!canInteract() || selectedOrbIndex < 0) return;
+    handleClick(lastTouchX, lastTouchY);
+}
+function onKeyDown(e) {
+    if (isHelpOpen()) {
+        if (e.key === "Escape") hideHelp();
+        return;
+    }
+    const isUndoKey = e.key === "Backspace" || e.key === "z" || e.key === "Z";
+    if (isUndoKey && !e.altKey) {
+        e.preventDefault();
+        undoMove();
+    }
+}
+
+function clearSelection() {
+    if (selectedOrbIndex >= 0 && orbs[selectedOrbIndex]) orbs[selectedOrbIndex].selected = false;
+    selectedOrbIndex = -1;
 }
 
 function handleSelection(mx, my) {
-    if (isAnyOrbMoving || solvingInProgress) return; // Renamed
-    let orbUnderMouseIndex = -1; // Renamed
-    for (let i = 0; i < orbs.length; i++) { // Renamed
-        let o = orbs[i]; if (o.anim) continue;  // Renamed
-        let orbCenterX = (o.cellX + 0.5) * CELL_SIZE; // Renamed
-        let orbCenterY = (o.cellY + 0.5) * CELL_SIZE; // Renamed
-        let distanceSquared = (mx - orbCenterX) * (mx - orbCenterX) + (my - orbCenterY) * (my - orbCenterY); // Renamed
-        if (distanceSquared <= ORB_RADIUS * ORB_RADIUS) { orbUnderMouseIndex = i; break; } // Renamed
-    }
-    if (orbUnderMouseIndex !== -1) { // Renamed
-        if (selectedOrbIndex !== orbUnderMouseIndex) { // Renamed
-            if (selectedOrbIndex >= 0 && orbs[selectedOrbIndex]) { // Renamed
-                orbs[selectedOrbIndex].selected = false;  // Renamed
+    for (let i = 0; i < orbs.length; i++) {
+        const o = orbs[i];
+        if (o.anim) continue;
+        const dx = mx - (o.cellX + 0.5) * CELL_SIZE, dy = my - (o.cellY + 0.5) * CELL_SIZE;
+        if (dx * dx + dy * dy <= ORB_RADIUS * ORB_RADIUS) {
+            if (selectedOrbIndex !== i) {
+                clearSelection();
+                selectedOrbIndex = i;
+                o.selected = true;
             }
-            selectedOrbIndex = orbUnderMouseIndex; // Renamed
-            orbs[selectedOrbIndex].selected = true;     // Renamed
-            drawGame(); 
+            return;
         }
-    } 
+    }
 }
 
 function handleClick(mx, my) {
-    if (selectedOrbIndex < 0 || isAnyOrbMoving || solvingInProgress) return; // Renamed
-    const orb = orbs[selectedOrbIndex]; // Renamed
-    const ocx = (orb.cellX + 0.5)*CELL_SIZE, ocy = (orb.cellY + 0.5)*CELL_SIZE; // Renamed
-    const dx = mx - ocx, dy = my - ocy; // Renamed
-    if (dx*dx + dy*dy <= ORB_RADIUS*ORB_RADIUS) return;  // Renamed
-    let dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
-    moveOrb(selectedOrbIndex, dir, false); // Renamed
+    const orb = orbs[selectedOrbIndex];
+    const dx = mx - (orb.cellX + 0.5) * CELL_SIZE, dy = my - (orb.cellY + 0.5) * CELL_SIZE;
+    if (dx * dx + dy * dy <= ORB_RADIUS * ORB_RADIUS) return;
+    const dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+    moveOrb(selectedOrbIndex, dir);
 }
 
-function moveOrb(idx, dir, isCheatMove) { // Renamed
-    if (idx < 0 || idx >= orbs.length || isAnyOrbMoving) return; // Renamed
-    if (!isCheatMove && solvingInProgress) return; 
-    let orb = orbs[idx]; // Renamed
-    let result = findMoveDestination(orb.cellX, orb.cellY, dir); // Renamed
-    if (result.cellsToMove > 0) {
-        startOrbAnimation(orb, result.endX, result.endY, result.cellsToMove); // Renamed
-        if (!isCheatMove) { userMoves++; updateMoveDisplay(); }
-        if (orbs[idx].selected) { orbs[idx].selected = false; } // Renamed
-        if (selectedOrbIndex === idx) { selectedOrbIndex = -1; } // Renamed
-    }
+// --- Moves ---
+
+function moveOrb(idx, dir) {
+    if (idx < 0 || idx >= orbs.length || isAnyOrbMoving) return;
+    const orb = orbs[idx];
+    const result = findMoveDestination(idx, dir);
+    if (result.cellsToMove === 0) return;
+    moveHistory.push({ orbIndex: idx, dir, fromX: orb.cellX, fromY: orb.cellY });
+    startOrbAnimation(orb, result.endX, result.endY, result.cellsToMove);
+    clearSelection();
+    if (!solvingInProgress) saveProgress();
+    updateDisplays();
 }
 
-function findMoveDestination(x, y, dir) {
-    let dx = 0, dy = 0;
-    if (dir === "left") dx = -1; else if (dir === "right") dx = 1;
-    else if (dir === "up") dy = -1; else if (dir === "down") dy = 1;
-    let cx = x, cy = y, steps = 0;
-    const movingOrbOriginalIndex = orbs.findIndex(o => o.cellX === x && o.cellY === y && !o.anim);  // Renamed
+function undoMove() {
+    if (!canInteract() || moveHistory.length === 0) return;
+    const last = moveHistory.pop();
+    const orb = orbs[last.orbIndex];
+    const steps = Math.abs(orb.cellX - last.fromX) + Math.abs(orb.cellY - last.fromY);
+    startOrbAnimation(orb, last.fromX, last.fromY, steps);
+    clearSelection();
+    saveProgress();
+    updateDisplays();
+}
+
+function findMoveDestination(orbIndex, dir) {
+    const dirIndex = DIRS.indexOf(dir);
+    const orb = orbs[orbIndex];
+    let cx = orb.cellX, cy = orb.cellY, steps = 0;
     while (true) {
-        if ((dx > 0 && verticalWalls[cx+1][cy]) || (dx < 0 && verticalWalls[cx][cy]) ||
-            (dy > 0 && horizontalWalls[cy+1][cx]) || (dy < 0 && horizontalWalls[cy][cx])) break;
-        let nx = cx + dx, ny = cy + dy;
+        if ((dirIndex === 1 && verticalWalls[cx + 1][cy]) || (dirIndex === 0 && verticalWalls[cx][cy]) ||
+            (dirIndex === 3 && horizontalWalls[cy + 1][cx]) || (dirIndex === 2 && horizontalWalls[cy][cx])) break;
+        const nx = cx + DIR_DX[dirIndex], ny = cy + DIR_DY[dirIndex];
         if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) break;
-        if (isCellOccupied(nx, ny, movingOrbOriginalIndex)) break;  // Renamed
+        if (isCellOccupied(nx, ny, orbIndex)) break;
         cx = nx; cy = ny; steps++;
-        if (steps > Math.max(ROWS,COLS)) break; 
     }
     return { endX: cx, endY: cy, cellsToMove: steps };
 }
 
-function isCellOccupied(x, y, movingOrbIndex = -1) {  // Renamed
-    for (let i = 0; i < orbs.length; i++) { // Renamed
-        if (i === movingOrbIndex) continue;  // Renamed
-        let o = orbs[i]; // Renamed
-        if (o.anim ? (o.animEndCellX === x && o.animEndCellY === y) : (o.cellX === x && o.cellY === y)) return true; // Renamed
+function isCellOccupied(x, y, excludeIndex) {
+    for (let i = 0; i < orbs.length; i++) {
+        if (i === excludeIndex) continue;
+        const o = orbs[i];
+        if (o.anim ? (o.animEndCellX === x && o.animEndCellY === y) : (o.cellX === x && o.cellY === y)) return true;
     }
     return false;
 }
 
-function startOrbAnimation(orb, ex, ey, steps) { // Renamed
+function startOrbAnimation(orb, ex, ey, steps) {
     if (steps === 0) return;
-    orb.anim = { startTime: performance.now(), duration: steps * 60 };  // Renamed
-    orb.animStartCellX = orb.cellX; orb.animStartCellY = orb.cellY; // Renamed
-    orb.animEndCellX = ex; orb.animEndCellY = ey; orb.animFraction = 0; // Renamed
-    isAnyOrbMoving = true; // Renamed
+    orb.anim = { startTime: performance.now(), duration: steps * 60 };
+    orb.animStartCellX = orb.cellX; orb.animStartCellY = orb.cellY;
+    orb.animEndCellX = ex; orb.animEndCellY = ey; orb.animFraction = 0;
+    isAnyOrbMoving = true;
 }
 
-function onCheatClick() {
-    if (isAnyOrbMoving || solvingInProgress || !goalActive) { // Renamed
-        if (!goalActive) alert("No active goal to solve!"); return;
-    }
-    let goalOrbIndex = orbs.findIndex(o => o.color === goal.color); // Renamed
-    if (goalOrbIndex < 0) { alert("Error: No orb of the goal color found!"); return; } // Renamed
-    let solutionPath = idaStar(getCurrentState(), goalOrbIndex, goal.cellX, goal.cellY); // Renamed
-    if (!solutionPath || solutionPath.length === 0) {
-        alert("No solution found by Cheat function."); return;
-    }
-    // In solutionPath, puckIndex should now be orbIndex
-    solutionPath.forEach(move => { if(move.puckIndex !== undefined) { move.orbIndex = move.puckIndex; delete move.puckIndex; }});
-    solutionMovesQueue = solutionPath.slice(); solvingInProgress = true;
-}
+// --- Solve ---
 
-function onShareClick() {
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-        const originalText = shareButtonElem.textContent;
-        shareButtonElem.textContent = "Copied!";
-        setTimeout(() => {
-            shareButtonElem.textContent = originalText;
-        }, 1500); 
-    }).catch(err => {
-        console.error('Failed to copy URL: ', err);
-        alert("Failed to copy link. Please copy it manually from the address bar.");
-    });
-}
-
-function onResetClick() {
-    if (isAnyOrbMoving || solvingInProgress) { // Renamed
-        console.log("Reset prevented: Animation or solving in progress.");
-        return;
-    }
-    const currentHash = window.location.hash.substring(1);
-    if (!currentHash) {
-        console.log("Reset: No current puzzle state in URL to reset to.");
-        return;
-    }
-
-    console.log("Reset: Attempting to reset to state from hash:", currentHash);
-    if (deserializeGameState(currentHash)) {
-        userMoves = 0;
-        let goalOrbIndex = orbs.findIndex(o => o.color === goal.color); // Renamed
-        if (goalOrbIndex !== -1) { // Renamed
-            optimalMovesForCurrentGoal = computeMinimalMovesForStateGoal(getCurrentState(), goalOrbIndex, goal.cellX, goal.cellY); // Renamed
-        } else {
-            optimalMovesForCurrentGoal = Math.max(ROWS, COLS); 
-        }
-        
-        selectedOrbIndex = -1; // Renamed
-        solvingInProgress = false;
-        solutionMovesQueue = [];
-        isAnyOrbMoving = false; // Renamed
-        orbs.forEach(o => o.anim = null); // Renamed
-
-        goalActive = true; 
-        goalReached = false;
-
-        updateMoveDisplay();
-        drawGame();
-        console.log("Reset: Puzzle reset successfully.");
-    } else {
-        console.error("Reset: Failed to deserialize state from hash. Puzzle not reset.");
-    }
-}
-
-
-function getCurrentState() { return orbs.map(o => [o.cellX, o.cellY]); } // Renamed
-function isGoalState(state, gpIdx, gx, gy) { return gpIdx >= 0 && gpIdx < state.length && state[gpIdx][0] === gx && state[gpIdx][1] === gy; }
-
-function heuristic(state, goalOrbIndex, gx, gy) { // Renamed goalPuckIndex
-    if (goalOrbIndex < 0 || goalOrbIndex >= state.length) return Infinity;  // Renamed
-    const [orbX, orbY] = state[goalOrbIndex]; // Renamed
-    if (orbX === gx && orbY === gy) return 0;  // Renamed
-    if (orbX === gx || orbY === gy) return 1; // Renamed
-    return 2; 
-}
-
-
-function idaStar(rootState, goalOrbIndex, gx, gy) { // Renamed
-    let bound = heuristic(rootState, goalOrbIndex, gx, gy); // Renamed
-    let path = []; const MAX_ITER = 50; 
-    for (let iter = 0; iter < MAX_ITER; iter++) {
-        path = []; 
-        let t = searchIda(rootState, 0, bound, path, goalOrbIndex, gx, gy); // Renamed
-        if (t === true) return path.slice(); 
-        if (t === Infinity) { return null; }
-        bound = t;                          
-    }
-    console.warn("IDA* reached max iterations for cheat/optimal calculation.");
-    return null; 
-}
-function searchIda(currState, g, bound, path, gpIdx, gx, gy) {
-    let f = g + heuristic(currState, gpIdx, gx, gy);
-    if (f > bound) return f;
-    if (isGoalState(currState, gpIdx, gx, gy)) return true;
-    let minOver = Infinity;
-    for (let oi = 0; oi < currState.length; oi++) { // Renamed pi to oi for orbIndex
-        for (let dir of ["left", "right", "up", "down"]) {
-            let { endX, endY, cellsToMove } = findDestinationForState(currState, currState[oi][0], currState[oi][1], dir, oi); // Renamed
-            if (cellsToMove > 0) {
-                let nextState = currState.map(o_pos => [...o_pos]); // Renamed
-                nextState[oi] = [endX, endY]; // Renamed
-                path.push({ orbIndex: oi, dir }); // Renamed puckIndex to orbIndex
-                let t = searchIda(nextState, g + 1, bound, path, gpIdx, gx, gy);
-                if (t === true) return true; 
-                path.pop(); 
-                if (t < minOver) minOver = t;
-            }
-        }
-    }
-    return minOver;
-}
-
-function boundedIdaStar(rootState, goalOrbIndex, gx, gy, maxDepth) { // Renamed
-    let startH = heuristic(rootState, goalOrbIndex, gx, gy); // Renamed
-    let path = [];
-    for (let currentBound = startH; currentBound <= maxDepth; currentBound++) {
-        path = []; 
-        if (searchBounded(rootState, 0, currentBound, path, goalOrbIndex, gx, gy, maxDepth) === true) return path.slice(); // Renamed
-    }
-    return null;
-}
-function searchBounded(currState, g, bound, path, gpIdx, gx, gy, maxDepth) {
-    if (g > maxDepth) return Infinity; 
-    let f = g + heuristic(currState, gpIdx, gx, gy);
-    if (f > bound) return f;
-    if (isGoalState(currState, gpIdx, gx, gy)) return true;
-    let minOver = Infinity;
-    for (let oi = 0; oi < currState.length; oi++) { // Renamed
-        for (let dir of ["left", "right", "up", "down"]) {
-            let { endX, endY, cellsToMove } = findDestinationForState(currState, currState[oi][0], currState[oi][1], dir, oi); // Renamed
-            if (cellsToMove > 0) {
-                let nextState = currState.map(o_pos => [...o_pos]); // Renamed
-                nextState[oi] = [endX, endY]; // Renamed
-                path.push({ orbIndex: oi, dir }); // Renamed
-                let t = searchBounded(nextState, g + 1, bound, path, gpIdx, gx, gy, maxDepth);
-                if (t === true) return true;
-                path.pop();
-                if (t < minOver) minOver = t;
-            }
-        }
-    }
-    return minOver;
-}
-
-function findDestinationForState(state, x, y, dir, movingOrbIndexInState) { // Renamed
-    let dx = 0, dy = 0;
-    if (dir === "left") dx = -1; else if (dir === "right") dx = 1;
-    else if (dir === "up") dy = -1; else if (dir === "down") dy = 1;
-    let cx = x, cy = y, steps = 0;
-    while (true) {
-        if ((dx > 0 && verticalWalls[cx+1][cy]) || (dx < 0 && verticalWalls[cx][cy]) ||
-            (dy > 0 && horizontalWalls[cy+1][cx]) || (dy < 0 && horizontalWalls[cy][cx])) break;
-        let nx = cx + dx, ny = cy + dy;
-        if (nx < 0 || nx >= COLS || ny < 0 || ny >= ROWS) break;
-        if (occupiedInState(state, nx, ny, movingOrbIndexInState)) break; // Renamed
-        cx = nx; cy = ny; steps++;
-        if (steps > Math.max(ROWS,COLS)) break; 
-    }
-    return { endX: cx, endY: cy, cellsToMove: steps };
-}
-function occupiedInState(state, xx, yy, excludeIndexInState = -1) {
-    for (let i = 0; i < state.length; i++) {
-        if (i === excludeIndexInState) continue;
-        if (state[i][0] === xx && state[i][1] === yy) return true;
-    }
-    return false;
-}
-
-function computeMinimalMovesForStateGoal(startState, goalOrbIndex, gx, gy) { // Renamed
-    if (isGoalState(startState, goalOrbIndex, gx, gy)) return 0; // Renamed
-    const solutionPath = idaStar(startState, goalOrbIndex, gx, gy); // Renamed
-    if (solutionPath) {
-        return solutionPath.length;
-    } else {
-        return Math.max(ROWS, COLS) * 2; 
-    }
-}
-
-// --- UI Update Functions ---
-function updateScoreDisplay() { scoreDisplayElem.textContent = `Goals Completed: ${goalsCompleted}`; }
-function updateMoveDisplay() { 
-    moveDisplayElem.textContent = `Moves: ${userMoves} (Optimal: ${optimalMovesForCurrentGoal})`; 
-}
-function onNewGameClick() { 
-    if (history.replaceState) { 
-        history.replaceState(null, null, window.location.pathname + window.location.search);
-    } else {
-        window.location.hash = "";
-    }
-    initGame(); 
+function onSolveClick() {
+    if (!canInteract() || !goalActive) return;
+    if (!window.confirm("Show the solution? This puzzle will be marked as solved with help and won't count toward your score.")) return;
+    assistedThisPuzzle = true;
+    // Undo all of the player's moves, then play the optimal solution.
+    moveHistory = [];
+    resetOrbsToStart();
+    clearSelection();
+    solutionMovesQueue = dailyPuzzles[currentPuzzleIndex].solution.slice();
+    solvingInProgress = true;
+    saveProgress();
+    updateDisplays();
 }
