@@ -18,14 +18,15 @@
         <div id="gameContainer">
             <canvas id="gameCanvas"></canvas>
             <div class="infoPanel">
-                <div id="scoreDisplay">Goals Completed: 0</div>
-                <div id="moveDisplay">Moves: 0 (Optimal: 0)</div>
+                <div id="puzzleDisplay">Puzzle 1 of 4</div>
+                <div id="moveDisplay">Moves: 0 · Par: 0</div>
             </div>
             <div class="controls">
-                <button id="newGameButton">New Game</button>
-                <button id="resetButton">Reset</button>
-                <button id="cheatButton">Cheat</button>
-                <button id="shareButton">Share Puzzle</button>
+                <button id="undoButton">Undo</button>
+                <button id="solveButton">Solve</button>
+            </div>
+            <div id="overlay" hidden>
+                <div id="overlayContent"></div>
             </div>
         </div>
 
