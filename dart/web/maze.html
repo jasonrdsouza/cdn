@@ -16,7 +16,14 @@
     <body>
         <header class="titleBar">
             <h1>Momentum Maze</h1>
-            <button id="helpButton" aria-label="How to play" title="How to play">?</button>
+            <button id="helpButton" aria-label="How to play" title="How to play">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <g transform="translate(0 0.2)">
+                        <path d="M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.2v.7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="18.2" r="1.4" fill="currentColor" />
+                    </g>
+                </svg>
+            </button>
         </header>
         <div id="gameContainer">
             <canvas id="gameCanvas"></canvas>
