@@ -32,6 +32,7 @@ const EPOCH_UTC_MS = Date.UTC(2026, 10, 1);
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 const STORAGE_KEY = "momentumMaze.daily.v1";
+const HELP_SEEN_KEY = "momentumMaze.helpSeen";
 
 const COLORS = [
     "#D32F2F", // red
@@ -333,7 +334,7 @@ let lastTouchY = 0;
 let puzzleDisplayElem, moveDisplayElem;
 let gameContainerElem, controlsElem, infoPanelElem;
 let undoButtonElem, solveButtonElem;
-let overlayElem, overlayContentElem;
+let overlayElem, overlayContentElem, helpOverlayElem;
 let countdownTimer = null;
 
 if (typeof window !== "undefined") {
@@ -354,6 +355,7 @@ function onLoad() {
     infoPanelElem = document.querySelector(".infoPanel");
     overlayElem = document.getElementById("overlay");
     overlayContentElem = document.getElementById("overlayContent");
+    helpOverlayElem = document.getElementById("helpOverlay");
 
     canvas.addEventListener("mousemove", onMouseMove);
     canvas.addEventListener("click", onClick);
@@ -363,6 +365,9 @@ function onLoad() {
     canvas.addEventListener("touchend", onTouchEnd, { passive: false });
     undoButtonElem.addEventListener("click", undoMove);
     solveButtonElem.addEventListener("click", onSolveClick);
+    document.getElementById("helpButton").addEventListener("click", showHelp);
+    document.getElementById("helpCloseButton").addEventListener("click", hideHelp);
+    helpOverlayElem.addEventListener("click", e => { if (e.target === helpOverlayElem) hideHelp(); });
     document.addEventListener("keydown", onKeyDown);
     window.addEventListener("resize", resizeCanvas);
 
@@ -386,6 +391,7 @@ function onLoad() {
         loadPuzzle(progress.results.length, progress.history || []);
         // Using Solve sticks to the puzzle, even across a refresh.
         assistedThisPuzzle = progress.assisted;
+        if (!hasSeenHelp()) showHelp();
     }
     requestAnimationFrame(gameLoop);
 }
@@ -421,6 +427,33 @@ function saveProgress() {
         console.warn("Could not save progress:", e);
     }
 }
+
+// --- How-to-play screen ---
+
+function hasSeenHelp() {
+    try {
+        return window.localStorage.getItem(HELP_SEEN_KEY) === "1";
+    } catch (e) {
+        return false;
+    }
+}
+
+function showHelp() {
+    clearSelection();
+    helpOverlayElem.hidden = false;
+    document.getElementById("helpCloseButton").focus();
+}
+
+function hideHelp() {
+    helpOverlayElem.hidden = true;
+    try {
+        window.localStorage.setItem(HELP_SEEN_KEY, "1");
+    } catch (e) {
+        console.warn("Could not save help preference:", e);
+    }
+}
+
+function isHelpOpen() { return helpOverlayElem && !helpOverlayElem.hidden; }
 
 // --- Puzzle lifecycle ---
 
@@ -690,7 +723,7 @@ function drawOrb(orb) {
 
 // --- Input ---
 
-function canInteract() { return !isAnyOrbMoving && !solvingInProgress && !inputLocked && !pendingCompletion; }
+function canInteract() { return !isAnyOrbMoving && !solvingInProgress && !inputLocked && !pendingCompletion && !isHelpOpen(); }
 
 function getCanvasCoordinates(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
@@ -727,6 +760,10 @@ function onTouchEnd(e) {
     handleClick(lastTouchX, lastTouchY);
 }
 function onKeyDown(e) {
+    if (isHelpOpen()) {
+        if (e.key === "Escape") hideHelp();
+        return;
+    }
     const isUndoKey = e.key === "Backspace" || e.key === "z" || e.key === "Z";
     if (isUndoKey && !e.altKey) {
         e.preventDefault();
